@@ -1,13 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const { MongoClient } = require('mongodb');
+const DB_URI = "mongodb://mongo:27017/";
+const DB_NAME = "campina-band-setlist-management";
 
-var app = express();
+const indexRouter = require('./routes/index');
+const songRouter = require('./routes/songs');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -15,12 +20,26 @@ app.set('view engine', 'hjs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(async(req, res, next) => {
+	try {
+		const client = new MongoClient(DB_URI);
+		await client.connect();
+		req.db = client.db(DB_NAME);
+		console.log("Connection successful!");
+		next();
+	} catch(error) {
+		console.log("DB Connection Error: " + error);
+		next(createError(500), error);
+	}
+});
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/songs', songRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
