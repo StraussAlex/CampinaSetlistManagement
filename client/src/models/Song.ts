@@ -9,7 +9,7 @@ class Song {
     ) {}
 }
 class SongFile {
-    public constructor(public instrument: string, public filepath: string) {}
+    public constructor(public instrument: string, public filepath: string[]) {}
 }
 
 export { Song, SongFile }

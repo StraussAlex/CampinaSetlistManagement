@@ -21,7 +21,7 @@ const setlists = ref<Setlist[]>([]);
 
 async function createNewSong(): Promise<void> {
 
-  const songFiles: SongFile[] = [ new SongFile("Guitar", "http://localhost:8888/myfiles/id"), new SongFile("Saxophon", "http://localhost:8888/myfiles/id2")]
+  const songFiles: SongFile[] = [ new SongFile("Guitar", ["http://localhost:8888/myfiles/id"]), new SongFile("Saxophon", ["http://localhost:8888/myfiles/id2"])]
   const song = new Song(title.value, artist.value, ["https://www.youtube.com/watch?v=dQw4w9WgXcQ"], songFiles);
 
 
