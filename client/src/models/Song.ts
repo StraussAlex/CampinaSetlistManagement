@@ -4,6 +4,7 @@ class Song {
     public constructor(
         public title: string, 
         public artist: string,
+        public lyrics: string,
         public links: string[],
         public files: SongFile[]
     ) {}

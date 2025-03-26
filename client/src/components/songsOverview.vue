@@ -1,113 +1,41 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-
+import { useRouter } from 'vue-router';
 import { Song, SongFile} from '../models/Song'
-import { Setlist, SetlistSong} from '../models/Setlist'
-
 import api from '../services/api'
 
+const router = useRouter();
 
 const SONG_API = "songs";
-const SETLIST_API = "setlists";
-
-//Testing inserting songs
-const title = ref<string>("");
-const artist = ref<string>("");
-
-const newSetlistName = ref<string>("");
-
 const songs = ref<Song[]>([]);
-const setlists = ref<Setlist[]>([]);
-
-async function createNewSong(): Promise<void> {
-
-  const songFiles: SongFile[] = [ new SongFile("Guitar", ["http://localhost:8888/myfiles/id"]), new SongFile("Saxophon", ["http://localhost:8888/myfiles/id2"])]
-  const song = new Song(title.value, artist.value, ["https://www.youtube.com/watch?v=dQw4w9WgXcQ"], songFiles);
-
-
-  try {
-    const response = await api.post(SONG_API, song);
-    song._id = response.data.insertedId;
-    console.log(response.data.insertedId);
-  } catch(error) {
-    console.error("Error saving data: ", error);
-  }
-
-  loadSongs();
-}
 
 async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
     songs.value = response.data;
-    console.log(response);
   } catch(error) {
     console.log(error);
   }
 }
-
-async function createNewSetlist(): Promise<void> {
-  const newList = new Setlist(newSetlistName.value, []);
-
-  try {
-    const response = await api.post(SETLIST_API, newList);
-    newList._id = response.data.insertedId;
-    console.log(response.data.insertedId);
-  } catch(error) {
-    console.error("Error saving data: ", error);
-  }
-
-  loadSetlists();
+function createNewSong(): void {
+  router.push("/create-song");
 }
 
-async function loadSetlists(): Promise<void> {
-  try {
-    const response = await api.get(SETLIST_API);
-    setlists.value = response.data;
-    console.log(response);
-  } catch(error) {
-    console.log(error);
-  }
-}
-async function addSongToSetlist(song: Song, setlist: Setlist): Promise<void> {
-  if(setlists.value.length === 0) return;
-
-  let position: number = setlist.songs.length + 1;
-  setlist.songs?.push(new SetlistSong(song._id, position));
-  try {
-    await api.put(`${SETLIST_API}/${setlist._id}`, setlist);
-  } catch(error) {
-    console.log(error);
-  }
-
-  loadSetlists();
-}
-
-onMounted(() => {loadSongs(); loadSetlists(); });
+onMounted(() => loadSongs());
 
 </script>
 
 <template>
-  <h1>Song Test</h1>
-  <ul>
-    <li v-for="song in songs">{{ song.artist }} - {{ song.title }} | {{ song._id }}
-      <button v-for="file in song.files">Download {{ file.instrument }}</button>
-      <button @click="addSongToSetlist(song, setlists[0])">Add to first list</button>
+  <h1>Songs</h1>
+  <ul v-if="songs.length !== 0">
+    <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
+      <button>View song</button>
+      <button>Edit song</button>
     </li>
   </ul>
-  <input v-model="title">
-  <input v-model="artist">
-  <button @click="createNewSong">Save</button>
+  <p v-else>No songs yet</p>
 
-  <br><br>
-  <input v-model="newSetlistName">
-  <button @click="createNewSetlist">Create empty setlist</button>
-
-  <br><br>
-
-  <ul>
-    <li v-for="list in setlists">{{ list.name }} contains {{ list.songs.length }} songs</li>
-  </ul>
+  <button @click="createNewSong">Create new song</button>
 </template>
 
 <style scoped>

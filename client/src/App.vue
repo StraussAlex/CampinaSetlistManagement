@@ -3,8 +3,10 @@
 </script>
 
 <template>
-  <p>use route songs to see song overview</p>
-  <p>use route event to see event overview</p>
+  <p>use route / to see event overview</p>
+  <p>use route /songs to see song overview</p>
+  <p>use route /setlists to see setlist overview</p>
+  <p>use route /create-song to see add song page</p>
   <router-view></router-view>
 </template>
 
