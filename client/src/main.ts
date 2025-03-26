@@ -6,6 +6,9 @@ import songsOverview from './components/songsOverview.vue'
 import setListOverview from './components/setListOverview.vue'
 import eventOverview from './components/eventOverview.vue'
 import createSong from './components/createSong.vue'
+import createSetlist from './components/createSetlist.vue'
+import songView from './components/songView.vue'
+import setlistView from './components/setlistView.vue'
 
 
 const router = createRouter({
@@ -14,8 +17,10 @@ const router = createRouter({
         { path: '/', name: 'events', component: eventOverview },
         { path: '/songs', name: 'songs', component: songsOverview },
         { path: '/setlists', name: 'setlists', component: setListOverview },
-        { path: '/create-song', name: 'create-song', component: createSong },
-        
+        { path: '/create-song', name: 'createsong', component: createSong },
+        { path: '/create-setlist', name: 'createsetlist', component: createSetlist },
+        { path: '/songs/:id', name: 'viewsong', component: songView },
+        { path: '/setlists/:id', name: 'viewsetlist', component: setlistView },
     ]
 });
 
