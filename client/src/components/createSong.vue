@@ -76,7 +76,7 @@ async function createNewSong(): Promise<void> {
     <li v-for="(link, index) in songLinks">{{ link }} <button @click="deleteLink(index)">X</button></li>
   </ul>
 
-  <label for="input-song-link">Add link</label>
+  <label for="input-song-link">Add link</label> 
   <input name="input-song-link" v-model="currentLink">
   <button @click="insertLink">Add link</button>
 

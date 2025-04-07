@@ -9,6 +9,10 @@ function viewSetlists(): void {
 function viewSongs(): void {
     router.push("/songs");
 }
+
+function createEvent(): void {
+    router.push("/create-event");
+}
 </script>
 
 <template>
@@ -19,6 +23,7 @@ function viewSongs(): void {
 
     <button @click="viewSetlists">Setlists</button>
     <button @click="viewSongs">Songs</button>
+    <button @click="createEvent">Create Event</button>
 </template>
 
 <style scoped>
