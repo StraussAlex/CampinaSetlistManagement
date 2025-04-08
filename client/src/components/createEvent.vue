@@ -6,7 +6,7 @@ import api from '../services/api'
 
 const router = useRouter();
 
-const EVENT_API = "";
+const EVENT_API = "events";
 
 const eventName = ref<string>("");
 const eventPlace = ref<string>("");

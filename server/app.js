@@ -12,7 +12,8 @@ const DB_NAME = "campina-band-setlist-management";
 const indexRouter = require('./routes/index');
 const songRouter = require('./routes/songs');
 const setlistRouter = require('./routes/setlists');
-const createEventRouter = require('/routes/create-event');
+const eventRouter = require('./routes/events');
+const userRouter = require('./routes/users');
 
 const app = express();
 
@@ -43,7 +44,8 @@ app.use(async(req, res, next) => {
 app.use('/', indexRouter);
 app.use('/songs', songRouter);
 app.use('/setlists', setlistRouter);
-app.use('/create-event', createEventRouter);
+app.use('/events', eventRouter);
+app.use('/users', userRouter);
 
 
 // catch 404 and forward to error handler

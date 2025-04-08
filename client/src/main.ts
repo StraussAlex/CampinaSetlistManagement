@@ -10,6 +10,7 @@ import createSetlist from './components/createSetlist.vue'
 import songView from './components/songView.vue'
 import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
+import adminPage from './components/adminPage.vue'
 
 
 const router = createRouter({
@@ -22,7 +23,8 @@ const router = createRouter({
         { path: '/create-setlist', name: 'createsetlist', component: createSetlist },
         { path: '/songs/:id', name: 'viewsong', component: songView },
         { path: '/setlists/:id', name: 'viewsetlist', component: setlistView },
-        { path: '/create-event', name: 'create-event', component: createEvent}
+        { path: '/create-event', name: 'create-event', component: createEvent},
+        { path: '/manage-users', name: 'admin-page', component: adminPage},
     ]
 });
 

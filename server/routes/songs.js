@@ -20,5 +20,12 @@ router.post('/', async(req, res) => {
     console.log(error);
   }
 });
+router.delete('/:id', async(req, res) => {
+  try {
+    res.json(await req.db.collection(SONG_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)}));
+  } catch(error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;
