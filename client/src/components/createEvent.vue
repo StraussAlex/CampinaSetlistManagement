@@ -6,7 +6,7 @@ import api from '../services/api'
 
 const router = useRouter();
 
-const EVENT_API = "";
+const EVENT_API = "events";
 
 const eventName = ref<string>("");
 const eventPlace = ref<string>("");
@@ -49,7 +49,7 @@ async function createEvent(): Promise<void> {
     const event = new Event(eventName.value, eventPlace.value, eventTime.value, 
                             eventDay.value, eventMonth.value, eventYear.value);
     try {
-        const response = await api.post(EVENT_API,event);
+        const response = await api.post(EVENT_API, event);
         event._id = response.data.insertedId;
 
         router.push("/")
