@@ -12,6 +12,9 @@ const songArtist = ref<string>("");
 
 const songLinks = ref<string[]>([]);
 const currentLink = ref<string>("");
+const instruments = ref<string[]>([]);
+const newInstrumentName = ref<string>("");
+//const files = ref<File[]>([]);
 
 const songLyrics = ref<string>("");
 
@@ -43,11 +46,36 @@ async function createNewSong(): Promise<void> {
   if(songTitle.value.length === 0) errors.value.push("Song title cannot be empty");
   if(songArtist.value.length === 0) errors.value.push("Song artist cannot be empty");
 
+  console.log("instrument verification");
+  for (const instrument of instruments.value) {
+
+    const target = document.getElementById(instrument) as HTMLInputElement;
+    console.log(target.files);
+    if (target.files === null){
+      errors.value.push(target.name + " file cannot be empty")
+    }
+  }
+
   if(errors.value.length > 0) return;
 
   const song = new Song(songTitle.value, songArtist.value, songLyrics.value, songLinks.value, []);
 
   try {
+    const formData = new FormData();
+    for (const instrument of instruments.value) {
+      const target = document.getElementById(instrument) as HTMLInputElement
+      formData.append(instrument, target.files![0]);
+
+    }
+
+
+    const fileResponse = await api.post(SONG_API + "/upload", formData);
+
+    for (const instrument of instruments.value) {
+      const songFile = new SongFile(instrument,fileResponse.data[0].path);
+      song.files.push(songFile);
+    }
+
     const response = await api.post(SONG_API, song);
     song._id = response.data.insertedId;
 
@@ -56,6 +84,17 @@ async function createNewSong(): Promise<void> {
   } catch(error) {
     errors.value.push("Error saving song: " + error);
   }
+}
+
+
+function addInstrumentInput(): void{
+  if (newInstrumentName.value !== ""){
+    instruments.value.push(newInstrumentName.value);
+    newInstrumentName.value = "";
+  }
+}
+function deleteInstrument(index: number): void {
+  instruments.value.splice(index, 1);
 }
 
 </script>
@@ -85,6 +124,20 @@ async function createNewSong(): Promise<void> {
   <label for="input-song-lyrics">Lyrics</label>
   <textarea name="input-song-lyrics" v-model="songLyrics"></textarea>
   <p>Insert song lyrics here. If left empty, try to fetch lyrics from external resource?</p>
+
+  <div>
+    <input type="text" v-model="newInstrumentName">
+    <button @click="addInstrumentInput">Add Instrument</button>
+
+    <div v-for="(instrument, index) in instruments">
+      <button @click="deleteInstrument(index)">X</button>
+      <label>{{ instrument }}</label>
+      <input type="file" :id="instrument" :name="instrument">
+    </div>
+  </div>
+
+
+
 
   <ul>
     <li v-for="error in errors">{{ error }}</li>
