@@ -11,6 +11,7 @@ import songView from './components/songView.vue'
 import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
 import adminPage from './components/adminPage.vue'
+import editEvent from './components/editEvent.vue'
 
 
 const router = createRouter({
@@ -25,6 +26,7 @@ const router = createRouter({
         { path: '/setlists/:id', name: 'viewsetlist', component: setlistView },
         { path: '/create-event', name: 'create-event', component: createEvent},
         { path: '/manage-users', name: 'admin-page', component: adminPage},
+        { path: '/events/:id', name: 'edit-event', component: editEvent }
     ]
 });
 

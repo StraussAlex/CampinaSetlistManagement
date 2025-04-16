@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
 
 const router = useRouter();
+const route = useRoute();
+
+const eventId = route.params._id;
 
 function viewSetlists(): void {
     router.push("/setlists");
@@ -16,6 +19,10 @@ function viewSongs(): void {
 function createEvent(): void {
     router.push("/create-event");
 }
+function updateEvent(id: string): void {
+  router.push({ name: 'edit-event', params: { id: String(id) } });
+}
+
 
 const EVENTS_API = "events";
 const events = ref<Event[]>([])
@@ -50,7 +57,11 @@ onMounted(() => loadEvents());
 <template>
     <h1>Events</h1>
     <ul v-if="events.length !== 0">
-        <li v-for="event in events">{{ event.name }} | {{ event.day }} of {{ event.month }} | {{ event.place }} <button>Details</button><button @click="deleteEvent(event._id)">Delete</button></li>
+        <li v-for="event in events">{{ event.name }} | {{ event.day }} of {{ event.month }} | {{ event.place }} 
+            <button>Details</button>
+            <button @click="deleteEvent(event._id)">Delete</button>
+            <button @click="updateEvent(event._id)">Edit Event</button>
+        </li>
     </ul>
     <p v-else>No events are created yet</p>
     <p>This page could be the public landing page where people can see events?</p>
