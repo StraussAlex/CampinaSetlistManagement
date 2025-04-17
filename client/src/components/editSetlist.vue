@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 
 const router = useRouter();
+const route = useRoute();
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
-const SETLIST_API = "setlists";
+const SETLIST_API = "setlists/edit-setlist";
+const setlistId = route.params.id;
 
 const errors = ref<string[]>([]);
 
@@ -31,6 +33,9 @@ onMounted(() => loadSongs());
 const setlistName = ref<string>("");
 const setlistSongs = ref<Song[]>([]);
 
+const newSetlistName = ref<string>('');
+const newSetlistSongs = ref<Song[]>([]);
+
 function removeSong(index: number): void {
   setlistSongs.value.splice(index, 1);
 }
@@ -45,10 +50,22 @@ function songAlreadyInSetlist(song: Song): boolean {
   return false;
 }
 
-async function createNewSetlist(): Promise<void> {
+onMounted( async() => {
+    try {
+        const response = await api.get(`${SETLIST_API}/${setlistId}`);
+        const setlist = response.data;
+        newSetlistName.value = setlist.setlistName;
+        newSetlistSongs.value = setlist.setlistSongs;
+    } catch(error) {
+        console.log(error);
+    }
+})
+
+async function updateSetlist(): Promise<void> {
   clearErrors();
 
   setlistName.value = setlistName.value.trim();
+
   if(setlistName.value.length === 0) errors.value.push("Setlist name cannot be empty");
   
   if(errors.value.length > 0) return;
@@ -58,21 +75,21 @@ async function createNewSetlist(): Promise<void> {
     const entry = new SetlistSong(setlistSongs.value[i]._id, i + 1);
     songList.push(entry);
   }
-  const setlist = new Setlist(setlistName.value, songList);
+  const updatedSetlist = new Setlist(newSetlistName.value, songList);
   try {
-    const response = await api.post(SETLIST_API, setlist);
-    setlist._id = response.data.insertedId;
+    const response = await api.put(`${SETLIST_API}/${setlistId}`, updatedSetlist);
+    updatedSetlist._id = response.data.insertedId;
     router.push("/setlists");
 
   } catch(error) {
-    errors.value.push("Error saving song: " + error);
+    errors.value.push("Error saving setlist: " + error);
   }
 }
 
 </script>
 
 <template>
-  <h1>Create Setlist</h1>
+  <h1>Edit Setlist</h1>
 
   <label for="input-setlist-name">Setlist Name</label>
   <input name="input-setlist-name" v-model="setlistName">
@@ -103,7 +120,7 @@ async function createNewSetlist(): Promise<void> {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSetlist">Save setlist</button>
+  <button @click="updateSetlist">Save setlist</button>
 </template>
 
 <style scoped>

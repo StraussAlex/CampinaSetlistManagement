@@ -12,6 +12,17 @@ router.get('/', async(req, res) => {
   }
 });
 
+router.get('/edit-setlist/:id', async (req, res) => {
+ try {
+    const setlist = await req.db.collection(SETLIST_COLLECTION).findOne({
+      _id: new ObjectId(req.params.id),
+    });
+    res.json(setlist);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 router.post('/', async(req, res) => {
   try {
     res.json(await req.db.collection(SETLIST_COLLECTION).insertOne(req.body));

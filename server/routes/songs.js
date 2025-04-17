@@ -19,6 +19,17 @@ router.get('/', async(req, res) => {
   }
 });
 
+router.get('/edit-song/:id', async(req, res) => {
+  try {
+    const event = await req.db.collection(SONG_COLLECTION).findOne({
+      _id: new ObjectId(req.params.id),
+    });
+    res.json(event);
+  } catch(error) {
+    console.log(error);
+  }
+});
+
 router.post('/', async(req, res) => {
   try {
     res.json(await req.db.collection(SONG_COLLECTION).insertOne(req.body));
@@ -43,6 +54,21 @@ router.post('/upload', upload.any(), (req, res) => {
 router.delete('/:id', async(req, res) => {
   try {
     res.json(await req.db.collection(SONG_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)}));
+  } catch(error) {
+    console.log(error);
+  }
+});
+
+router.put('/edit-song/:id', async(req, res) => {
+  try {
+    res.json(await req.db.collection(SONG_COLLECTION).updateOne(
+      {_id: new ObjectId(req.params.id)},
+      { $set: {title: req.body.title,
+               artist: req.body.artist,
+               lyrics: req.body.lyrics,
+               links: req.body.links,
+               files: req.body.files
+      }}));
   } catch(error) {
     console.log(error);
   }
