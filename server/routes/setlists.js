@@ -32,12 +32,13 @@ router.post('/', async(req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/edit-setlist/:id", async (req, res) => {
   try {
       res.json(
           await req.db.collection(SETLIST_COLLECTION).updateOne(
               { _id: new ObjectId(req.params.id) },
-              { $set: { songs: req.body.songs } }
+              { $set: {name: req.body.name,
+                       songs: req.body.songs } }
           )
       );
   } catch (error) {

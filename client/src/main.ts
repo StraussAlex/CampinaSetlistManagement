@@ -13,7 +13,7 @@ import createEvent from './components/createEvent.vue'
 import adminPage from './components/adminPage.vue'
 import editEvent from './components/editEvent.vue'
 import editSong from './components/editSong.vue'
-import EditSetlist from './components/editSetlist.vue'
+import editSetlist from './components/editSetlist.vue'
 
 
 const router = createRouter({
@@ -30,7 +30,7 @@ const router = createRouter({
         { path: '/manage-users', name: 'admin-page', component: adminPage},
         { path: '/events/:id', name: 'edit-event', component: editEvent },
         { path: '/songs/edit-song/:id', name: 'edit-song', component: editSong },
-        { path: '/setlists/edit-setlist/:id', name: 'edit-setlist', component: EditSetlist }
+        { path: '/setlists/edit-setlist/:id', name: 'edit-setlist', component: editSetlist }
     ]
 });
 

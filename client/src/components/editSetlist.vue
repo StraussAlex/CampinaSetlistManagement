@@ -19,6 +19,7 @@ function clearErrors(): void {
   errors.value = [];
 }
 
+
 async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
@@ -28,57 +29,68 @@ async function loadSongs(): Promise<void> {
   }
 }
 
-onMounted(() => loadSongs());
-
-const setlistName = ref<string>("");
-const setlistSongs = ref<Song[]>([]);
-
 const newSetlistName = ref<string>('');
 const newSetlistSongs = ref<Song[]>([]);
 
+
+onMounted(async () => {
+  await loadSongs()
+
+  try {
+    const response = await api.get(`${SETLIST_API}/${setlistId}`)
+    const setlist = response.data
+
+    newSetlistName.value = setlist.name
+
+    const fullSongs = songs.value.filter(song =>
+      setlist.songs.some((s: SetlistSong) => s.songId === song._id)
+    )
+
+    newSetlistSongs.value = fullSongs
+
+  } catch (error) {
+    console.log(error)
+    errors.value.push("Failed to load setlist.")
+  }
+})
+
+
+onMounted(() => loadSongs());
+
+
 function removeSong(index: number): void {
-  setlistSongs.value.splice(index, 1);
+  newSetlistSongs.value.splice(index, 1);
 }
 function addSongToSetlist(song: Song) {
   if(songAlreadyInSetlist(song)) return;
-  setlistSongs.value.push(song);
+  newSetlistSongs.value.push(song);
 }
 function songAlreadyInSetlist(song: Song): boolean {
-  for(let i: number = 0; i < setlistSongs.value.length; i++) {
-    if(setlistSongs.value[i]._id == song._id) return true;
+  for(let i: number = 0; i < newSetlistSongs.value.length; i++) {
+    if(newSetlistSongs.value[i]._id == song._id) return true;
   }
   return false;
 }
 
-onMounted( async() => {
-    try {
-        const response = await api.get(`${SETLIST_API}/${setlistId}`);
-        const setlist = response.data;
-        newSetlistName.value = setlist.setlistName;
-        newSetlistSongs.value = setlist.setlistSongs;
-    } catch(error) {
-        console.log(error);
-    }
-})
-
 async function updateSetlist(): Promise<void> {
   clearErrors();
 
-  setlistName.value = setlistName.value.trim();
-
-  if(setlistName.value.length === 0) errors.value.push("Setlist name cannot be empty");
+  if(newSetlistName.value.length === 0) errors.value.push("Setlist name cannot be empty");
   
   if(errors.value.length > 0) return;
 
   let songList: SetlistSong[] = [];
-  for(let i: number = 0; i < setlistSongs.value.length; i++) {
-    const entry = new SetlistSong(setlistSongs.value[i]._id, i + 1);
+  for(let i: number = 0; i < newSetlistSongs.value.length; i++) {
+    const entry = new SetlistSong(newSetlistSongs.value[i]._id, i + 1);
     songList.push(entry);
   }
-  const updatedSetlist = new Setlist(newSetlistName.value, songList);
+  const updatedSetlist: Setlist = {
+    _id: setlistId,
+    name: newSetlistName.value,
+    songs: songList};
+
   try {
-    const response = await api.put(`${SETLIST_API}/${setlistId}`, updatedSetlist);
-    updatedSetlist._id = response.data.insertedId;
+    await api.put(`${SETLIST_API}/${setlistId}`, updatedSetlist);
     router.push("/setlists");
 
   } catch(error) {
@@ -92,12 +104,12 @@ async function updateSetlist(): Promise<void> {
   <h1>Edit Setlist</h1>
 
   <label for="input-setlist-name">Setlist Name</label>
-  <input name="input-setlist-name" v-model="setlistName">
+  <input name="input-setlist-name" v-model="newSetlistName">
 
   <p>Setlist</p>
   <div>
-    <ul v-if="setlistSongs.length !== 0">
-      <li v-for="(song, index) in setlistSongs">{{ song.artist }} - {{ song.title }}
+    <ul v-if="newSetlistSongs.length !== 0">
+      <li v-for="(song, index) in newSetlistSongs">{{ song.artist }} - {{ song.title }}
         <button @click="removeSong(index)">X</button>
       </li>
     </ul>

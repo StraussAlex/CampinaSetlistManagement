@@ -35,7 +35,7 @@ onMounted(() => loadSetlists());
   <ul v-if="setlists.length !== 0">
     <li v-for="setlist in setlists">{{ setlist.name }} | {{ setlist.songs.length }} song(s)
       <button @click="viewSetlist(setlist._id)">View setlist</button>
-      <!--<button @click="editSetlist(setlist._id)">Edit setlist</button> -->
+      <button @click="editSetlist(setlist._id)">Edit setlist</button> 
     </li>
   </ul>
   <p v-else>No setlists yet</p>
