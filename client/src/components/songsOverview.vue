@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { Song, SongFile} from '../models/Song'
 import api from '../services/api'
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 
@@ -43,6 +44,8 @@ onMounted(() => loadSongs());
   <p v-else>No songs yet</p>
 
   <button @click="createNewSong">Create new song</button>
+
+  <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

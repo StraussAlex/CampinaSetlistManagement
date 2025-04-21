@@ -19,7 +19,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/', name: 'landing-page', component: landingPage },
-        { path: '/home', name: 'events', component: eventOverview },
+        { path: '/events', name: 'events', component: eventOverview },
         { path: '/songs', name: 'songs', component: songsOverview },
         { path: '/setlists', name: 'setlists', component: setListOverview },
         { path: '/create-song', name: 'createsong', component: createSong },

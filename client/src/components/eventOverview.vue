@@ -3,18 +3,12 @@ import { onMounted, ref } from 'vue';
 import { useRouter,useRoute } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const route = useRoute();
 
 const eventId = route.params._id;
-
-function viewSetlists(): void {
-    router.push("/setlists");
-}
-function viewSongs(): void {
-    router.push("/songs");
-}
 
 function createEvent(): void {
     router.push("/create-event");
@@ -68,13 +62,10 @@ onMounted(() => loadEvents());
         </li>
     </ul>
     <p v-else>No events are created yet</p>
-    <p>This page could be the public landing page where people can see events?</p>
-    <p>Band members could also log in here to maybe unlock more actions etc..?</p>
-    <button>Log in</button>
 
-    <button @click="viewSetlists">Setlists</button>
-    <button @click="viewSongs">Songs</button>
     <button @click="createEvent">Create Event</button>
+
+    <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

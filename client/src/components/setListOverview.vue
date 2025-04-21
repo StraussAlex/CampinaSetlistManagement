@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { Setlist } from '../models/Setlist';
 import api from '../services/api'
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 
@@ -41,6 +42,8 @@ onMounted(() => loadSetlists());
   <p v-else>No setlists yet</p>
 
   <button @click="createNewSetlist">Create new setlist</button>
+
+  <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>
