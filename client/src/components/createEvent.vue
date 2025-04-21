@@ -40,13 +40,15 @@ const warnings = ref<string[]>([]);
 async function deleteEvent(): Promise<void> {
     try {
         await api.delete(`${EVENT_API}/${editingId}`);
-        router.push("/");
+        router.push("/events");
     } catch(error) {
         errors.value.push("Error deleting event: " + error);
     }
 }
 
 async function createEvent(): Promise<void> {
+
+    errors.value = [];
     eventName.value = eventName.value.trim();
     eventLocation.value = eventLocation.value.trim();
     eventDate.value = eventDate.value.trim();
@@ -84,7 +86,7 @@ async function createEvent(): Promise<void> {
             const response = await api.post(EVENT_API, event);
             event._id = response.data.insertedId;
         }
-        router.push("/")
+        router.push("/events")
     } catch(error) {
         errors.value.push("Error creating an event: " + error)
     }
