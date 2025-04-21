@@ -1,41 +1,67 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import  Event  from '../models/Event'
 import api from '../services/api'
 
 const router = useRouter();
+const route = useRoute();
+const editingId = route.params.id;
+
+const buttonText = ref<string>(isEditingRoute() ? "Update Event" : "Create Event");
+
+function isEditingRoute(): boolean {
+  return route.name == "edit-event";
+}
+
+onMounted(async () => {
+  try {
+    const response = await api.get(`${EVENT_API}/${editingId}`)
+    const event = response.data
+    eventName.value = event.name;
+    eventLocation.value = event.location;
+    eventDate.value = event.date;
+  } catch (error) {
+    errors.value.push('Failed to load event')
+  }
+})
 
 const EVENT_API = "events";
 
 const eventName = ref<string>("");
-const eventPlace = ref<string>("");
-const eventTime = ref<string>("");
-const eventDay = ref<number>(0);
-//const eventMonth = ref<number>(0); if we want to make a proper validation
-const eventMonth = ref<string>("");
-const eventYear = ref<number>(0);
+const eventLocation = ref<string>("");
+const eventDate = ref<string>("");
 
-let date: Date = new Date();
+// let date: Date = new Date();
 
 const errors = ref<string[]>([]);
 const warnings = ref<string[]>([]);
 
+async function deleteEvent(): Promise<void> {
+    try {
+        await api.delete(`${EVENT_API}/${editingId}`);
+        router.push("/");
+    } catch(error) {
+        errors.value.push("Error deleting event: " + error);
+    }
+}
+
 async function createEvent(): Promise<void> {
     eventName.value = eventName.value.trim();
-    eventPlace.value = eventPlace.value.trim();
-    eventTime.value = eventTime.value.trim();
-    eventMonth.value = eventMonth.value.trim();
+    eventLocation.value = eventLocation.value.trim();
+    eventDate.value = eventDate.value.trim();
 
-    if (eventName.value.length === 0 || eventPlace.value.length === 0) {
+    // eventMonth.value = eventMonth.value.trim();
+
+    if(eventName.value.length === 0 || eventLocation.value.length === 0) {
         errors.value.push("Name or place of the event cannot be empty.");
     }
-    if (eventDay.value < 1 || eventDay.value > 31){
-        errors.value.push("Day number cannot be less than 1 and bigger than 31.");
-    }
-    if (eventYear.value < date.getFullYear()){
-        warnings.value.push("This event is located in the past.");
-    }
+    //TODO datum validiern
+    //Warnings machen so wenig sinn wenn man trotzdem speichern kann und weitergeleitet wird - man sieht sie nie?
+
+    // if (eventYear.value < date.getFullYear()){
+    //     warnings.value.push("This event is located in the past.");
+    // }
     // proper validation
     /*if (eventYear.value === date.getFullYear && eventMonth.value < date.getMonth()){
             warnings.value.push("This event is located in the past.");
@@ -46,12 +72,18 @@ async function createEvent(): Promise<void> {
             warnings.value.push("This event is located in the past.");
     }*/
 
-    const event = new Event(eventName.value, eventPlace.value, eventTime.value, 
-                            eventDay.value, eventMonth.value, eventYear.value);
-    try {
-        const response = await api.post(EVENT_API,event);
-        event._id = response.data.insertedId;
+    if(errors.value.length > 0) return;
 
+
+    const event = new Event(eventName.value, eventLocation.value, eventDate.value);
+
+    try {
+        if(isEditingRoute()) {
+            await api.put(`${EVENT_API}/${editingId}`, event);
+        } else {
+            const response = await api.post(EVENT_API, event);
+            event._id = response.data.insertedId;
+        }
         router.push("/")
     } catch(error) {
         errors.value.push("Error creating an event: " + error)
@@ -67,28 +99,13 @@ async function createEvent(): Promise<void> {
 
     <br><br>
 
-    <label for = "input-event-place">Event place</label>
-    <input name = "input-event-place" v-model = "eventPlace">
+    <label for = "input-event-place">Event location</label>
+    <input name = "input-event-place" v-model = "eventLocation">
 
     <br><br>
 
-    <label for = "input-event-time">Event time</label>
-    <input name = "input-event-time" v-model = "eventTime">
-
-    <br><br>
-
-    <label for = "input-event-day">Event day</label>
-    <input name = "input-event-day" v-model = "eventDay">
-
-    <br><br>
-
-    <label for = "input-event-month">Event month</label>
-    <input name = "input-event-month" v-model = "eventMonth">
-
-    <br><br>
-
-    <label for = "input-event-year">Event year</label>
-    <input name = "input-event-year" v-model = "eventYear">
+    <label for = "input-event-time">Event Date</label>
+    <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
 
     <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -98,7 +115,8 @@ async function createEvent(): Promise<void> {
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul>
 
-    <button @click="createEvent">Save an event</button>
+    <button @click="createEvent">{{ buttonText }}</button>
+    <button v-if="isEditingRoute()">Delete Event</button>
 </template>
 
 <style scoped>

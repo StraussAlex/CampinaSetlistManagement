@@ -11,15 +11,15 @@ import songView from './components/songView.vue'
 import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
 import adminPage from './components/adminPage.vue'
-import editEvent from './components/editEvent.vue'
 import editSong from './components/editSong.vue'
-import editSetlist from './components/editSetlist.vue'
+import landingPage from './components/landingPage.vue'
 
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', name: 'events', component: eventOverview },
+        { path: '/', name: 'landing-page', component: landingPage },
+        { path: '/home', name: 'events', component: eventOverview },
         { path: '/songs', name: 'songs', component: songsOverview },
         { path: '/setlists', name: 'setlists', component: setListOverview },
         { path: '/create-song', name: 'createsong', component: createSong },
@@ -28,9 +28,9 @@ const router = createRouter({
         { path: '/setlists/:id', name: 'viewsetlist', component: setlistView },
         { path: '/create-event', name: 'create-event', component: createEvent},
         { path: '/manage-users', name: 'admin-page', component: adminPage},
-        { path: '/events/:id', name: 'edit-event', component: editEvent },
+        { path: '/edit-event/:id', name: 'edit-event', component: createEvent },
         { path: '/songs/edit-song/:id', name: 'edit-song', component: editSong },
-        { path: '/setlists/edit-setlist/:id', name: 'edit-setlist', component: editSetlist }
+        { path: '/edit-setlist/:id', name: 'edit-setlist', component: createSetlist }
     ]
 });
 

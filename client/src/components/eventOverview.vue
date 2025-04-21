@@ -30,21 +30,26 @@ const events = ref<Event[]>([])
 async function loadEvents(): Promise<void> {
     try{
         const response = await api.get(EVENTS_API);
-        events.value = response.data;
+        events.value = response.data.map((e: any) => {
+        const event = new Event(e.name, e.location, e.date);
+        event._id = e._id;
+        return event;
+    });
+        console.log(events);
     } catch(error) {
         console.log("An error in showing the events has appeared: " + error);
     }
 }
-
-async function deleteEvent(eventId: number): Promise<void>{
-    try{
-        await api.delete(`${EVENTS_API}/${eventId}`);
-        events.value = events.value.filter(event => event._id !== eventId);
+//Delete in createEvent verschoben, nur angezeigt wenn edited wird
+// async function deleteEvent(eventId: number): Promise<void>{
+//     try{
         
-    } catch(error){
-        console.log("An error in deleting the event has appeared: " + error)
-    }
-}
+//         events.value = events.value.filter(event => event._id !== eventId);
+        
+//     } catch(error){
+//         console.log("An error in deleting the event has appeared: " + error)
+//     }
+// }
 
 function confirmDelete(): void{
     // TODO: ask to confirm the deletion of an event after clicking "delete" button
@@ -57,9 +62,8 @@ onMounted(() => loadEvents());
 <template>
     <h1>Events</h1>
     <ul v-if="events.length !== 0">
-        <li v-for="event in events">{{ event.name }} | {{ event.day }} of {{ event.month }} | {{ event.place }} 
+        <li v-for="event in events">{{ event.name }} | {{ event.getFullDate }} 
             <button>Details</button>
-            <button @click="deleteEvent(event._id)">Delete</button>
             <button @click="updateEvent(event._id)">Edit Event</button>
         </li>
     </ul>

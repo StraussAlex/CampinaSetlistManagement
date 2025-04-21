@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 
 const router = useRouter();
+const route = useRoute();
+const editingId = route.params.id;
+
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
 const SETLIST_API = "setlists";
 
+const buttonText = ref<string>(isEditingRoute() ? "Update setlist" : "Save setlist");
+
 const errors = ref<string[]>([]);
 
 function clearErrors(): void {
   errors.value = [];
+}
+function isEditingRoute(): boolean {
+  return route.name == "edit-setlist";
 }
 
 async function loadSongs(): Promise<void> {
@@ -26,7 +34,29 @@ async function loadSongs(): Promise<void> {
   }
 }
 
-onMounted(() => loadSongs());
+onMounted(async() => {
+
+  await loadSongs();
+
+  if(isEditingRoute()) {
+    try {
+      const response = await api.get(`${SETLIST_API}/${editingId}`)
+      const setlist = response.data
+
+      setlistName.value = setlist.name
+
+      const fullSongs = songs.value.filter(song =>
+        setlist.songs.some((s: SetlistSong) => s.songId === song._id)
+      )
+
+      setlistSongs.value = fullSongs
+
+    } catch (error) {
+      console.log(error)
+      errors.value.push("Failed to load setlist.")
+    }
+  }
+});
 
 const setlistName = ref<string>("");
 const setlistSongs = ref<Song[]>([]);
@@ -59,13 +89,32 @@ async function createNewSetlist(): Promise<void> {
     songList.push(entry);
   }
   const setlist = new Setlist(setlistName.value, songList);
+
+
   try {
-    const response = await api.post(SETLIST_API, setlist);
-    setlist._id = response.data.insertedId;
+    if(isEditingRoute()) {
+      await api.put(`${SETLIST_API}/${editingId}`, setlist);
+    } else {
+      const response = await api.post(SETLIST_API, setlist);
+      setlist._id = response.data.insertedId;
+    }
+
     router.push("/setlists");
 
   } catch(error) {
-    errors.value.push("Error saving song: " + error);
+    errors.value.push("An error occurred: " + error);
+  }
+}
+
+async function deleteSetlist(): Promise<void> {
+  if(!isEditingRoute()) return;
+
+  try {
+    await api.delete(`${SETLIST_API}/${editingId}`);
+    router.push("/setlists");
+
+  } catch(error) {
+    errors.value.push("Error deleting setlist: " + error);
   }
 }
 
@@ -103,7 +152,8 @@ async function createNewSetlist(): Promise<void> {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSetlist">Save setlist</button>
+  <button @click="createNewSetlist">{{ buttonText }}</button>
+  <button v-if="isEditingRoute()" @click="deleteSetlist()">Delete setlist</button>
 </template>
 
 <style scoped>
