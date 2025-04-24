@@ -12,6 +12,8 @@
         <button @click="navigateTo('/events')">Events</button>
         <button @click="navigateTo('/setlists')">Setlists</button>
         <button @click="navigateTo('/songs')">Songs</button>
+        <!-- only show this button if logged in as admin -->
+        <button @click="navigateTo('/manage-users')">Users</button> 
     </div>
 </template>
 

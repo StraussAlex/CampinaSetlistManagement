@@ -44,11 +44,9 @@ router.put('/:id', async(req, res) => {
     res.json(await req.db.collection(EVENTS_COLLECTON).updateOne(
       {_id: new ObjectId(req.params.id)},
       { $set: {name: req.body.name,
-               place: req.body.place,
-               time: req.body.time,
-               day: req.body.day,
-               month: req.body.month,
-               year: req.body.year
+               location: req.body.location,
+               date: req.body.date,
+               setlistIds: req.body.setlistIds
       }}));
   } catch(error) {
     console.log(error);

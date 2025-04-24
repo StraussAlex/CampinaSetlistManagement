@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import  Event  from '../models/Event'
 import api from '../services/api'
+import { Setlist } from '../models/Setlist';
 
 const router = useRouter();
 const route = useRoute();
@@ -15,22 +16,59 @@ function isEditingRoute(): boolean {
 }
 
 onMounted(async () => {
-  try {
-    const response = await api.get(`${EVENT_API}/${editingId}`)
-    const event = response.data
-    eventName.value = event.name;
-    eventLocation.value = event.location;
-    eventDate.value = event.date;
-  } catch (error) {
-    errors.value.push('Failed to load event')
-  }
+    await loadSetlists();
+
+    if(isEditingRoute()) {
+        try {
+            const response = await api.get(`${EVENT_API}/${editingId}`)
+            const event = response.data
+            eventName.value = event.name;
+            eventLocation.value = event.location;
+            eventDate.value = event.date;
+
+            const eventSetlists = setlists.value.filter(list =>
+                event.setlistIds.some((s: any) => s === list._id)
+            )
+
+            setlistsInEvent.value = eventSetlists;
+        } catch (error) {
+            errors.value.push('Failed to load event')
+        }
+    }
 })
 
+async function loadSetlists(): Promise<void> {
+  try {
+    const response = await api.get(SETLIST_API);
+    setlists.value = response.data;
+  } catch(error) {
+    errors.value.push("Error loading setlists: " + error);
+  }
+}
+
 const EVENT_API = "events";
+const SETLIST_API = "setlists";
+
+const setlists = ref<Setlist[]>([]);
+const setlistsInEvent = ref<Setlist[]>([]);
 
 const eventName = ref<string>("");
 const eventLocation = ref<string>("");
 const eventDate = ref<string>("");
+
+function removeSetlist(index: number): void {
+  setlistsInEvent.value.splice(index, 1);
+}
+function addSetlistToEvent(list: Setlist) {
+  if(setlistAlreadyInEvent(list)) return;
+  setlistsInEvent.value.push(list);
+}
+function setlistAlreadyInEvent(list: Setlist): boolean {
+  for(let i: number = 0; i < setlistsInEvent.value.length; i++) {
+    if(setlistsInEvent.value[i]._id == list._id) return true;
+  }
+  return false;
+}
 
 // let date: Date = new Date();
 
@@ -76,11 +114,16 @@ async function createEvent(): Promise<void> {
 
     if(errors.value.length > 0) return;
 
+    const setlistIds: any[] = [];
+    for(let i = 0; i < setlistsInEvent.value.length; i++) {
+        setlistIds.push(setlistsInEvent.value[i]._id);
+    }
 
-    const event = new Event(eventName.value, eventLocation.value, eventDate.value);
+    const event = new Event(eventName.value, eventLocation.value, eventDate.value, setlistIds);
 
     try {
         if(isEditingRoute()) {
+            console.log(event.setlistIds.length);
             await api.put(`${EVENT_API}/${editingId}`, event);
         } else {
             const response = await api.post(EVENT_API, event);
@@ -109,6 +152,28 @@ async function createEvent(): Promise<void> {
     <label for = "input-event-time">Event Date</label>
     <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
 
+    <p>Setlists</p>
+    <div>
+        <ul v-if="setlistsInEvent.length !== 0">
+        <li v-for="(list, index) in setlistsInEvent">{{ list.name }}
+            <button @click="removeSetlist(index)">X</button>
+        </li>
+        </ul>
+        <p v-else>No setlists</p>
+    </div>
+
+    <hr>
+
+    <p>Setlist selection</p>
+    <div>
+        <ul v-if="setlists.length !== 0">
+            <li v-for="list in setlists">{{ list.name }}
+                <button @click="addSetlistToEvent(list)">Add setlist</button>
+            </li>
+        </ul>
+        <p v-else>No songs available</p>
+    </div>
+
     <ul>
         <li v-for="error in errors">{{ error }}</li>
     </ul>
@@ -118,7 +183,7 @@ async function createEvent(): Promise<void> {
     </ul>
 
     <button @click="createEvent">{{ buttonText }}</button>
-    <button v-if="isEditingRoute()">Delete Event</button>
+    <button @click="deleteEvent" v-if="isEditingRoute()">Delete Event</button>
 </template>
 
 <style scoped>

@@ -4,6 +4,7 @@ class Event{
         public name: string,
         public location: string,
         public date: string,
+        public setlistIds: any[]
     ) {}
 
     get getDay(): number {

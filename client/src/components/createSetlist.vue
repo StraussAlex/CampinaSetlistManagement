@@ -30,7 +30,7 @@ async function loadSongs(): Promise<void> {
     const response = await api.get(SONG_API);
     songs.value = response.data;
   } catch(error) {
-    console.log(error);
+    errors.value.push("Error loading songs: " + error);
   }
 }
 

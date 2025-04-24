@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import api from '../services/api'
 import User from '../models/User';
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const USER_API = "users";
@@ -101,6 +102,8 @@ function getUserErrors(): string[] {
   <ul>
     <li v-for="e in errors">{{ e }}</li>
   </ul>
+
+  <NavigationBarBottom></NavigationBarBottom>
 
 </template>
 
