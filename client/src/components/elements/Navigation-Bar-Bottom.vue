@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
     import { useRouter } from 'vue-router';
 
     const router = useRouter();
 
-    function navigateTo(path) {
+    function navigateTo(path: string): void {
         router.push(path);
     }
 </script>
