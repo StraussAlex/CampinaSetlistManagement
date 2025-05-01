@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Song } from '../models/Song'
+import { Song, SongFile } from '../models/Song'
 import api from '../services/api'
 
 const router = useRouter()
@@ -17,7 +17,7 @@ const newTitle = ref('');
 const newArtist = ref('');
 const newLyrics = ref('');
 const newLinks = ref([]);
-const newFiles = ref([]);
+const newFiles = ref<SongFile[]>([]);
 
 onMounted(async () => {
   try {
@@ -58,6 +58,25 @@ async function updateSong(): Promise<void> {
     errors.value.push("Error updating song: " + error)
   }
 }
+
+async function download(songFile: SongFile){
+  const filename = songFile.filepath.split("/")[1];
+  console.log(songFile)
+  try {
+    const response = await api.get(`songs/download/${filename}`, {
+      responseType: "blob"
+    });
+
+    const url = window.URL.createObjectURL(new File([response.data], filename, { type: response.headers.get("content-type")!}))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', filename.split("-")[1])
+    document.body.appendChild(link)
+    link.click()
+  } catch (error) {
+    console.error('Error downloading the song file:', error);
+  }
+}
 </script>
 
 <template>    
@@ -82,8 +101,13 @@ async function updateSong(): Promise<void> {
 
     <br><br>
 
-    <label for = "input-song-files">Files</label>
-    <input name = "input-event-files" v-model = "newFiles">
+    <label for = "input-song-links">Files</label>
+  <ul>
+    <li v-for="file in songFiles">
+      <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1]}}</em></p>
+      <button @click="download(file)">Download</button>
+    </li>
+  </ul>
 
     <br><br>
 

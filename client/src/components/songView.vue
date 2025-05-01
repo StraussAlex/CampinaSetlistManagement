@@ -32,6 +32,25 @@ async function loadSongDetails() :Promise<void>{
   }
 }
 
+async function download(songFile: SongFile){
+  const filename = songFile.filepath.split("/")[1];
+  console.log(songFile)
+  try {
+    const response = await api.get(`songs/download/${filename}`, {
+      responseType: "blob"
+    });
+
+    const url = window.URL.createObjectURL(new File([response.data], filename, { type: response.headers.get("content-type")!}))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', filename.split("-")[1])
+    document.body.appendChild(link)
+    link.click()
+  } catch (error) {
+    console.error('Error downloading the song file:', error);
+  }
+}
+
 onMounted(() => loadSongDetails());
 </script>
 
@@ -60,6 +79,13 @@ onMounted(() => loadSongDetails());
         </li>
       </ul>
     <br>
+    <h2>Links</h2>
+    <ul>
+      <li v-for="file in songFiles">
+        <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1]}}</em></p>
+        <button @click="download(file)">Download</button>
+      </li>
+    </ul>
 </template>
 
 <style scoped>

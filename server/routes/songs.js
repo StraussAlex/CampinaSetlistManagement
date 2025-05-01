@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 
 const { ObjectId } = require('mongodb');
@@ -82,6 +84,26 @@ router.put('/edit-song/:id', async(req, res) => {
       }}));
   } catch(error) {
     console.log(error);
+  }
+});
+
+
+router.get('/download/:name', async(req, res) => {
+  console.log("get request received")
+  console.log(req.params.name)
+  const path = "uploads/" + req.params.name;
+  console.log(path)
+
+  res.download(path, (err) => {
+    if (err) {
+      return res.status(500).send({
+        message: "Could not download the file. " + err,
+      });
+    }
+  });
+
+  if (!req.params.name) {
+    return res.status(400).send('Filepath is required.');
   }
 });
 
