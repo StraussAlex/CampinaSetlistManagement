@@ -11,16 +11,14 @@ watch(currentSearch, (newVal) => {
 
 </script>
 <template>
-    <div class="search-bar">
-        <label for="search-input">Search
-            <input name="search-input" type="text" v-model="currentSearch">
-        </label>
-    </div>
+    <label for="search-input">Search
+        <input name="search-input" type="text" v-model="currentSearch">
+    </label>
 </template>
 
 <style scoped>
 
-    .search-bar {
+    /* .search-bar {
         display: flex;
         align-items: center;
         flex-direction: row;
@@ -29,6 +27,6 @@ watch(currentSearch, (newVal) => {
 
         padding: 20px;
         background-color: #1e1e1e;
-    }
+    } */
 
 </style>

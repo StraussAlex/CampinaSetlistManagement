@@ -5,6 +5,8 @@ import { Song } from '../models/Song'
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import SearchBar from './elements/Search-Bar.vue';
+import SortAction from './elements/Sort-Action.vue';
+import type { order } from './elements/Sort-Action.vue';
 
 const router = useRouter();
 
@@ -15,7 +17,8 @@ async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
     songs.value = response.data;
-    filteredSongs.value = response.data;
+    filteredSongs.value = songs.value;
+    onSortingChanged('asc');
   } catch(error) {
     console.log(error);
   }
@@ -37,6 +40,20 @@ function onSearchChange(query: string): void {
     song.title.toLowerCase().includes(query.toLowerCase()) ||
     song.artist.toLowerCase().includes(query.toLowerCase())
   );
+  onSortingChanged(currentSort.value);
+}
+const currentSort = ref<order>('asc');
+function onSortingChanged(sort: order): void {
+  currentSort.value = sort;
+  const sortedSongs = [...filteredSongs.value];
+  
+  if (sort === 'asc') {
+    sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+  } else {
+    sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
+  }
+
+  filteredSongs.value = sortedSongs;
 }
 
 onMounted(() => loadSongs());
@@ -46,7 +63,10 @@ onMounted(() => loadSongs());
 <template>
   <h1>Songs</h1>
   
-  <SearchBar @search-change="onSearchChange"></SearchBar>
+  <div>
+    <SearchBar @search-change="onSearchChange"></SearchBar>
+    <SortAction sort-asc-label="A-Z" sort-desc-label="Z-A" @sort-change="onSortingChanged"></SortAction>
+  </div>
 
   <ul v-if="filteredSongs.length !== 0">
     <li v-for="song in filteredSongs">{{ song.artist }} - {{ song.title }}
