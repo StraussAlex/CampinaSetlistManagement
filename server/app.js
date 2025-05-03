@@ -4,6 +4,8 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const { MongoClient } = require('mongodb');
 const DB_URI = "mongodb://mongo:27017/";
@@ -14,6 +16,8 @@ const songRouter = require('./routes/songs');
 const setlistRouter = require('./routes/setlists');
 const eventRouter = require('./routes/events');
 const userRouter = require('./routes/users');
+const loginRouter = require('./routes/login');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
@@ -23,10 +27,30 @@ app.set('view engine', 'hjs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	origin: 'http://localhost:5555',  // domains allowed to request from server
+	// TODO: modify origin before moving to production!
+	credentials: true                // allow cookies to be sent
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+	secret: 'super-secret-key',
+	resave: false,
+	saveUninitialized: false,
+	store: MongoStore.create({
+	  mongoUrl: DB_URI + DB_NAME, 
+	  collectionName: 'Sessions'  
+	}),
+	cookie: {
+	  maxAge: 1000 * 60 * 60 * 24, 
+	  httpOnly: true,
+	  secure: false, 
+	  sameSite: 'lax'
+	}
+  }));
 
 app.use(async(req, res, next) => {
 	try {
@@ -46,6 +70,8 @@ app.use('/songs', songRouter);
 app.use('/setlists', setlistRouter);
 app.use('/events', eventRouter);
 app.use('/users', userRouter);
+app.use('/login', loginRouter);
+app.use('/auth', authRouter);
 
 
 // catch 404 and forward to error handler

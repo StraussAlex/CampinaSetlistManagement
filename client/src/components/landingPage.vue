@@ -1,7 +1,10 @@
 <script setup lang="ts">
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 function redirectToLogin(): void {
-  //TODO route to login page
+  router.push('/login');
 }
 
 </script>

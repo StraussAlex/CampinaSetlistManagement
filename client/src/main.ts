@@ -13,26 +13,122 @@ import createEvent from './components/createEvent.vue'
 import adminPage from './components/adminPage.vue'
 import editSong from './components/editSong.vue'
 import landingPage from './components/landingPage.vue'
-
+import login from './components/login.vue'
+import api from './services/api'
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', name: 'landing-page', component: landingPage },
-        { path: '/events', name: 'events', component: eventOverview },
-        { path: '/songs', name: 'songs', component: songsOverview },
-        { path: '/setlists', name: 'setlists', component: setListOverview },
-        { path: '/create-song', name: 'createsong', component: createSong },
-        { path: '/create-setlist', name: 'createsetlist', component: createSetlist },
-        { path: '/songs/:id', name: 'viewsong', component: songView },
-        { path: '/setlists/:id', name: 'viewsetlist', component: setlistView },
-        { path: '/create-event', name: 'create-event', component: createEvent},
-        { path: '/manage-users', name: 'admin-page', component: adminPage},
-        { path: '/edit-event/:id', name: 'edit-event', component: createEvent },
-        { path: '/songs/edit-song/:id', name: 'edit-song', component: editSong },
-        { path: '/edit-setlist/:id', name: 'edit-setlist', component: createSetlist }
+      { 
+        path: '/', 
+        name: 'landing-page', 
+        component: landingPage 
+      },
+      { 
+        path: '/login', 
+        name: 'login', 
+        component: login 
+      },
+      { 
+        path: '/events', 
+        name: 'events', 
+        component: eventOverview, 
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/create-event', 
+        name: 'create-event', 
+        component: createEvent,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/edit-event/:id', 
+        name: 'edit-event', 
+        component: createEvent,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/songs', 
+        name: 'songs', 
+        component: songsOverview,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/create-song', 
+        name: 'createsong', 
+        component: createSong,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/songs/:id', 
+        name: 'viewsong', 
+        component: songView,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/songs/edit-song/:id', 
+        name: 'edit-song', 
+        component: editSong,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/setlists', 
+        name: 'setlists', 
+        component: setListOverview,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/create-setlist', 
+        name: 'createsetlist', 
+        component: createSetlist,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/setlists/:id', 
+        name: 'viewsetlist', 
+        component: setlistView,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/edit-setlist/:id', 
+        name: 'edit-setlist', 
+        component: createSetlist,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/manage-users', 
+        name: 'admin-page', 
+        component: adminPage,
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
     ]
-});
+  });
+  
+  // checks if authenticated when needed, otherwise reroutes to /login
+  router.beforeEach(async (to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      try {
+        const response = await api.get('/auth', { withCredentials: true });
+        const user = response.data.user;
+  
+        if (!response.data.authenticated) {
+          return next('/login');
+        }
+  
+        if (to.meta.requiresAdmin && !user.isAdmin) {
+          return next('/'); 
+        }
+  
+        next();
+      } catch (error) {
+        console.error('Authentication check failed:', error);
+        next('/login');
+      }
+    } else {
+      next();
+    }
+  });
+  
 
 const app = createApp(App)
 
