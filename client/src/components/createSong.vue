@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { Song, SongFile} from '../models/Song'
 import { useRouter } from 'vue-router';
 import api from '../services/api'
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 
 const SONG_API = "songs";
@@ -145,7 +146,8 @@ function deleteInstrument(index: number): void {
 
   <button @click="createNewSong">Save song</button>
 
-  <p>TODO: Add the option to add different files and assign them to instruments</p>
+  <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
+  <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

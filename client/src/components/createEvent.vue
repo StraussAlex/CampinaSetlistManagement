@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import  Event  from '../models/Event'
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -184,6 +185,8 @@ async function createEvent(): Promise<void> {
 
     <button @click="createEvent">{{ buttonText }}</button>
     <button @click="deleteEvent" v-if="isEditingRoute()">Delete Event</button>
+
+    <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

@@ -21,9 +21,6 @@ async function loadSetlists(): Promise<void> {
 function viewSetlist(setlistId: any): void {
   router.push({ name: 'viewsetlist', params: { id: setlistId } });
 }
-function editSetlist(setlistId: any): void {
-  router.push({ name: 'edit-setlist', params: { id: String(setlistId) } });
-}
 function createNewSetlist(): void {
   router.push("/create-setlist");
 }
@@ -36,7 +33,7 @@ onMounted(() => loadSetlists());
   <ul v-if="setlists.length !== 0">
     <li v-for="setlist in setlists">{{ setlist.name }} | {{ setlist.songs.length }} song(s)
       <button @click="viewSetlist(setlist._id)">View setlist</button>
-      <button @click="editSetlist(setlist._id)">Edit setlist</button> 
+      <!-- <button @click="editSetlist(setlist._id)">Edit setlist</button>  -->
     </li>
   </ul>
   <p v-else>No setlists yet</p>

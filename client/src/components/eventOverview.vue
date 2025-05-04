@@ -6,15 +6,15 @@ import api from '../services/api';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
-const route = useRoute();
+// const route = useRoute();
 
-const eventId = route.params._id;
+// const eventId = route.params._id; ???
 
 function createEvent(): void {
     router.push("/create-event");
 }
-function updateEvent(id: string): void {
-  router.push({ name: 'edit-event', params: { id: String(id) } });
+function viewEvent(eventId: any): void {
+  router.push({ name: 'viewevent', params: { id: eventId } });
 }
 
 
@@ -25,7 +25,7 @@ async function loadEvents(): Promise<void> {
     try{
         const response = await api.get(EVENTS_API);
         events.value = response.data.map((e: any) => {
-        const event = new Event(e.name, e.location, e.date);
+        const event = new Event(e.name, e.location, e.date, e.setlistIds);
         event._id = e._id;
         return event;
     });
@@ -45,9 +45,9 @@ async function loadEvents(): Promise<void> {
 //     }
 // }
 
-function confirmDelete(): void{
-    // TODO: ask to confirm the deletion of an event after clicking "delete" button
-}
+// function confirmDelete(): void{
+//     // TODO: ask to confirm the deletion of an event after clicking "delete" button
+// }
 
 onMounted(() => loadEvents());
 
@@ -57,8 +57,8 @@ onMounted(() => loadEvents());
     <h1>Events</h1>
     <ul v-if="events.length !== 0">
         <li v-for="event in events">{{ event.name }} | {{ event.getFullDate }} 
-            <button>Details</button>
-            <button @click="updateEvent(event._id)">Edit Event</button>
+            <button @click="viewEvent(event._id)">Details</button>
+            <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
         </li>
     </ul>
     <p v-else>No events are created yet</p>

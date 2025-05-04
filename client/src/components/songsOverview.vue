@@ -26,9 +26,6 @@ async function loadSongs(): Promise<void> {
 function createNewSong(): void {
   router.push("/create-song");
 }
-function editSong(songId: string): void {
-  router.push({ name: "edit-song", params: {id: String(songId)}});
-}
 function viewSong(songId: any): void {
   console.log(songId);
   router.push({ name: 'viewsong', params: { id: songId } })
@@ -71,7 +68,7 @@ onMounted(() => loadSongs());
   <ul v-if="filteredSongs.length !== 0">
     <li v-for="song in filteredSongs">{{ song.artist }} - {{ song.title }}
       <button @click="viewSong(song._id)">View song</button>
-      <button @click="editSong(song._id)">Edit song</button>
+      <!-- <button @click="editSong(song._id)">Edit song</button> -->
     </li>
   </ul>
   <p v-else>No songs yet</p>

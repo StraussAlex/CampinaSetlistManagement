@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -154,6 +155,8 @@ async function deleteSetlist(): Promise<void> {
 
   <button @click="createNewSetlist">{{ buttonText }}</button>
   <button v-if="isEditingRoute()" @click="deleteSetlist()">Delete setlist</button>
+
+  <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

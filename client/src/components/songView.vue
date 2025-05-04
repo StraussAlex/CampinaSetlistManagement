@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api'
 import { Song, SongFile } from '../models/Song';
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -16,6 +17,10 @@ const songArtist = ref('');
 const songLyrics = ref('');
 const songLinks = ref<string[]>([]);
 const songFiles = ref<SongFile[]>([]);
+
+function editSong(): void {
+  router.push({ name: "edit-song", params: {id: String(songId)}});
+}
 
 async function loadSongDetails() :Promise<void>{
   try{
@@ -86,6 +91,9 @@ onMounted(() => loadSongDetails());
         <button @click="download(file)">Download</button>
       </li>
     </ul>
+
+    <button @click="editSong">Edit</button>
+    <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>

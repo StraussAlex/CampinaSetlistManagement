@@ -10,6 +10,7 @@ import createSetlist from './components/createSetlist.vue'
 import songView from './components/songView.vue'
 import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
+import eventView from './components/eventView.vue'
 import adminPage from './components/adminPage.vue'
 import editSong from './components/editSong.vue'
 import landingPage from './components/landingPage.vue'
@@ -39,6 +40,12 @@ const router = createRouter({
         path: '/create-event', 
         name: 'create-event', 
         component: createEvent,
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/events/:id', 
+        name: 'viewevent', 
+        component: eventView,
         meta: { requiresAuth: true } 
       },
       { 

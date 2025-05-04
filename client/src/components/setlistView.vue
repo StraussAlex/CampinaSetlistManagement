@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import { Song } from '../models/Song';
+import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -14,6 +15,10 @@ const SETLIST_API = "setlists";
 
 const setlistName = ref('');
 const setlistSongs = ref<Song[]>([]);
+
+function editSetlist(): void {
+  router.push({ name: 'edit-setlist', params: { id: String(setlistId) } });
+}
 
 function songDetails(songId:any){
   router.push({ name: "viewsong", params: {id: String(songId)}});
@@ -57,7 +62,9 @@ onMounted(() => loadSetlistDetails());
       </ul>
       <p v-else> *No songs were added to this composition*</p>
     <br>
-
+    
+    <button @click="editSetlist">Edit</button>
+    <NavigationBarBottom></NavigationBarBottom>
 </template>
 
 <style scoped>
