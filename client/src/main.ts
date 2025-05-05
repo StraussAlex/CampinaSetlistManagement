@@ -73,8 +73,8 @@ const router = createRouter({
         meta: { requiresAuth: true } 
       },
       { 
-        path: '/songs/edit-song/:id', 
-        name: 'edit-song', 
+        path: '/songs/edit-song/:id',
+        name: 'createsong',
         component: editSong,
         meta: { requiresAuth: true } 
       },

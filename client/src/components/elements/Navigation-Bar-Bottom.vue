@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
     import { useRouter } from 'vue-router';
 import api from '../../services/api'
 
-import 'stylesheets/nav.css';
+import '/src/stylesheets/nav.css';
 
     const router = useRouter();
 

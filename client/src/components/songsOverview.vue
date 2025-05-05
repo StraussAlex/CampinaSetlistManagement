@@ -8,10 +8,10 @@ import SearchBar from './elements/Search-Bar.vue';
 import SortAction from './elements/Sort-Action.vue';
 import type { order } from './elements/Sort-Action.vue';
 
-import 'stylesheets/list.css'
-import 'stylesheets/input.css'
-import 'stylesheets/header.css'
-import 'stylesheets/search.css'
+import '/src/stylesheets/list.css'
+import '/src/stylesheets/input.css'
+import '/src/stylesheets/header.css'
+import '/src/stylesheets/search.css'
 
 const router = useRouter();
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import 'stylesheets/search.css'
+import '/src/stylesheets/search.css'
 
 const currentSearch = ref<string>("");
 
