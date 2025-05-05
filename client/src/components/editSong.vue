@@ -59,6 +59,15 @@ async function updateSong(): Promise<void> {
   }
 }
 
+async function deleteSong(): Promise<void> {
+  try{
+    await api.delete(`songs/${songId}`)
+    router.push('/songs')
+  }catch (error) {
+    errors.value.push("Error deleting song: " + error)
+  }
+}
+
 async function download(songFile: SongFile){
   const filename = songFile.filepath.split("/")[1];
   console.log(songFile)
@@ -76,6 +85,9 @@ async function download(songFile: SongFile){
   } catch (error) {
     console.error('Error downloading the song file:', error);
   }
+}
+function deleteInstrument(index: number): void {
+  newFiles.value.splice(index, 1);
 }
 </script>
 
@@ -103,9 +115,10 @@ async function download(songFile: SongFile){
 
     <label for = "input-song-links">Files</label>
   <ul>
-    <li v-for="file in songFiles">
+    <li v-for="file in newFiles">
       <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1]}}</em></p>
       <button @click="download(file)">Download</button>
+      <button @click="deleteInstrument(index)">Delete</button>
     </li>
   </ul>
 
@@ -119,7 +132,8 @@ async function download(songFile: SongFile){
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul>
 
-    <button @click="updateSong">Save a song</button>
+    <button @click="updateSong">Save Song</button>
+    <button @click="deleteSong">Delete Song</button>
 </template>
 
 <style scoped>

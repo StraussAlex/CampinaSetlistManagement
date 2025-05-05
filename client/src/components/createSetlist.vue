@@ -6,6 +6,12 @@ import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
+import 'stylesheets/input.css'
+import 'stylesheets/header.css'
+import 'stylesheets/search.css'
+import 'stylesheets/overlay.css'
+import 'stylesheets/list.css'
+
 const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
@@ -113,7 +119,6 @@ async function deleteSetlist(): Promise<void> {
   try {
     await api.delete(`${SETLIST_API}/${editingId}`);
     router.push("/setlists");
-
   } catch(error) {
     errors.value.push("Error deleting setlist: " + error);
   }

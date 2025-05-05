@@ -5,6 +5,10 @@ import { useRouter } from 'vue-router';
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
+import 'stylesheets/input.css'
+import 'stylesheets/header.css'
+import 'stylesheets/search.css'
+import 'stylesheets/overlay.css'
 
 const SONG_API = "songs";
 

@@ -5,6 +5,8 @@ import api from '../services/api';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
+import 'stylesheets/input.css'
+
 const currentUsername = ref<string>('');
 const currentPassword = ref<string>('');
 const errorMessage = ref<string>('');

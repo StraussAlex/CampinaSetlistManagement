@@ -6,6 +6,11 @@ import { Setlist } from '../models/Setlist';
 import { Song } from '../models/Song';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
+import 'stylesheets/list.css'
+import 'stylesheets/input.css'
+import 'stylesheets/header.css'
+import 'stylesheets/search.css'
+
 const router = useRouter();
 const route = useRoute();
 

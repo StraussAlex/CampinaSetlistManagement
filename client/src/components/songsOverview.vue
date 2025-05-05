@@ -8,6 +8,11 @@ import SearchBar from './elements/Search-Bar.vue';
 import SortAction from './elements/Sort-Action.vue';
 import type { order } from './elements/Sort-Action.vue';
 
+import 'stylesheets/list.css'
+import 'stylesheets/input.css'
+import 'stylesheets/header.css'
+import 'stylesheets/search.css'
+
 const router = useRouter();
 
 const SONG_API = "songs";

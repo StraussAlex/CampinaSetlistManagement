@@ -5,6 +5,11 @@ import { Setlist } from '../models/Setlist';
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
+import 'stylesheets/list.css'
+import 'stylesheets/input.css'
+import 'stylesheets/header.css'
+import 'stylesheets/search.css'
+
 const router = useRouter();
 
 const SETLIST_API = "setlists";

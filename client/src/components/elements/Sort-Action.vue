@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import 'stylesheets/search.css'
 
 export type order = 'asc' | 'desc';
 interface Props {
