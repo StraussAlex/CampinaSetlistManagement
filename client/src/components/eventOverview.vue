@@ -4,6 +4,7 @@ import { useRouter,useRoute } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 const router = useRouter();
 // const route = useRoute();
@@ -44,7 +45,6 @@ async function loadEvents(): Promise<void> {
 //         console.log("An error in deleting the event has appeared: " + error)
 //     }
 // }
-
 // function confirmDelete(): void{
 //     // TODO: ask to confirm the deletion of an event after clicking "delete" button
 // }
@@ -58,7 +58,7 @@ onMounted(() => loadEvents());
     <ul v-if="events.length !== 0">
         <li v-for="event in events">{{ event.name }} | {{ event.getFullDate }} 
             <button @click="viewEvent(event._id)">Details</button>
-            <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
+                        <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
         </li>
     </ul>
     <p v-else>No events are created yet</p>
@@ -66,6 +66,8 @@ onMounted(() => loadEvents());
     <button @click="createEvent">Create Event</button>
 
     <NavigationBarBottom></NavigationBarBottom>
+    <!--Um "Mobile Nav Bar"-Ansicht zu aktivieren, ist "NavigationBarBottom"-Tag zu löschen und "MobileNavBar" zu unkommentieren-->
+    <!--<MobileNavBar></MobileNavBar> --> 
 </template>
 
 <style scoped>
