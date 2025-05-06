@@ -22,7 +22,7 @@ async function loadSongs(): Promise<void> {
     const response = await api.get(SONG_API);
     songs.value = response.data;
     filteredSongs.value = songs.value;
-    onSortingChanged('asc');
+    onSortingChanged('newest');
   } catch(error) {
     console.log(error);
   }
@@ -80,10 +80,10 @@ onMounted(() => loadSongs());
   <div>
     <SearchBar @search-change="onSearchChange"></SearchBar>
     <SortAction @sort-change="onSortingChanged" :sort-options="[
-      {value: 'asc', display: 'A-Z'},
-      {value: 'desc', display: 'Z-A'},
       {value: 'newest', display: 'Newest'},
-      {value: 'oldest', display: 'Oldest'}
+      {value: 'oldest', display: 'Oldest'},
+      {value: 'asc', display: 'A-Z'},
+      {value: 'desc', display: 'Z-A'}
     ]"></SortAction>
   </div>
 

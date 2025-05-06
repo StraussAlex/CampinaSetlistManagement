@@ -91,7 +91,6 @@ function onSortingChanged(sort: string): void {
         <SortAction @sort-change="onSortingChanged" :sort-options="[
             {value: 'newest', display: 'Newest'},
             {value: 'oldest', display: 'Oldest'}
-        
         ]"></SortAction>
     </div>
 
