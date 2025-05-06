@@ -65,7 +65,7 @@ onMounted(() => loadSetlistDetails());
           {{ setlistSong.title }} - {{ setlistSong.artist }}<button @click="songDetails(setlistSong._id)">Details</button>
         </li>
       </ul>
-      <p v-else> *No songs were added to this composition*</p>
+      <p v-else> *No songs were added to this setlist*</p>
     <br>
     
     <button @click="editSetlist">Edit</button>

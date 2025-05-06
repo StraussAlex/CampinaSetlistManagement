@@ -4,8 +4,10 @@ class Song {
         public title: string, 
         public artist: string,
         public lyrics: string,
+        public notes: string,
         public links: string[],
-        public files: SongFile[]
+        public files: SongFile[],
+        public creationDate: string
     ) {}
 }
 class SongFile {

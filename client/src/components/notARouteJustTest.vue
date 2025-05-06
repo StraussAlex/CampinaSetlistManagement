@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
 import { Song, SongFile} from '../models/Song'
@@ -112,4 +112,4 @@ onMounted(() => {loadSongs(); loadSetlists(); });
 
 <style scoped>
 
-</style>
+</style> -->

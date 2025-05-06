@@ -62,7 +62,7 @@ const router = createRouter({
       },
       { 
         path: '/create-song', 
-        name: 'createsong', 
+        name: 'create-song', 
         component: createSong,
         meta: { requiresAuth: true } 
       },

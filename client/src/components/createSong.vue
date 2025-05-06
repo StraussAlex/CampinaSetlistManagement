@@ -14,6 +14,7 @@ const SONG_API = "songs";
 
 const songTitle = ref<string>("");
 const songArtist = ref<string>("");
+const currentNotes = ref<string>("");
 
 const songLinks = ref<string[]>([]);
 const currentLink = ref<string>("");
@@ -63,7 +64,13 @@ async function createNewSong(): Promise<void> {
 
   if(errors.value.length > 0) return;
 
-  const song = new Song(songTitle.value, songArtist.value, songLyrics.value, songLinks.value, []);
+  //! WICHTIG: Siehe createEvent und createSetlist, sollte es eine editingRoute sein (mithilfe von Funktion abfragen), das alte creationDate laden und
+  //! wie in den anderen beiden create files zwischenspeichern. In der nächsten Zeile basierend auf isEditingRoute entscheiden, ob neues oder bestehendes
+  //! creation Date genommen wird
+
+  //! Eigentlich auch gar nicht nötig, da in der express put route kein set feld fürs creation date existiert. Trotzdem zur sicherheit vorher abfragen?
+  const creationDate: string = new Date().toISOString();
+  const song = new Song(songTitle.value, songArtist.value, songLyrics.value, currentNotes.value, songLinks.value, [], creationDate);
 
   try {
     const formData = new FormData();
@@ -114,6 +121,11 @@ function deleteInstrument(index: number): void {
 
   <label for="input-song-artist">Artist</label>
   <input name="input-song-artist" v-model="songArtist">
+
+  <br><br>
+
+  <label for="input-song-notes">Additional notes</label>
+  <textarea name="input-song-notes" v-model="currentNotes"></textarea>
 
   <h2>Links</h2>
   <ul>

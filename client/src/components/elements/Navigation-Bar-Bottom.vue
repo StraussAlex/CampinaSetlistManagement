@@ -22,15 +22,11 @@ import '/src/stylesheets/nav.css';
 const user = ref<any|null>(null);
 
 // retrieving SessionInformation from Backend
-onMounted(() => {
-    async function checkAuth() {
-        const response = await api.get('/auth', { withCredentials: true });
-        user.value  = response.data.user;
-        console.log(user);
-        
-    }
-    checkAuth();
-}) 
+onMounted(async() => {
+    const response = await api.get('/auth', { withCredentials: true });
+    user.value  = response.data.user;
+    console.log(user);
+});
 
 
 

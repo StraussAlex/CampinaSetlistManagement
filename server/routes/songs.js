@@ -80,6 +80,7 @@ router.put('/edit-song/:id', async(req, res) => {
                artist: req.body.artist,
                lyrics: req.body.lyrics,
                links: req.body.links,
+               notes: req.body.notes,
                files: req.body.files
       }}));
   } catch(error) {

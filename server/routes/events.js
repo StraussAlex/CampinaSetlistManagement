@@ -8,8 +8,27 @@ router.get('/', async(req, res) => {
     try{
         res.json(await req.db.collection(EVENTS_COLLECTON).find().toArray());
     } catch(e) {
-        console.log(e);
+        console.error(e);
     }
+});
+
+router.get('/upcoming-public', async (req, res) => {
+  try {
+    const now = new Date().toISOString();
+
+    const nextEvent = await req.db.collection(EVENTS_COLLECTON)
+      .find({
+        isPublic: true,
+        date: { $gt: now }
+      })
+      .sort({ date: 1 })
+      .limit(1)
+      .toArray();
+
+    res.json(nextEvent[0] || null); //null wenn nichts gefunden
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 router.get('/:id', async (req, res) => {
@@ -46,6 +65,7 @@ router.put('/:id', async(req, res) => {
       { $set: {name: req.body.name,
                location: req.body.location,
                date: req.body.date,
+               isPublic: req.body.isPublic,
                setlistIds: req.body.setlistIds
       }}));
   } catch(error) {

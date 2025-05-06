@@ -4,13 +4,11 @@ import { useRouter,useRoute } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import SortAction from './elements/Sort-Action.vue';
+import SearchBar from './elements/Search-Bar.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 const router = useRouter();
-// const route = useRoute();
-
-// const eventId = route.params._id; ???
-
 function createEvent(): void {
     router.push("/create-event");
 }
@@ -26,11 +24,12 @@ async function loadEvents(): Promise<void> {
     try{
         const response = await api.get(EVENTS_API);
         events.value = response.data.map((e: any) => {
-        const event = new Event(e.name, e.location, e.date, e.setlistIds);
-        event._id = e._id;
-        return event;
-    });
-        console.log(events);
+            const event = new Event(e.name, e.location, e.date, e.setlistIds, e.isPublic, e.creationDate);
+            event._id = e._id;
+            return event;
+        });
+        filteredEvents.value = events.value;
+        onSortingChanged('newest');
     } catch(error) {
         console.log("An error in showing the events has appeared: " + error);
     }
@@ -51,12 +50,53 @@ async function loadEvents(): Promise<void> {
 
 onMounted(() => loadEvents());
 
+const filteredEvents = ref<Event[]>(events.value);
+function onSearchChange(query: string): void {
+    filteredEvents.value = events.value.filter(e =>
+    e.name.toLowerCase().includes(query.toLowerCase()));
+  onSortingChanged(currentSort.value);
+}
+const currentSort = ref<string>('newest');
+function onSortingChanged(sort: string): void {
+  currentSort.value = sort;
+  const sortedEvents = [...filteredEvents.value];
+  
+  //! Events filtern nach dem event datum, nicht dem event erstellungs datum, theoretisch wird das creationDate feld nicht verwendet, beides
+  //! einzubinden macht aber finde ich auch keinen sinn, bei events bietet es sich an nach event date zu filtern ig?
+  //! Sollte eine alphabetische sortierung notwendig oder gewünscht sein, bitte code aus setlist oder song hereinkopieren, glaub aber nicht dass das hier 
+  //! sinn ergibt
+  switch(sort) {
+    case 'oldest':
+        sortedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        break;
+    case 'newest':
+        sortedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+    default:
+        //Wie bei sorted songs hab i einfach bei bugs oder so newest als default sorting
+        sortedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+    }
+
+  filteredEvents.value = sortedEvents;
+}
+
 </script>
 
 <template>
     <h1>Events</h1>
-    <ul v-if="events.length !== 0">
-        <li v-for="event in events">{{ event.name }} | {{ event.getFullDate }} 
+
+    <div>
+        <SearchBar @search-change="onSearchChange"></SearchBar>
+        <SortAction @sort-change="onSortingChanged" :sort-options="[
+            {value: 'newest', display: 'Newest'},
+            {value: 'oldest', display: 'Oldest'}
+        
+        ]"></SortAction>
+    </div>
+
+    <ul v-if="filteredEvents.length !== 0">
+        <li v-for="event in filteredEvents">{{ event.name }} | {{ event.getFullDate }} 
             <button @click="viewEvent(event._id)">Details</button>
                         <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
         </li>

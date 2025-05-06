@@ -1,6 +1,6 @@
 class Setlist {
     public _id: any;
-    constructor(public name: string, public songs: SetlistSong[]) {}
+    constructor(public name: string, public songs: SetlistSong[], public creationDate: string) {}
 }
 
 class SetlistSong {

@@ -6,7 +6,6 @@ import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import SearchBar from './elements/Search-Bar.vue';
 import SortAction from './elements/Sort-Action.vue';
-import type { order } from './elements/Sort-Action.vue';
 
 import '/src/stylesheets/list.css'
 import '/src/stylesheets/input.css'
@@ -44,15 +43,28 @@ function onSearchChange(query: string): void {
   );
   onSortingChanged(currentSort.value);
 }
-const currentSort = ref<order>('asc');
-function onSortingChanged(sort: order): void {
+const currentSort = ref<string>('asc');
+function onSortingChanged(sort: string): void {
   currentSort.value = sort;
   const sortedSongs = [...filteredSongs.value];
   
-  if (sort === 'asc') {
-    sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
-  } else {
-    sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
+  switch(sort) {
+    case 'asc':
+      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case 'desc':
+      sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case 'oldest':
+      sortedSongs.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
+      break;
+    case 'newest':
+      sortedSongs.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+      break;
+    default:
+      //Sollts an error geben sortier i alphabetisch, bitte ändern wenns ned passt
+      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+      break;
   }
 
   filteredSongs.value = sortedSongs;
@@ -67,7 +79,12 @@ onMounted(() => loadSongs());
   
   <div>
     <SearchBar @search-change="onSearchChange"></SearchBar>
-    <SortAction sort-asc-label="A-Z" sort-desc-label="Z-A" @sort-change="onSortingChanged"></SortAction>
+    <SortAction @sort-change="onSortingChanged" :sort-options="[
+      {value: 'asc', display: 'A-Z'},
+      {value: 'desc', display: 'Z-A'},
+      {value: 'newest', display: 'Newest'},
+      {value: 'oldest', display: 'Oldest'}
+    ]"></SortAction>
   </div>
 
   <ul v-if="filteredSongs.length !== 0">

@@ -15,6 +15,7 @@ import '/src/stylesheets/list.css'
 const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
+const originalCreationDate = ref<string>('');
 
 
 const SONG_API = "songs";
@@ -47,20 +48,21 @@ onMounted(async() => {
 
   if(isEditingRoute()) {
     try {
-      const response = await api.get(`${SETLIST_API}/${editingId}`)
-      const setlist = response.data
+      const response = await api.get(`${SETLIST_API}/${editingId}`);
+      const setlist = response.data;
 
-      setlistName.value = setlist.name
+      setlistName.value = setlist.name;
+      originalCreationDate.value = setlist.creationDate;
 
       const fullSongs = songs.value.filter(song =>
         setlist.songs.some((s: SetlistSong) => s.songId === song._id)
       )
 
-      setlistSongs.value = fullSongs
+      setlistSongs.value = fullSongs;
 
     } catch (error) {
-      console.log(error)
-      errors.value.push("Failed to load setlist.")
+      console.log(error);
+      errors.value.push("Failed to load setlist.");
     }
   }
 });
@@ -95,7 +97,10 @@ async function createNewSetlist(): Promise<void> {
     const entry = new SetlistSong(setlistSongs.value[i]._id, i + 1);
     songList.push(entry);
   }
-  const setlist = new Setlist(setlistName.value, songList);
+
+  //! Eigentlich gar nicht nötig, da in der express put route kein set feld fürs creation date existiert. Trotzdem zur sicherheit vorher abfragen?
+  const creationDate = isEditingRoute() ? originalCreationDate.value : new Date().toISOString();
+  const setlist = new Setlist(setlistName.value, songList, creationDate);
 
 
   try {
@@ -127,7 +132,7 @@ async function deleteSetlist(): Promise<void> {
 </script>
 
 <template>
-  <h1>Create Setlist</h1>
+  <h1>{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
 
   <label for="input-setlist-name">Setlist Name</label>
   <input name="input-setlist-name" v-model="setlistName">

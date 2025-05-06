@@ -12,9 +12,10 @@ const songId = route.params.id;
 
 const SONG_API = "songs"
 
-const songTitle = ref('');
-const songArtist = ref('');
-const songLyrics = ref('');
+const songTitle = ref<string>('');
+const songArtist = ref<string>('');
+const songLyrics = ref<string>('');
+const songNotes = ref<string>('');
 const songLinks = ref<string[]>([]);
 const songFiles = ref<SongFile[]>([]);
 
@@ -29,6 +30,7 @@ async function loadSongDetails() :Promise<void>{
     songTitle.value = song.title;
     songArtist.value = song.artist;
     songLyrics.value = song.lyrics;
+    songNotes.value = song.notes;
     songLinks.value = Array(song.links);
     songFiles.value = song.files;
     
@@ -70,11 +72,16 @@ onMounted(() => loadSongDetails());
     <p>{{ songArtist }}</p>
     <br>
 
+    <!-- Irgendwie vlt schön formatieren mit den breaks und so idk -->
+    <h2>Additional notes</h2>
+    <p>{{ songNotes }}</p>
+    <br>
+
     <h2>Lyrics</h2>
       <div v-if="songLyrics.length !== 0">
         <p>{{ songLyrics }}</p>
       </div>
-      <p v-else>*No lyrics were added to this composition*</p>
+      <p v-else>*No lyrics were added to this song*</p>
     <br>
 
     <h2>Links</h2>

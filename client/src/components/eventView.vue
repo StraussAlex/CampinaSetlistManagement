@@ -13,9 +13,10 @@ const eventId = route.params.id;
 
 const EVENTS_API = "events";
 
-const eventName = ref('');
-const eventLocation = ref('');
-const eventDate = ref('');
+const eventName = ref<string>('');
+const eventLocation = ref<string>('');
+const eventDate = ref<string>('');
+const eventIsPublic = ref<boolean>(false);
 const eventSetlists = ref<Setlist[]>([]);
 
 function editEvent(): void {
@@ -29,10 +30,11 @@ async function loadEventDetails() :Promise<void>{
   
   try{
     const response = await api.get(`${EVENTS_API}/${eventId}`);
-    const event: Event = new Event(response.data.name, response.data.location, response.data.date, response.data.setlistIds);
+    const event: Event = new Event(response.data.name, response.data.location, response.data.date, response.data.setlistIds, response.data.isPublic, response.data.creationDate);
     eventName.value = event.name;
     eventLocation.value = event.location;
     eventDate.value = event.getFullDate;
+    eventIsPublic.value = event.isPublic;
 
     const setlistData: Setlist[] = [];
 
@@ -56,6 +58,9 @@ onMounted(() => loadEventDetails());
   <p>{{ eventName }}</p>
   <p>{{ eventLocation }}</p>
   <p>{{ eventDate }}</p>
+
+  <p v-if="eventIsPublic">This event is public</p>
+  <p v-else>This event is private</p>
 
   <h2>Setlists</h2>
     <ul v-if="eventSetlists.length !== 0">

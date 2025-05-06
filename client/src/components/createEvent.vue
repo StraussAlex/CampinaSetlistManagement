@@ -9,6 +9,7 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
+const originalCreationDate = ref<string>('');
 
 const buttonText = ref<string>(isEditingRoute() ? "Update Event" : "Create Event");
 
@@ -26,6 +27,8 @@ onMounted(async () => {
             eventName.value = event.name;
             eventLocation.value = event.location;
             eventDate.value = event.date;
+            eventIsPublic.value = event.isPublic;
+            originalCreationDate.value = event.creationDate;
 
             const eventSetlists = setlists.value.filter(list =>
                 event.setlistIds.some((s: any) => s === list._id)
@@ -56,6 +59,7 @@ const setlistsInEvent = ref<Setlist[]>([]);
 const eventName = ref<string>("");
 const eventLocation = ref<string>("");
 const eventDate = ref<string>("");
+const eventIsPublic = ref<boolean>(false);
 
 function removeSetlist(index: number): void {
   setlistsInEvent.value.splice(index, 1);
@@ -74,7 +78,7 @@ function setlistAlreadyInEvent(list: Setlist): boolean {
 // let date: Date = new Date();
 
 const errors = ref<string[]>([]);
-const warnings = ref<string[]>([]);
+// const warnings = ref<string[]>([]);
 
 async function deleteEvent(): Promise<void> {
     try {
@@ -86,7 +90,6 @@ async function deleteEvent(): Promise<void> {
 }
 
 async function createEvent(): Promise<void> {
-
     errors.value = [];
     eventName.value = eventName.value.trim();
     eventLocation.value = eventLocation.value.trim();
@@ -95,7 +98,7 @@ async function createEvent(): Promise<void> {
     // eventMonth.value = eventMonth.value.trim();
 
     if(eventName.value.length === 0 || eventLocation.value.length === 0) {
-        errors.value.push("Name or place of the event cannot be empty.");
+        errors.value.push("Name or location of the event cannot be empty.");
     }
     //TODO datum validiern
     //Warnings machen so wenig sinn wenn man trotzdem speichern kann und weitergeleitet wird - man sieht sie nie?
@@ -120,7 +123,9 @@ async function createEvent(): Promise<void> {
         setlistIds.push(setlistsInEvent.value[i]._id);
     }
 
-    const event = new Event(eventName.value, eventLocation.value, eventDate.value, setlistIds);
+    //! Eigentlich gar nicht nötig, da in der express put route kein set feld fürs creation date existiert. Trotzdem zur sicherheit vorher abfragen?
+    const creationDate = isEditingRoute() ? originalCreationDate.value : new Date().toISOString();
+    const event = new Event(eventName.value, eventLocation.value, eventDate.value, setlistIds, eventIsPublic.value, creationDate);
 
     try {
         if(isEditingRoute()) {
@@ -139,7 +144,7 @@ async function createEvent(): Promise<void> {
 
 
 <template>    
-    <h1>Create an Event</h1>
+    <h1>{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
     <label for = "input-event-name">Event name</label>
     <input name = "input-event-name" v-model = "eventName">
 
@@ -152,6 +157,12 @@ async function createEvent(): Promise<void> {
 
     <label for = "input-event-time">Event Date</label>
     <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
+
+    <br><br>
+
+    <label for = "input-is-public">Public event</label>
+    <input type="checkbox" name = "input-is-public" v-model = "eventIsPublic">
+    <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
 
     <p>Setlists</p>
     <div>
@@ -172,16 +183,16 @@ async function createEvent(): Promise<void> {
                 <button @click="addSetlistToEvent(list)">Add setlist</button>
             </li>
         </ul>
-        <p v-else>No songs available</p>
+        <p v-else>No setlists available</p>
     </div>
 
     <ul>
         <li v-for="error in errors">{{ error }}</li>
     </ul>
 
-    <ul>
+    <!-- <ul>
         <li v-for="warning in warnings">{{ warning }}</li>
-    </ul>
+    </ul> -->
 
     <button @click="createEvent">{{ buttonText }}</button>
     <button @click="deleteEvent" v-if="isEditingRoute()">Delete Event</button>
