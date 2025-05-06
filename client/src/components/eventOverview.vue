@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouter,useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
