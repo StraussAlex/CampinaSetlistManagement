@@ -1,10 +1,12 @@
+@import '../style.css';
+
 .nav-limiter {
     align-items: center;
     justify-content: center;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgb(174, 188, 199);
+    background-color: var(--primary);
     width: 90%;
     height: 2px;
     bottom: 8%;
@@ -19,7 +21,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    background-color: #ffffff;
+    background-color: var(--background);
 }
 
 .icon-container {
@@ -45,13 +47,13 @@
     z-index: 1;
     height: 0px;
     width: 0px;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--background);
     border-radius: 18px;
     transition: all 0.2s ease-out;
 }
 
 .icon-container:hover .ani_square {
-    background-color: rgb(204, 222, 236);
+    background-color: var(--secondary);
     width: 52px;
     height: 52px;
     transition: all 0.2s ease;
