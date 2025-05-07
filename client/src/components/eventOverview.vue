@@ -18,7 +18,8 @@ function viewEvent(eventId: any): void {
 
 
 const EVENTS_API = "events";
-const events = ref<Event[]>([])
+const events = ref<Event[]>([]);
+const showAllEvents = ref<boolean>(false);
 
 async function loadEvents(): Promise<void> {
     try{
@@ -29,6 +30,7 @@ async function loadEvents(): Promise<void> {
             return event;
         });
         filteredEvents.value = events.value;
+        onSearchChange('');
         onSortingChanged('newest');
     } catch(error) {
         console.log("An error in showing the events has appeared: " + error);
@@ -51,10 +53,25 @@ async function loadEvents(): Promise<void> {
 onMounted(() => loadEvents());
 
 const filteredEvents = ref<Event[]>(events.value);
+const currentQuery = ref<string>('');
 function onSearchChange(query: string): void {
+    currentQuery.value = query;
     filteredEvents.value = events.value.filter(e =>
-    e.name.toLowerCase().includes(query.toLowerCase()));
-  onSortingChanged(currentSort.value);
+        e.name.toLowerCase().includes(query.toLowerCase())
+    );
+    onShowAllEventsChanged(filteredEvents.value);
+    onSortingChanged(currentSort.value);
+}
+
+function onShowAllEventsChanged(preFilteredEvents: Event[]): void {
+    labelNewest.value = showAllEvents.value ? "Newest" : "Upcoming next";
+    labelOldest.value = showAllEvents.value ? "Oldest" : "Upcoming last";
+    
+    if(showAllEvents.value) return;
+
+    filteredEvents.value = preFilteredEvents.filter((e: Event) => {
+        return new Date(e.date) > new Date();
+    });
 }
 const currentSort = ref<string>('newest');
 function onSortingChanged(sort: string): void {
@@ -67,10 +84,12 @@ function onSortingChanged(sort: string): void {
   //! sinn ergibt
   switch(sort) {
     case 'oldest':
-        sortedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        if(showAllEvents.value) sortedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        else sortedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         break;
     case 'newest':
-        sortedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        if(!showAllEvents.value) sortedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        else sortedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         break;
     default:
         //Wie bei sorted songs hab i einfach bei bugs oder so newest als default sorting
@@ -81,6 +100,9 @@ function onSortingChanged(sort: string): void {
   filteredEvents.value = sortedEvents;
 }
 
+const labelNewest = ref<string>('Newest');
+const labelOldest = ref<string>('Oldest'); 
+
 </script>
 
 <template>
@@ -89,9 +111,11 @@ function onSortingChanged(sort: string): void {
     <div>
         <SearchBar @search-change="onSearchChange"></SearchBar>
         <SortAction @sort-change="onSortingChanged" :sort-options="[
-            {value: 'newest', display: 'Newest'},
-            {value: 'oldest', display: 'Oldest'}
+            {value: 'newest', display: labelNewest},
+            {value: 'oldest', display: labelOldest}
         ]"></SortAction>
+        <label for="input-show-all">Show all events</label>
+        <input type="checkbox" name="input-show-all" v-model="showAllEvents" @change="onSearchChange(currentQuery)">
     </div>
 
     <ul v-if="filteredEvents.length !== 0">
