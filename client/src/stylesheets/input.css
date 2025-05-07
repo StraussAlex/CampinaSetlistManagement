@@ -61,13 +61,12 @@ button {
 
 .btn-nav {
     aspect-ratio: 1/1;
-    /* width: 20px; */
     padding: 0;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
     overflow: hidden;
     text-align: center;
     background-color: var(--background);
-    border-color: var(--secondary-lighter);
+    /* border-color: var(--secondary-lighter); */
 }
 .btn-square {
     aspect-ratio: 1/1;

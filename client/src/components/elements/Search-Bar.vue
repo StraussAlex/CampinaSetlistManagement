@@ -12,8 +12,8 @@ watch(currentSearch, (newVal) => {
 
 </script>
 <template>
-    <label for="search-input">Search
-        <input name="search-input" type="text" v-model="currentSearch">
+    <label for="search-input">
+        <input name="search-input" type="text" v-model="currentSearch" placeholder="Search 🔍">
     </label>
 </template>
 
