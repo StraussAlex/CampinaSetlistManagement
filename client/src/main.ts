@@ -12,7 +12,7 @@ import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
 import eventView from './components/eventView.vue'
 import adminPage from './components/adminPage.vue'
-import editSong from './components/editSong.vue'
+
 import landingPage from './components/landingPage.vue'
 import login from './components/login.vue'
 import api from './services/api'
@@ -74,8 +74,8 @@ const router = createRouter({
       },
       { 
         path: '/songs/edit-song/:id',
-        name: 'createsong',
-        component: editSong,
+        name: 'edit-song',
+        component: createSong,
         meta: { requiresAuth: true } 
       },
       { 

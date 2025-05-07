@@ -43,7 +43,7 @@ async function download(songFile: SongFile){
   const filename = songFile.filepath.split("/")[1];
   console.log(songFile)
   try {
-    const response = await api.get(`songs/download/${filename}`, {
+    const response = await api.get(`songs/file/${filename}`, {
       responseType: "blob"
     });
 
@@ -63,7 +63,7 @@ onMounted(() => loadSongDetails());
 
 <template>
   <h1>Song Details</h1>
-    
+
     <h2>Title</h2>
     <p>{{ songTitle }}</p>
     <br>
@@ -94,7 +94,7 @@ onMounted(() => loadSongDetails());
     <h2>Links</h2>
     <ul>
       <li v-for="file in songFiles">
-        <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1]}}</em></p>
+        <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1] }}</em></p>
         <button @click="download(file)" class="btn-secondary">Download</button>
       </li>
     </ul>

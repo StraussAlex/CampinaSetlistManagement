@@ -51,19 +51,7 @@ router.post('/', async(req, res) => {
     console.log(error);
   }
 });
-router.post('/upload', upload.any(), (req, res) => {
-  try {
-    console.log("upload request received")
-    //res.json(await req.db.collection(SONG_COLLECTION).insertOne(req.body));
-    if (!req.files){
-      return res.status(400).send('No file uploaded.');
-    } else {
-      res.json(req.files);
-    }
-  } catch(error) {
-    console.log(error);
-  }
-});
+
 router.delete('/:id', async(req, res) => {
   try {
     res.json(await req.db.collection(SONG_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)}));
@@ -72,7 +60,7 @@ router.delete('/:id', async(req, res) => {
   }
 });
 
-router.put('/edit-song/:id', async(req, res) => {
+router.put('/:id', async(req, res) => {
   try {
     res.json(await req.db.collection(SONG_COLLECTION).updateOne(
       {_id: new ObjectId(req.params.id)},
@@ -88,11 +76,32 @@ router.put('/edit-song/:id', async(req, res) => {
   }
 });
 
-
-router.get('/download/:name', async(req, res) => {
+router.post('/upload', upload.any(), (req, res) => {
+  try {
+    console.log("upload request received")
+    if (!req.files){
+      return res.status(400).send('No file uploaded.');
+    } else {
+      res.json(req.files);
+    }
+  } catch (error) {
+    console.error("File upload error:", error);
+    res.status(500).json({ error: 'Internal server error during file upload.' });
+  }
+});
+router.delete('/file/:filename', async(req, res) => {
+  const path = "uploads/" + req.params.filename;
+  fs.unlink(path, (err) => {
+    if (err) {
+      return res.status(500).send('Error deleting the file');
+    }
+    res.send('File deleted successfully');
+  });
+});
+router.get('/file/:filename', async(req, res) => {
   console.log("get request received")
-  console.log(req.params.name)
-  const path = "uploads/" + req.params.name;
+  console.log(req.params.filename)
+  const path = "uploads/" + req.params.filename;
   console.log(path)
 
   res.download(path, (err) => {
@@ -103,7 +112,7 @@ router.get('/download/:name', async(req, res) => {
     }
   });
 
-  if (!req.params.name) {
+  if (!req.params.filename) {
     return res.status(400).send('Filepath is required.');
   }
 });

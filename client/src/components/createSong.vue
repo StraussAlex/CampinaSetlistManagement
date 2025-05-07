@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Song, SongFile} from '../models/Song'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 
@@ -18,7 +18,7 @@ const currentNotes = ref<string>("");
 
 const songLinks = ref<string[]>([]);
 const currentLink = ref<string>("");
-const instruments = ref<string[]>([]);
+const files = ref<SongFile[]>([]);
 const newInstrumentName = ref<string>("");
 //const files = ref<File[]>([]);
 
@@ -27,6 +27,34 @@ const songLyrics = ref<string>("");
 const errors = ref<string[]>([]);
 
 const router = useRouter();
+const route = useRoute();
+const editingId = route.params.id;
+
+const buttonText = ref<string>(isEditingRoute() ? "Update Song" : "Create Song");
+function isEditingRoute(): boolean {
+  return route.name == "edit-song";
+}
+
+onMounted(async () => {
+  if(isEditingRoute()) {
+    try {
+      const response = await api.get(`${SONG_API}/${editingId}`)
+      const song = response.data
+      songTitle.value = song.title;
+      songArtist.value = song.artist;
+      songLinks.value = song.links;
+      files.value = song.files;
+
+      /*
+      for (const file of song.files) {
+        instruments.value.push(file.instrument);
+      }
+      */
+    } catch (error) {
+      errors.value.push('Failed to load song')
+    }
+  }
+})
 
 function insertLink(): void {
   currentLink.value = currentLink.value.trim();
@@ -52,13 +80,14 @@ async function createNewSong(): Promise<void> {
   if(songTitle.value.length === 0) errors.value.push("Song title cannot be empty");
   if(songArtist.value.length === 0) errors.value.push("Song artist cannot be empty");
 
-  console.log("instrument verification");
-  for (const instrument of instruments.value) {
-
-    const target = document.getElementById(instrument) as HTMLInputElement;
-    console.log(target.files);
-    if (target.files === null){
-      errors.value.push(target.name + " file cannot be empty")
+  //console.log("instrument verification");
+  for (const file of files.value) {
+    if (file.filepath === "None"){
+      const target = document.getElementById(file.instrument) as HTMLInputElement;
+      //console.log(target.files);
+      if (target.files === null){
+        errors.value.push(target.name + " file cannot be empty")
+      }
     }
   }
 
@@ -74,24 +103,41 @@ async function createNewSong(): Promise<void> {
 
   try {
     const formData = new FormData();
-    for (const instrument of instruments.value) {
-      const target = document.getElementById(instrument) as HTMLInputElement
-      formData.append(instrument, target.files![0]);
+    for (const file of files.value) {
+      const target = document.getElementById(file.instrument) as HTMLInputElement
 
+      if (target.files[0]){
+        formData.append(file.instrument, target.files![0]);
+        if (file.filepath !== "None"){
+          const filename = file.filepath.split("/")[1]
+          await api.delete(`${SONG_API}/file/${filename}`);
+        }
+      }else if(file.filepath !== "None"){
+        song.files.push(file)
+      }
+    }
+    console.log(formData)
+    if (!formData.entries().next().done){
+      const fileResponse = await api.post(SONG_API + "/upload", formData);
+
+      for (const file of files.value) {
+        const songFile = new SongFile(file.instrument, fileResponse.data[0].path);
+        song.files.push(songFile);
+      }
     }
 
 
-    const fileResponse = await api.post(SONG_API + "/upload", formData);
-
-    for (const instrument of instruments.value) {
-      const songFile = new SongFile(instrument,fileResponse.data[0].path);
-      song.files.push(songFile);
+    try {
+      if(isEditingRoute()) {
+        await api.put(`${SONG_API}/${editingId}`, song);
+      } else {
+        const response = await api.post(SONG_API, song);
+        song._id = response.data.insertedId;
+      }
+      router.push("/events")
+    } catch(error) {
+      errors.value.push("Error creating an event: " + error)
     }
-
-    const response = await api.post(SONG_API, song);
-    song._id = response.data.insertedId;
-
-    router.push("/songs");
 
   } catch(error) {
     errors.value.push("Error saving song: " + error);
@@ -101,12 +147,15 @@ async function createNewSong(): Promise<void> {
 
 function addInstrumentInput(): void{
   if (newInstrumentName.value !== ""){
-    instruments.value.push(newInstrumentName.value);
+    const song = new SongFile(newInstrumentName.value, "None")
+    files.value.push(song);
     newInstrumentName.value = "";
   }
 }
-function deleteInstrument(index: number): void {
-  instruments.value.splice(index, 1);
+async function deleteInstrument(index: number) {
+  const filename = files.value[index].filepath.split("/")[1]
+  await api.delete(`${SONG_API}/file/${filename}`);
+  files.value.splice(index, 1)
 }
 
 </script>
@@ -146,10 +195,12 @@ function deleteInstrument(index: number): void {
     <input type="text" v-model="newInstrumentName">
     <button @click="addInstrumentInput" class="btn-secondary btn-small"> + Add Instrument</button>
 
-    <div v-for="(instrument, index) in instruments">
+    <div v-for="(file, index) in files">
       <button @click="deleteInstrument(index)">X</button>
-      <label>{{ instrument }}</label>
-      <input type="file" :id="instrument" :name="instrument">
+      <label>{{ file.instrument }}</label>
+      <label v-if='file.filepath==="None"'>File: None</label>
+      <label v-else>File: {{ file.filepath.split("/")[1].split("-")[1] }}</label>
+      <input type="file" :id="file.instrument" :name="file.instrument">
     </div>
   </div>
 
@@ -160,7 +211,7 @@ function deleteInstrument(index: number): void {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSong" class="btn-primary">Save song</button>
+  <button @click="createNewSong" class="btn-primary">{{ buttonText }}</button>
 
   <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
   <NavigationBarBottom></NavigationBarBottom>
