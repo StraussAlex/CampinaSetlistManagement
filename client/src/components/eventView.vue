@@ -71,7 +71,7 @@ onMounted(() => loadEventDetails());
     <p v-else> *There are no setlists assigned to this event*</p>
   <br>
     
-  <button @click="editEvent">Edit</button>
+  <button @click="editEvent" class="btn-primary">Edit</button>
   <NavigationBarBottom></NavigationBarBottom>
 </template>
 

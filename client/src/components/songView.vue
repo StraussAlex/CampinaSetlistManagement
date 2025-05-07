@@ -95,11 +95,11 @@ onMounted(() => loadSongDetails());
     <ul>
       <li v-for="file in songFiles">
         <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1]}}</em></p>
-        <button @click="download(file)">Download</button>
+        <button @click="download(file)" class="btn-secondary">Download</button>
       </li>
     </ul>
 
-    <button @click="editSong">Edit</button>
+    <button @click="editSong" class="btn-primary">Edit</button>
     <NavigationBarBottom></NavigationBarBottom>
 </template>
 

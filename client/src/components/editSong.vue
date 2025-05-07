@@ -132,8 +132,8 @@ function deleteInstrument(index: number): void {
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul>
 
-    <button @click="updateSong">Save Song</button>
-    <button @click="deleteSong">Delete Song</button>
+    <button @click="updateSong" class="btn-primary">Save Song</button>
+    <button @click="deleteSong" class="btn-caution">Delete Song</button>
 </template>
 
 <style scoped>

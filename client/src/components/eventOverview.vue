@@ -96,17 +96,17 @@ function onSortingChanged(sort: string): void {
 
     <ul v-if="filteredEvents.length !== 0">
         <li v-for="event in filteredEvents">{{ event.name }} | {{ event.getFullDate }} 
-            <button @click="viewEvent(event._id)">Details</button>
+            <button @click="viewEvent(event._id)" class="btn-secondary">Details</button>
                         <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
         </li>
     </ul>
     <p v-else>No events are created yet</p>
 
-    <button @click="createEvent">Create Event</button>
+    <button @click="createEvent" class="btn-primary">Create Event</button>
 
     <NavigationBarBottom></NavigationBarBottom>
-    <!--Um "Mobile Nav Bar"-Ansicht zu aktivieren, ist "NavigationBarBottom"-Tag zu löschen und "MobileNavBar" zu unkommentieren-->
-    <!--<MobileNavBar></MobileNavBar> --> 
+    <!-- Um "Mobile Nav Bar"-Ansicht zu aktivieren, ist "NavigationBarBottom"-Tag zu löschen und "MobileNavBar" zu unkommentieren -->
+    <!-- <MobileNavBar></MobileNavBar>  -->
 </template>
 
 <style scoped>

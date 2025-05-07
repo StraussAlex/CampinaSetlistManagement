@@ -160,15 +160,29 @@ async function createEvent(): Promise<void> {
 
     <br><br>
 
-    <label for = "input-is-public">Public event</label>
-    <input type="checkbox" name = "input-is-public" v-model = "eventIsPublic">
+    <!-- <label for = "input-is-public">Public event</label>
+    <input type="checkbox" name = "input-is-public" v-model = "eventIsPublic"> -->
+
+    <label class="checkbox-wrapper">
+  <input 
+    name="input-is-public" 
+    type="checkbox" 
+    v-model="eventIsPublic" 
+    class="checkbox-input"
+  >
+  <span class="custom-checkbox"></span>
+  Public Event
+</label>
+
+
+
     <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
 
     <p>Setlists</p>
     <div>
         <ul v-if="setlistsInEvent.length !== 0">
         <li v-for="(list, index) in setlistsInEvent">{{ list.name }}
-            <button @click="removeSetlist(index)">X</button>
+            <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
         </li>
         </ul>
         <p v-else>No setlists</p>
@@ -180,7 +194,7 @@ async function createEvent(): Promise<void> {
     <div>
         <ul v-if="setlists.length !== 0">
             <li v-for="list in setlists">{{ list.name }}
-                <button @click="addSetlistToEvent(list)">Add setlist</button>
+                <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small">+ Add setlist</button>
             </li>
         </ul>
         <p v-else>No setlists available</p>
@@ -194,8 +208,8 @@ async function createEvent(): Promise<void> {
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul> -->
 
-    <button @click="createEvent">{{ buttonText }}</button>
-    <button @click="deleteEvent" v-if="isEditingRoute()">Delete Event</button>
+    <button @click="createEvent" class="btn-primary">{{ buttonText }}</button>
+    <button @click="deleteEvent" v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
 
     <NavigationBarBottom></NavigationBarBottom>
 </template>

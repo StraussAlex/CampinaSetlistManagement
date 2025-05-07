@@ -89,13 +89,13 @@ onMounted(() => loadSongs());
 
   <ul v-if="filteredSongs.length !== 0">
     <li v-for="song in filteredSongs">{{ song.artist }} - {{ song.title }}
-      <button @click="viewSong(song._id)">View song</button>
+      <button @click="viewSong(song._id)" class="btn-secondary btn-small">View song</button>
       <!-- <button @click="editSong(song._id)">Edit song</button> -->
     </li>
   </ul>
   <p v-else>No songs yet</p>
 
-  <button @click="createNewSong">Create new song</button>
+  <button @click="createNewSong" class="btn-primary">Create new song</button>
 
   <NavigationBarBottom></NavigationBarBottom>
 </template>

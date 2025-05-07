@@ -129,12 +129,12 @@ function deleteInstrument(index: number): void {
 
   <h2>Links</h2>
   <ul>
-    <li v-for="(link, index) in songLinks">{{ link }} <button @click="deleteLink(index)">X</button></li>
+    <li v-for="(link, index) in songLinks">{{ link }} <button @click="deleteLink(index)" class="btn-caution btn-square">X</button></li>
   </ul>
 
   <label for="input-song-link">Add link</label> 
   <input name="input-song-link" v-model="currentLink">
-  <button @click="insertLink">Add link</button>
+  <button @click="insertLink" class="btn-secondary btn-small">+ Add link</button>
 
   <h2>Lyrics</h2>
 
@@ -144,7 +144,7 @@ function deleteInstrument(index: number): void {
 
   <div>
     <input type="text" v-model="newInstrumentName">
-    <button @click="addInstrumentInput">Add Instrument</button>
+    <button @click="addInstrumentInput" class="btn-secondary btn-small"> + Add Instrument</button>
 
     <div v-for="(instrument, index) in instruments">
       <button @click="deleteInstrument(index)">X</button>
@@ -160,7 +160,7 @@ function deleteInstrument(index: number): void {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSong">Save song</button>
+  <button @click="createNewSong" class="btn-primary">Save song</button>
 
   <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
   <NavigationBarBottom></NavigationBarBottom>

@@ -141,7 +141,7 @@ async function deleteSetlist(): Promise<void> {
   <div>
     <ul v-if="setlistSongs.length !== 0">
       <li v-for="(song, index) in setlistSongs">{{ song.artist }} - {{ song.title }}
-        <button @click="removeSong(index)">X</button>
+        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
       </li>
     </ul>
     <p v-else>Empty setlist</p>
@@ -153,7 +153,7 @@ async function deleteSetlist(): Promise<void> {
   <div>
     <ul v-if="songs.length !== 0">
       <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
-        <button @click="addSongToSetlist(song)">Add song</button>
+        <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
       </li>
     </ul>
     <p v-else>No songs available</p>
@@ -163,8 +163,8 @@ async function deleteSetlist(): Promise<void> {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSetlist">{{ buttonText }}</button>
-  <button v-if="isEditingRoute()" @click="deleteSetlist()">Delete setlist</button>
+  <button @click="createNewSetlist" class="btn-primary">{{ buttonText }}</button>
+  <button v-if="isEditingRoute()" @click="deleteSetlist()" class="btn-caution">Delete setlist</button>
 
   <NavigationBarBottom></NavigationBarBottom>
 </template>

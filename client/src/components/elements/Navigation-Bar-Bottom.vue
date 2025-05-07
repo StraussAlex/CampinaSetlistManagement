@@ -33,12 +33,12 @@ onMounted(async() => {
 </script>
 <template>
     <div class="navigation-bar-bottom">
-        <button @click="navigateTo('/events')">Events</button>
-        <button @click="navigateTo('/setlists')">Setlists</button>
-        <button @click="navigateTo('/songs')">Songs</button>
+        <button @click="navigateTo('/events')" class="btn-nav">📅</button>
+        <button @click="navigateTo('/setlists')" class="btn-nav">📃</button>
+        <button @click="navigateTo('/songs')" class="btn-nav">🎶</button>
         <!-- only show this button if logged in as admin -->
-        <button v-if="user !== null && user.isAdmin" @click="navigateTo('/manage-users')">Users</button>
-        <button @click="logoutUser()">Logout</button> 
+        <button v-if="user !== null && user.isAdmin" @click="navigateTo('/manage-users')" class="btn-nav">🧍‍♂️</button>
+        <button @click="logoutUser()" class="btn-nav">🚪</button> 
     </div>
 </template>
 
@@ -53,11 +53,14 @@ onMounted(async() => {
 
         width: 100%;
         position: fixed;
+        
         bottom: 0;
         left: 0;
 
-        padding: 20px;
-        background-color: #1e1e1e;
+        border-top: solid 2px var(--primary);
+
+        padding: 5px 20px;
+        background-color: var(--background);
     }
 
 </style>

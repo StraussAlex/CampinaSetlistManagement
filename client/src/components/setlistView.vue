@@ -62,13 +62,13 @@ onMounted(() => loadSetlistDetails());
     <h2>Songs</h2>
       <ul v-if="setlistSongs.length !== 0">
         <li v-for="setlistSong in setlistSongs">
-          {{ setlistSong.title }} - {{ setlistSong.artist }}<button @click="songDetails(setlistSong._id)">Details</button>
+          {{ setlistSong.title }} - {{ setlistSong.artist }}<button @click="songDetails(setlistSong._id)" class="btn-secondary btn-small">Details</button>
         </li>
       </ul>
       <p v-else> *No songs were added to this setlist*</p>
     <br>
     
-    <button @click="editSetlist">Edit</button>
+    <button @click="editSetlist" class="btn-primary">Edit</button>
     <NavigationBarBottom></NavigationBarBottom>
 </template>
 

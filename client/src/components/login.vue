@@ -7,8 +7,8 @@ const router = useRouter();
 
 import '/src/stylesheets/input.css'
 
-const currentUsername = ref<string>('');
-const currentPassword = ref<string>('');
+const currentUsername = ref<string>('admin');
+const currentPassword = ref<string>('password123');
 const errorMessage = ref<string>('');
 
 // ! AUTO ADMIN CREATION - DELETE BEFORE PRODUCTION
@@ -62,7 +62,7 @@ async function loginUser(): Promise<void> {
     />
   </label>
   <br />
-  <button @click="loginUser">Login</button>
+  <button @click="loginUser" class="btn-primary">Log In</button>
   <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 </template>
 

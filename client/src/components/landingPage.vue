@@ -52,7 +52,7 @@ onMounted(async() => {
   </div>
   <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
 
-  <button @click="redirectToLogin">Log In</button>
+  <button @click="redirectToLogin" class="btn-primary">Log In</button>
 
 </template>
 

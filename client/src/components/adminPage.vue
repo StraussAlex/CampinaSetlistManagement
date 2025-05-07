@@ -85,19 +85,32 @@ function getUserErrors(): string[] {
   <ul>
     <li v-for="user in users">
       {{ user.userName }} &nbsp; Admin: {{ user.isAdmin }}
-      <button @click="deleteUser(user)">Delete</button>
+      <button @click="deleteUser(user)" class="btn-caution btn-square">X</button>
     </li>
   </ul>
 
   <h2>Create user</h2>
+  <div class="labeled-input">
   <label for="input-username">Username</label>
-  <input name="input-username" v-model="currentUsername">
+  <input type="text" name="input-username" v-model="currentUsername" placeholder="Username">
+</div>
+<div class="labeled-input">
   <label for="input-password">Password</label>
-  <input name="input-password" type="password" v-model="currentPassword">
-  <label for="input-isadmin">Is Admin</label>
-  <input name="input-isadmin" type="checkbox" v-model="currentIsAdmin">
+  <input name="input-password" type="password" v-model="currentPassword" placeholder="Password"></div>
   
-  <button @click="createUser()">Create user</button>
+  <label class="checkbox-wrapper">
+  <input 
+    name="input-isadmin" 
+    type="checkbox" 
+    v-model="currentIsAdmin" 
+    class="checkbox-input"
+  >
+  <span class="custom-checkbox"></span>
+  Is Admin
+</label>
+
+  
+  <button @click="createUser()" class="btn-primary">Create user</button>
   
   <ul>
     <li v-for="e in errors">{{ e }}</li>
