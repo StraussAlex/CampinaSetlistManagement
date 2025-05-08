@@ -87,12 +87,12 @@ onMounted(() => loadSongs());
     ]"></SortAction>
   </div>
 
-  <ul v-if="filteredSongs.length !== 0">
-    <li v-for="song in filteredSongs">{{ song.artist }} - {{ song.title }}
-      <button @click="viewSong(song._id)" class="btn-secondary btn-small">View song</button>
+  <div v-if="filteredSongs.length !== 0" class="flex">
+    <span v-for="song in filteredSongs">
+      <button @click="viewSong(song._id)" class="list">{{ song.artist }} - {{ song.title }}</button>
       <!-- <button @click="editSong(song._id)">Edit song</button> -->
-    </li>
-  </ul>
+    </span>
+  </div>
   <p v-else>No songs yet</p>
 
   <button @click="createNewSong" class="btn-primary">Create new song</button>

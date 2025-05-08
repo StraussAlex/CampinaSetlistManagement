@@ -145,8 +145,9 @@ async function createEvent(): Promise<void> {
 
 <template>    
     <h1>{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
-    <label for = "input-event-name">Event name</label>
-    <input name = "input-event-name" v-model = "eventName">
+    <div class="flex">
+    <label for = "input-event-name" class="labeled-input">Event name
+    <input name = "input-event-name" v-model = "eventName"></label>
 
     <br><br>
 
@@ -178,7 +179,7 @@ async function createEvent(): Promise<void> {
 
     <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
 
-    <p>Setlists</p>
+    <h2>Setlists</h2>
     <div>
         <ul v-if="setlistsInEvent.length !== 0">
         <li v-for="(list, index) in setlistsInEvent">{{ list.name }}
@@ -190,7 +191,7 @@ async function createEvent(): Promise<void> {
 
     <hr>
 
-    <p>Setlist selection</p>
+    <h3>Setlist selection</h3>
     <div>
         <ul v-if="setlists.length !== 0">
             <li v-for="list in setlists">{{ list.name }}
@@ -203,7 +204,7 @@ async function createEvent(): Promise<void> {
     <ul>
         <li v-for="error in errors">{{ error }}</li>
     </ul>
-
+</div>
     <!-- <ul>
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul> -->

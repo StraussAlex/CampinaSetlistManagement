@@ -1,0 +1,15 @@
+.list {
+    border-color: var(--primary);
+    background-color: var(--background);
+    color: var(--text);
+    padding: 15px 30px;
+    width: 100%;
+    margin: 6px;
+    font-size: 16px;
+    /* font-weight: 500; */
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+}

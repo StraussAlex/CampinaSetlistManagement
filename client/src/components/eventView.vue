@@ -62,12 +62,12 @@ onMounted(() => loadEventDetails());
   <p v-if="eventIsPublic">This event is public</p>
   <p v-else>This event is private</p>
 
-  <h2>Setlists</h2>
-    <ul v-if="eventSetlists.length !== 0">
-      <li v-for="setlist in eventSetlists">
-        {{ setlist.name }}<button @click="setlistDetails(setlist._id)">Details</button>
-      </li>
-    </ul>
+  <h3>Setlists</h3>
+    <div v-if="eventSetlists.length !== 0" class="flex">
+      <span v-for="setlist in eventSetlists" >
+         <button class="list" @click="setlistDetails(setlist._id)">{{ setlist.name }}</button>
+      </span>
+    </div>
     <p v-else> *There are no setlists assigned to this event*</p>
   <br>
     

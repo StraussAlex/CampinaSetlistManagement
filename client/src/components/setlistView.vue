@@ -55,16 +55,21 @@ onMounted(() => loadSetlistDetails());
 </script>
 
 <template>
-  <h1>Setlist Details</h1>
-  <h2>Name</h2>
-    <p>{{ setlistName }}</p>
+  <h3>Setlist Overview</h3>
+  <h4>{{ setlistName }}</h4>
+    <!-- <p>{{ setlistName }}</p> -->
 
-    <h2>Songs</h2>
-      <ul v-if="setlistSongs.length !== 0">
+    <!-- <h2>Songs</h2> -->
+      <div v-if="setlistSongs.length !== 0" class="flex">
+        <span v-for="setlistSong in setlistSongs">
+          <button @click="songDetails(setlistSong._id)" class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
+        </span>
+      </div>
+      <!-- <ul v-if="setlistSongs.length !== 0">
         <li v-for="setlistSong in setlistSongs">
-          {{ setlistSong.title }} - {{ setlistSong.artist }}<button @click="songDetails(setlistSong._id)" class="btn-secondary btn-small">Details</button>
+          <button @click="songDetails(setlistSong._id)" class="btn-secondary">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
         </li>
-      </ul>
+      </ul> -->
       <p v-else> *No songs were added to this setlist*</p>
     <br>
     

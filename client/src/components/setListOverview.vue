@@ -85,12 +85,13 @@ function onSortingChanged(sort: string): void {
     ]"></SortAction>
   </div>
 
-  <ul v-if="filteredSetlists.length !== 0">
-    <li v-for="setlist in filteredSetlists">{{ setlist.name }} | {{ setlist.songs.length }} song(s)
-      <button @click="viewSetlist(setlist._id)" class="btn-secondary btn-small">View setlist</button>
+  <div v-if="filteredSetlists.length !== 0" class="flex">
+    <span v-for="setlist in filteredSetlists">
+      <button @click="viewSetlist(setlist._id)" class="list">  {{ setlist.name }} | {{ setlist.songs.length }} song(s)</button>
       <!-- <button @click="editSetlist(setlist._id)">Edit setlist</button>  -->
-    </li>
-  </ul>
+    </span>
+  </div>
+
   <p v-else>No setlists yet</p>
 
   <button @click="createNewSetlist" class="btn-primary">Create new setlist</button>

@@ -113,17 +113,16 @@ const labelOldest = ref<string>('Oldest');
         <SortAction @sort-change="onSortingChanged" :sort-options="[
             {value: 'newest', display: labelNewest},
             {value: 'oldest', display: labelOldest}
-        ]"></SortAction>
+        ]"></SortAction> <br>
         <label for="input-show-all">Show all events</label>
         <input type="checkbox" name="input-show-all" v-model="showAllEvents" @change="onSearchChange(currentQuery)">
     </div>
 
-    <ul v-if="filteredEvents.length !== 0">
-        <li v-for="event in filteredEvents">{{ event.name }} | {{ event.getFullDate }} 
-            <button @click="viewEvent(event._id)" class="btn-secondary">Details</button>
-                        <!-- <button @click="updateEvent(event._id)">Edit Event</button> -->
-        </li>
-    </ul>
+    <div v-if="filteredEvents.length !== 0" class="flex">
+        <span v-for="event in filteredEvents"> 
+            <button @click="viewEvent(event._id)" class="list">{{ event.name }} | {{ event.getFullDate }}</button>
+        </span>
+    </div>
     <p v-else>No events are created yet</p>
 
     <button @click="createEvent" class="btn-primary">Create Event</button>

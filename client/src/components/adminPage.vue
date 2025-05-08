@@ -90,13 +90,10 @@ function getUserErrors(): string[] {
   </ul>
 
   <h2>Create user</h2>
-  <div class="labeled-input">
-  <label for="input-username">Username</label>
-  <input type="text" name="input-username" v-model="currentUsername" placeholder="Username">
-</div>
-<div class="labeled-input">
-  <label for="input-password">Password</label>
-  <input name="input-password" type="password" v-model="currentPassword" placeholder="Password"></div>
+  <label for="input-username">Username</label> <br>
+  <input type="text" name="input-username" v-model="currentUsername" placeholder="Username"> <br>
+  <label for="input-password">Password</label> <br>
+  <input name="input-password" type="password" v-model="currentPassword" placeholder="Password">
   
   <label class="checkbox-wrapper">
   <input 
