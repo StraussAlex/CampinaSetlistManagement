@@ -64,3 +64,18 @@
     transition: transform 0.3s ease;
 }
 
+.icon-container.active .ani_square {
+    background-color: var(--secondary);
+    width: 52px;
+    height: 52px;
+    transition: all 0.2s ease;
+}
+
+.icon-container.active img {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+
+
+
