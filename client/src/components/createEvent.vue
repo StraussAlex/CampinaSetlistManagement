@@ -5,6 +5,7 @@ import  Event  from '../models/Event'
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -12,6 +13,10 @@ const editingId = route.params.id;
 const originalCreationDate = ref<string>('');
 
 const buttonText = ref<string>(isEditingRoute() ? "Update Event" : "Create Event");
+
+const overlayActive = ref<boolean>(false);
+const overlayYesHandler = ref<() => void>(() => {});
+const overlayText = ref<string>("")
 
 function isEditingRoute(): boolean {
   return route.name == "edit-event";
@@ -140,6 +145,13 @@ async function createEvent(): Promise<void> {
         errors.value.push("Error creating an event: " + error)
     }
 };
+
+function activateOverlay(handler: () => void, text: string){
+  overlayYesHandler.value = handler
+  overlayText.value = text
+  overlayActive.value = true
+  console.log("isActive: " + overlayActive.value)
+}
 </script>
 
 
@@ -209,8 +221,9 @@ async function createEvent(): Promise<void> {
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul> -->
 
-    <button @click="createEvent" class="btn-primary">{{ buttonText }}</button>
-    <button @click="deleteEvent" v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
+    <button @click='activateOverlay(createEvent, "Are you sure you want to save this Song?")' class="btn-primary">{{ buttonText }}</button>
+    <button @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Song?")' v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
+    <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <NavigationBarBottom></NavigationBarBottom>
 </template>

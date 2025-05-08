@@ -5,6 +5,7 @@ import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
@@ -17,13 +18,16 @@ const route = useRoute();
 const editingId = route.params.id;
 const originalCreationDate = ref<string>('');
 
+const overlayActive = ref<boolean>(false);
+const overlayYesHandler = ref<() => void>(() => {});
+const overlayText = ref<string>("")
+
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
 const SETLIST_API = "setlists";
 
 const buttonText = ref<string>(isEditingRoute() ? "Update setlist" : "Save setlist");
-
 const errors = ref<string[]>([]);
 
 function clearErrors(): void {
@@ -128,7 +132,12 @@ async function deleteSetlist(): Promise<void> {
     errors.value.push("Error deleting setlist: " + error);
   }
 }
-
+function activateOverlay(handler: () => void, text: string){
+  overlayYesHandler.value = handler
+  overlayText.value = text
+  overlayActive.value = true
+  console.log("isActive: " + overlayActive.value)
+}
 </script>
 
 <template>
@@ -163,8 +172,9 @@ async function deleteSetlist(): Promise<void> {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSetlist" class="btn-primary">{{ buttonText }}</button>
-  <button v-if="isEditingRoute()" @click="deleteSetlist()" class="btn-caution">Delete setlist</button>
+  <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Song?")' class="btn-primary">{{ buttonText }}</button>
+  <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Song?")' class="btn-caution">Delete setlist</button>
+  <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <NavigationBarBottom></NavigationBarBottom>
 </template>
