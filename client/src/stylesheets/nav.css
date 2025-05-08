@@ -39,7 +39,7 @@
     width: 26px;
     position: absolute;
     z-index: 2;
-    transition: transform 0.3s ease-out;
+    transition: transform 0.15s ease-out;
 }
 
 .ani_square {
@@ -49,31 +49,35 @@
     width: 0px;
     background-color: var(--background);
     border-radius: 18px;
-    transition: all 0.2s ease-out;
+    transition: all 0.1s ease-out;
 }
 
 .icon-container:hover .ani_square {
     background-color: var(--secondary);
     width: 52px;
     height: 52px;
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
 }
 
 .icon-container:hover img {
     transform: scale(1.2);
-    transition: transform 0.3s ease;
+    transition: transform 0.15s ease;
 }
 
 .icon-container.active .ani_square {
     background-color: var(--secondary);
     width: 52px;
     height: 52px;
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
 }
 
 .icon-container.active img {
     transform: scale(1.2);
-    transition: transform 0.3s ease;
+    transition: transform 0.15s ease;
+}
+
+img {
+    filter: var(--icon-invert);
 }
 
 

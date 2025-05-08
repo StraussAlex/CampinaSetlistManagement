@@ -32,6 +32,8 @@
   --accent: #a22c2c;
   --accent-darker: #912626; 
   --accent-lighter: #af3333;
+
+  --icon-invert: invert(0%);
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -50,6 +52,8 @@
   --accent: #d35f5f;
   --accent-darker: #b94d4d;
   --accent-lighter: #e27272;
+
+  --icon-invert: invert(100%);
 }
 
 

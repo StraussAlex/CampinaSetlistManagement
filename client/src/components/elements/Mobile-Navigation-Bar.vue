@@ -2,19 +2,19 @@
 import { useRoute, useRouter } from 'vue-router';
 
 import '/src/stylesheets/nav.css';
+import { watchEffect } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
 
 function navigateTo(path: string): void {
-    setTimeout(() => {
-      router.push(path);
-    }, 300); 
+  router.push(path);
 }
 
 </script>
 
 <template>
+  <div class = "nav-limiter"></div>
     <div class="mobile-navigation-bar">
   <div 
     class="icon-container" 
