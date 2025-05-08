@@ -134,7 +134,7 @@ async function createNewSong(): Promise<void> {
         const response = await api.post(SONG_API, song);
         song._id = response.data.insertedId;
       }
-      router.push("/events")
+      router.push(`/songs/${editingId}`)
     } catch(error) {
       errors.value.push("Error creating an event: " + error)
     }

@@ -135,7 +135,7 @@ async function createEvent(): Promise<void> {
             const response = await api.post(EVENT_API, event);
             event._id = response.data.insertedId;
         }
-        router.push("/events")
+        router.push(`/events/${editingId}`)
     } catch(error) {
         errors.value.push("Error creating an event: " + error)
     }

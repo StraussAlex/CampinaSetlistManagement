@@ -111,7 +111,7 @@ async function createNewSetlist(): Promise<void> {
       setlist._id = response.data.insertedId;
     }
 
-    router.push("/setlists");
+    router.push(`/setlists/${editingId}`);
 
   } catch(error) {
     errors.value.push("An error occurred: " + error);
