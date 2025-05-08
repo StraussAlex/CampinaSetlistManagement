@@ -9,6 +9,8 @@ import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
 import '/src/stylesheets/overlay.css'
+import YesNoOverlay from "./elements/YesNo-Overlay.vue";
+import {create} from "axios";
 
 const SONG_API = "songs";
 
@@ -20,7 +22,10 @@ const songLinks = ref<string[]>([]);
 const currentLink = ref<string>("");
 const files = ref<SongFile[]>([]);
 const newInstrumentName = ref<string>("");
-//const files = ref<File[]>([]);
+
+const overlayActive = ref<boolean>(false);
+const overlayYesHandler = ref<() => void>(() => {});
+const overlayText = ref<string>("")
 
 const songLyrics = ref<string>("");
 
@@ -55,7 +60,16 @@ onMounted(async () => {
     }
   }
 })
+async function deleteSong(): Promise<void> {
+  if(!isEditingRoute()) return;
 
+  try {
+    await api.delete(`${SONG_API}/${editingId}`);
+    router.push("/songs");
+  } catch(error) {
+    errors.value.push("Error deleting song: " + error);
+  }
+}
 function insertLink(): void {
   currentLink.value = currentLink.value.trim();
   if(currentLink.value.length === 0) return;
@@ -157,7 +171,12 @@ async function deleteInstrument(index: number) {
   await api.delete(`${SONG_API}/file/${filename}`);
   files.value.splice(index, 1)
 }
-
+function activateOverlay(handler: () => void, text: string){
+  overlayYesHandler.value = handler
+  overlayText.value = text
+  overlayActive.value = true
+  console.log("isActive: " + overlayActive.value)
+}
 </script>
 
 <template>
@@ -211,10 +230,13 @@ async function deleteInstrument(index: number) {
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click="createNewSong" class="btn-primary">{{ buttonText }}</button>
+  <button @click='activateOverlay(createNewSong, "Are you sure you want to delete this Song?")' class="btn-primary">{{ buttonText }}</button>
+  <button v-if="isEditingRoute()" @click='activateOverlay(deleteSong, "Are you sure you want to delete this Song?")' class="btn-caution">Delete setlist</button>
+  <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
   <NavigationBarBottom></NavigationBarBottom>
+
 </template>
 
 <style scoped>
