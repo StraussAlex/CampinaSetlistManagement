@@ -230,8 +230,8 @@ function activateOverlay(handler: () => void, text: string){
     <li v-for="error in errors">{{ error }}</li>
   </ul>
 
-  <button @click='activateOverlay(createNewSong, "Are you sure you want to delete this Song?")' class="btn-primary">{{ buttonText }}</button>
-  <button v-if="isEditingRoute()" @click='activateOverlay(deleteSong, "Are you sure you want to delete this Song?")' class="btn-caution">Delete setlist</button>
+  <button @click='activateOverlay(createNewSong, `Are you sure you want to ${buttonText.split(" ")[0]} this Song?`)' class="btn-primary">{{ buttonText }}</button>
+  <button v-if="isEditingRoute()" @click='activateOverlay(deleteSong, "Are you sure you want to delete this Song?")' class="btn-caution">Delete song</button>
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
