@@ -221,8 +221,8 @@ function activateOverlay(handler: () => void, text: string){
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul> -->
 
-    <button @click='activateOverlay(createEvent, "Are you sure you want to save this Song?")' class="btn-primary">{{ buttonText }}</button>
-    <button @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Song?")' v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
+    <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
+    <button @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <NavigationBarBottom></NavigationBarBottom>

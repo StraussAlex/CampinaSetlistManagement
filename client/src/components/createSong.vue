@@ -10,7 +10,7 @@ import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
 import '/src/stylesheets/overlay.css'
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
-import {create} from "axios";
+//import {create} from "axios";
 
 const SONG_API = "songs";
 
@@ -120,7 +120,7 @@ async function createNewSong(): Promise<void> {
     for (const file of files.value) {
       const target = document.getElementById(file.instrument) as HTMLInputElement
 
-      if (target.files[0]){
+      if (target.files![0]){
         formData.append(file.instrument, target.files![0]);
         if (file.filepath !== "None"){
           const filename = file.filepath.split("/")[1]
