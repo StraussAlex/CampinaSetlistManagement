@@ -6,6 +6,8 @@ import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
+import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
+
 
 const router = useRouter();
 const route = useRoute();
@@ -152,6 +154,12 @@ function activateOverlay(handler: () => void, text: string){
   overlayActive.value = true
   console.log("isActive: " + overlayActive.value)
 }
+
+const sheet = ref<InstanceType<typeof BottomSheetOverlay>>();
+
+const openSheet = () => {
+  sheet.value?.open();
+};
 </script>
 
 
@@ -223,9 +231,11 @@ function activateOverlay(handler: () => void, text: string){
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
     <button @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
+    <button @click="openSheet">Overlay</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <NavigationBarBottom></NavigationBarBottom>
+    <bottom-sheet-overlay ref="sheet"/>
 </template>
 
 <style scoped>
