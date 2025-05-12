@@ -6,6 +6,7 @@ import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
+import SlotOverlay  from "./elements/SlotOverlay.vue"
 import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
 
 
@@ -19,6 +20,7 @@ const buttonText = ref<string>(isEditingRoute() ? "Update Event" : "Create Event
 const overlayActive = ref<boolean>(false);
 const overlayYesHandler = ref<() => void>(() => {});
 const overlayText = ref<string>("")
+const slotOverlayActive= ref<boolean>(false);
 
 function isEditingRoute(): boolean {
   return route.name == "edit-event";
@@ -154,6 +156,9 @@ function activateOverlay(handler: () => void, text: string){
   overlayActive.value = true
   console.log("isActive: " + overlayActive.value)
 }
+function toggleSlotOverlay(){
+  slotOverlayActive.value = !slotOverlayActive.value
+}
 
 const sheet = ref<InstanceType<typeof BottomSheetOverlay>>();
 
@@ -208,18 +213,10 @@ const openSheet = () => {
         </ul>
         <p v-else>No setlists</p>
     </div>
-
+    <button @click="toggleSlotOverlay">Add Settlist</button>
     <hr>
 
-    <h3>Setlist selection</h3>
-    <div>
-        <ul v-if="setlists.length !== 0">
-            <li v-for="list in setlists">{{ list.name }}
-                <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small">+ Add setlist</button>
-            </li>
-        </ul>
-        <p v-else>No setlists available</p>
-    </div>
+
 
     <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -235,7 +232,18 @@ const openSheet = () => {
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <NavigationBarBottom></NavigationBarBottom>
+    <SlotOverlay v-model="slotOverlayActive">
+      <div>
+        <ul v-if="setlists.length !== 0">
+          <li v-for="list in setlists">{{ list.name }}
+            <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small">+ Add setlist</button>
+          </li>
+        </ul>
+        <p v-else>No setlists available</p>
+      </div>
+    </SlotOverlay>
     <bottom-sheet-overlay ref="sheet"/>
+
 </template>
 
 <style scoped>
