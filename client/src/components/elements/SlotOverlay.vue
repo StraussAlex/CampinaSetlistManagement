@@ -4,17 +4,12 @@ import '/src/stylesheets/input.css'
 
 
 //const text = ref<string>("");
-const props = defineProps<{text: string}>();
+
 const isActive = defineModel()
-const emit = defineEmits<(e: 'yes') => void>();
+
 
 function toggleOverlay(){
   isActive.value = !isActive.value
-}
-function yes(){
-  emit('yes')
-  console.log("yes")
-  toggleOverlay()
 }
 function no(){
   console.log("no")
@@ -34,9 +29,8 @@ onMounted(()=>{
 <template>
   <div v-if="isActive">
     <div id="content">
-      <h6>{{ props.text }}</h6>
-      <button @click="yes" id="btn-small">Yes</button>
-      <button @click="no" id="btn-small">No</button>
+      <slot/>
+      <button @click="no" >Done</button>
     </div>
     <div @click="no" id="background"></div>
   </div>
@@ -57,7 +51,7 @@ onMounted(()=>{
 }
 
 #content{
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
