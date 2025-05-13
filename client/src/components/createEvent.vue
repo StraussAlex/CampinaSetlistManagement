@@ -8,6 +8,7 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import SlotOverlay  from "./elements/SlotOverlay.vue"
 import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
+import ErrorView from './elements/Error-View.vue';
 
 
 const router = useRouter();
@@ -171,6 +172,9 @@ const openSheet = () => {
 <template>    
     <h1>{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
     <div class="flex">
+
+    <ErrorView :errors="errors"></ErrorView>
+    
     <label for = "input-event-name" class="labeled-input">Event name
     <input name = "input-event-name" v-model = "eventName"></label>
 
@@ -190,15 +194,15 @@ const openSheet = () => {
     <input type="checkbox" name = "input-is-public" v-model = "eventIsPublic"> -->
 
     <label class="checkbox-wrapper">
-  <input 
-    name="input-is-public" 
-    type="checkbox" 
-    v-model="eventIsPublic" 
-    class="checkbox-input"
-  >
-  <span class="custom-checkbox"></span>
-  Public Event
-</label>
+    <input 
+      name="input-is-public" 
+      type="checkbox" 
+      v-model="eventIsPublic" 
+      class="checkbox-input"
+    >
+    <span class="custom-checkbox"></span>
+    Public Event
+  </label>
 
 
 
@@ -215,12 +219,6 @@ const openSheet = () => {
     </div>
     <button @click="toggleSlotOverlay">Add Settlist</button>
     <hr>
-
-
-
-    <ul>
-        <li v-for="error in errors">{{ error }}</li>
-    </ul>
 </div>
     <!-- <ul>
         <li v-for="warning in warnings">{{ warning }}</li>

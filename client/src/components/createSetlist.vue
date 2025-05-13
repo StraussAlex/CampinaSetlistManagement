@@ -12,6 +12,7 @@ import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
 import '/src/stylesheets/overlay.css'
 import '/src/stylesheets/list.css'
+import ErrorView from './elements/Error-View.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -143,6 +144,8 @@ function activateOverlay(handler: () => void, text: string){
 <template>
   <h1>{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
 
+  <ErrorView :errors="errors"></ErrorView>
+
   <label for="input-setlist-name">Setlist Name</label>
   <input name="input-setlist-name" v-model="setlistName">
 
@@ -167,10 +170,6 @@ function activateOverlay(handler: () => void, text: string){
     </ul>
     <p v-else>No songs available</p>
   </div>
-
-  <ul>
-    <li v-for="error in errors">{{ error }}</li>
-  </ul>
 
   <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
   <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution">Delete setlist</button>

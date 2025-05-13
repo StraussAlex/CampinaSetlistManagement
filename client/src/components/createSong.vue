@@ -10,6 +10,7 @@ import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
 import '/src/stylesheets/overlay.css'
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
+import ErrorView from './elements/Error-View.vue';
 //import {create} from "axios";
 
 const SONG_API = "songs";
@@ -182,6 +183,8 @@ function activateOverlay(handler: () => void, text: string){
 <template>
   <h1>Create Song</h1>
 
+  <ErrorView :errors="errors"></ErrorView>
+
   <label for="input-song-name">Song Name</label>
   <input name="input-song-name" v-model="songTitle">
 
@@ -222,13 +225,6 @@ function activateOverlay(handler: () => void, text: string){
       <input type="file" :id="file.instrument" :name="file.instrument">
     </div>
   </div>
-
-
-
-
-  <ul>
-    <li v-for="error in errors">{{ error }}</li>
-  </ul>
 
   <button @click='activateOverlay(createNewSong, `Are you sure you want to ${buttonText.split(" ")[0]} this Song?`)' class="btn-primary">{{ buttonText }}</button>
   <button v-if="isEditingRoute()" @click='activateOverlay(deleteSong, "Are you sure you want to delete this Song?")' class="btn-caution">Delete song</button>
