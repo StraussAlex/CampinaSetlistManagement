@@ -8,9 +8,56 @@
     font-size: 16px;
     /* font-weight: 500; */
     /* border-width: 2px; */
+    text-align: left;
+}
+
+.list > em {
+    font-size: small;
+    color: var(--primary);
 }
 
 .flex {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    margin-left: -6px; 
+    /* ! for whatever reason hat das ein offset von 12 pixeln, wird dadurch behoben? */
+    /* align-items: flex-start; */
+}
+
+.list:hover {
+    background-color: var(--secondary-lighter);
+}
+
+/* * Well, I now started to define the listing of the song overview also as a list, so imma put it here yolo :P */
+.details-box {
+    text-align: left;
+    border-top: 1px solid var(--secondary-lighter);
+    padding: 20px 15px;
+}
+
+.details-box > h2 {
+      text-transform: none;
+      font-size: larger;
+      line-height: normal;
+}
+
+.details-box > h3 {
+      text-transform: none;
+      font-size: large;
+      line-height: 0;
+}
+
+.section-heading {
+    background-color: var(--secondary);
+    width: 100vw;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--primary);
+    border-top: 1px solid var(--primary);
+    font-size: 24px;
+}
+
+
+.mobile-container {
+    margin: 0 5vw;
 }

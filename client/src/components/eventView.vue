@@ -5,6 +5,7 @@ import api from '../services/api'
 import Event from '../models/Event';
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -72,7 +73,8 @@ onMounted(() => loadEventDetails());
   <br>
     
   <button @click="editEvent" class="btn-primary">Edit</button>
-  <NavigationBarBottom></NavigationBarBottom>
+  <!-- <NavigationBarBottom></NavigationBarBottom> -->
+   <MobileNavBar></MobileNavBar> 
 </template>
 
 <style scoped>

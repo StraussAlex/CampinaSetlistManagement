@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api'
 import { Song, SongFile } from '../models/Song';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -62,45 +63,56 @@ onMounted(() => loadSongDetails());
 </script>
 
 <template>
-  <h1>Song Details</h1>
 
-    <h2>Title</h2>
-    <p>{{ songTitle }}</p>
-    <br>
 
-    <h2>Artist</h2>
-    <p>{{ songArtist }}</p>
+    <div class="details-box">
+    <h2>{{ songTitle }}</h2>
+    <h3>{{ songArtist }}</h3>
+    </div>
+
     <br>
 
     <!-- Irgendwie vlt schön formatieren mit den breaks und so idk -->
-    <h2>Additional notes</h2>
+     <!-- jaja, ich mach ja schon  -->
+    <div class="details-box">
+    <h3 >Additional Information</h3>
     <p>{{ songNotes }}</p>
+    </div>
     <br>
 
-    <h2>Lyrics</h2>
+     <div class="details-box">
+    <h3>Lyrics</h3>
       <div v-if="songLyrics.length !== 0">
         <p>{{ songLyrics }}</p>
       </div>
       <p v-else>*No lyrics were added to this song*</p>
     <br>
+     </div>
 
-    <h2>Links</h2>
+      <div class="details-box">
+    <h3>Links</h3>
       <ul>
         <li v-for="songLink in songLinks">
           {{ songLink }}
         </li>
       </ul>
+      </div>
+
     <br>
-    <h2>Links</h2>
+
+     <div class="details-box">
+    <h3>Files</h3>
     <ul>
       <li v-for="file in songFiles">
         <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1] }}</em></p>
         <button @click="download(file)" class="btn-secondary">Download</button>
       </li>
     </ul>
+    </div>
 
     <button @click="editSong" class="btn-primary">Edit</button>
-    <NavigationBarBottom></NavigationBarBottom>
+    <!-- <NavigationBarBottom></NavigationBarBottom> -->
+     <MobileNavBar></MobileNavBar> 
 </template>
 
 <style scoped>

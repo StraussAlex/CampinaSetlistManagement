@@ -5,6 +5,7 @@ import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import { Song } from '../models/Song';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 import '/src/stylesheets/list.css'
 import '/src/stylesheets/input.css'
@@ -74,7 +75,8 @@ onMounted(() => loadSetlistDetails());
     <br>
     
     <button @click="editSetlist" class="btn-primary">Edit</button>
-    <NavigationBarBottom></NavigationBarBottom>
+    <!-- <NavigationBarBottom></NavigationBarBottom> -->
+     <MobileNavBar></MobileNavBar> 
 </template>
 
 <style scoped>

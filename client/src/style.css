@@ -68,12 +68,12 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /* display: flex; */
   place-items: center;
   min-height: 100vh;
   width: 100vw;
   font-family: "Roboto";
-  padding-bottom: 70px; /* ! needed for navbar on the botttom */
+  padding-bottom: 90px; /* ! needed for navbar on the botttom */
 }
 
 main {

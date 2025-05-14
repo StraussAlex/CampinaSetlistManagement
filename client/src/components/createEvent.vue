@@ -5,6 +5,7 @@ import  Event  from '../models/Event'
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import SlotOverlay  from "./elements/SlotOverlay.vue"
 import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
@@ -229,14 +230,17 @@ const openSheet = () => {
     <button @click="openSheet">Overlay</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
-    <NavigationBarBottom></NavigationBarBottom>
+    <!-- <NavigationBarBottom></NavigationBarBottom> -->
+    <MobileNavBar></MobileNavBar> 
+
     <SlotOverlay v-model="slotOverlayActive">
+      <h3>Select Setlists</h3>
       <div>
-        <ul v-if="setlists.length !== 0">
-          <li v-for="list in setlists">{{ list.name }}
-            <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small">+ Add setlist</button>
-          </li>
-        </ul>
+        <div v-if="setlists.length !== 0">
+          <span v-for="list in setlists">
+            <button @click="addSetlistToEvent(list)" class="btn-secondary"> {{ list.name }} </button>
+          </span>
+        </div>
         <p v-else>No setlists available</p>
       </div>
     </SlotOverlay>

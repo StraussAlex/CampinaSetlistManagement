@@ -72,7 +72,6 @@ onMounted(async() => {
 
     <div 
       class="icon-container" 
-      v-if="user !== null && user.isAdmin" 
       @click="logoutUser()">
       <img class="users" src="../temporary-images/logout.png" />
       <div class="ani_square"></div>

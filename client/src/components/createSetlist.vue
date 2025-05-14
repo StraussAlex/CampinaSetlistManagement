@@ -5,6 +5,7 @@ import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
+import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 
 import '/src/stylesheets/input.css'
@@ -175,7 +176,8 @@ function activateOverlay(handler: () => void, text: string){
   <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution">Delete setlist</button>
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
-  <NavigationBarBottom></NavigationBarBottom>
+  <!-- <NavigationBarBottom></NavigationBarBottom> -->
+   <MobileNavBar></MobileNavBar> 
 </template>
 
 <style scoped>

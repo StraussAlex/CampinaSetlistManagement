@@ -130,7 +130,13 @@ textarea {
 .labeled-input {
     display: flex;
     flex-direction: column;
-    
 }
+
+.labeled-input > label {
+    text-align: left;
+    /* padding: 0 15px */
+    font-family: "Krona One";
+}
+
 
 /* Check Boxes */
