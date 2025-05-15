@@ -1,5 +1,5 @@
 /* Buttons */
-button {
+button, div.list {
     border-radius: 7px;
     padding: 12px 24px;
     margin: 10px;

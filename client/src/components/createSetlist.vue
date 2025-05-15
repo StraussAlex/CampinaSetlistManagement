@@ -8,6 +8,8 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 
+import draggableComponent from 'vuedraggable';
+
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
@@ -27,6 +29,7 @@ const overlayText = ref<string>("")
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
+const availableSongs = ref<Song[]>([]);
 const SETLIST_API = "setlists";
 
 const buttonText = ref<string>(isEditingRoute() ? "Update setlist" : "Save setlist");
@@ -43,6 +46,12 @@ async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
     songs.value = response.data;
+
+    availableSongs.value = [];
+    for(let i = 0; i < songs.value.length; i++) {
+      if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
+    }
+
   } catch(error) {
     errors.value.push("Error loading songs: " + error);
   }
@@ -60,9 +69,13 @@ onMounted(async() => {
       setlistName.value = setlist.name;
       originalCreationDate.value = setlist.creationDate;
 
-      const fullSongs = songs.value.filter(song =>
-        setlist.songs.some((s: SetlistSong) => s.songId === song._id)
-      )
+      const songPositions = new Map<any, number>(setlist.songs.map((s: SetlistSong) => [s.songId, s.position]));
+
+      const fullSongs = songs.value
+        .filter(song => songPositions.has(song._id))
+        .sort((a, b) => {
+          return (songPositions.get(a._id) ?? 0) - (songPositions.get(b._id) ?? 0);
+        })
 
       setlistSongs.value = fullSongs;
 
@@ -78,10 +91,21 @@ const setlistSongs = ref<Song[]>([]);
 
 function removeSong(index: number): void {
   setlistSongs.value.splice(index, 1);
+
+  availableSongs.value = [];
+  for(let i = 0; i < songs.value.length; i++) {
+    if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
+  }
 }
 function addSongToSetlist(song: Song) {
   if(songAlreadyInSetlist(song)) return;
+
   setlistSongs.value.push(song);
+
+  availableSongs.value = [];
+  for(let i = 0; i < songs.value.length; i++) {
+    if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
+  }
 }
 function songAlreadyInSetlist(song: Song): boolean {
   for(let i: number = 0; i < setlistSongs.value.length; i++) {
@@ -151,21 +175,47 @@ function activateOverlay(handler: () => void, text: string){
   <input name="input-setlist-name" v-model="setlistName">
 
   <p>Setlist</p>
-  <div>
+
+<!-- Old code from before I added dragging -->
+  <!-- <div v-if="setlistSongs.length !== 0" class="flex">
+    <span v-for="(setlistSong, index) in setlistSongs">
+      <div class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}
+        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
+      </div>
+    </span>
+  </div>
+  <p v-else>Empty setlist</p> -->
+
+  <draggableComponent
+    v-model="setlistSongs"
+    item-key="_id"
+    class="flex"
+    :animation="200">
+
+    <template #item="{ element, index }">
+      <div class="list">
+        {{ index + 1 }}. {{ element.title }} | {{ element.artist }}
+        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
+      </div>
+    </template>
+  </draggableComponent>
+
+<!-- Old code from where i  -->
+  <!-- <div>
     <ul v-if="setlistSongs.length !== 0">
       <li v-for="(song, index) in setlistSongs">{{ song.artist }} - {{ song.title }}
         <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
       </li>
     </ul>
     <p v-else>Empty setlist</p>
-  </div>
+  </div> -->
 
   <hr>
 
   <p>Song selection</p>
   <div>
     <ul v-if="songs.length !== 0">
-      <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
+      <li v-for="song in availableSongs">{{ song.artist }} - {{ song.title }}
         <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
       </li>
     </ul>
