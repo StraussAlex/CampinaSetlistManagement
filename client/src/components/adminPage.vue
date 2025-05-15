@@ -5,13 +5,19 @@ import api from '../services/api';
 import User from '../models/User';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import ErrorView from './elements/Error-View.vue';
 
 const router = useRouter();
 const USER_API = 'users';
 
 const currentUsername = ref<string>('');
 const currentPassword = ref<string>('');
+const repeatedPassword = ref<string>('');
 const currentIsAdmin = ref<boolean>(false);
+
+type PasswordVisibility =  'password' | 'text';
+
+const passwordType = ref<PasswordVisibility>('password');
 
 const errors = ref<string[]>([]);
 
@@ -43,6 +49,7 @@ async function createUser(): Promise<void> {
 
   currentPassword.value = currentPassword.value.trim();
   currentUsername.value = currentUsername.value.trim();
+  repeatedPassword.value = repeatedPassword.value.trim();
 
   try {
     const response = await api.get(
@@ -72,6 +79,7 @@ async function createUser(): Promise<void> {
     currentIsAdmin.value = false;
     currentPassword.value = '';
     currentUsername.value = '';
+    repeatedPassword.value = '';
   } catch (error) {
     errors.value.push('Error creating user: ' + error);
   }
@@ -80,9 +88,15 @@ function getUserErrors(): string[] {
   const e = [];
   if (currentUsername.value.trim().length <= 0)
     e.push('Username cannot be empty');
-  if (currentPassword.value.trim().length <= 8)
+  if (currentPassword.value.trim().length < 8)
     e.push('Password needs at least 8 characters'); //Someone can go crazy here with requirements lmao
+  if (repeatedPassword.value.trim() !== currentPassword.value.trim())
+    e.push('Password does not match repeated password');
   return e;
+}
+
+function togglePasswordVisibility(): void {
+  passwordType.value = passwordType.value == 'password' ? 'text' : 'password';
 }
 </script>
 
@@ -113,11 +127,21 @@ function getUserErrors(): string[] {
     <label for="input-password">Password</label> <br />
     <input
       name="input-password"
-      type="password"
+      :type="passwordType"
       v-model="currentPassword"
       placeholder="Password"
     />
   </div>
+  <div class="labeled-input">
+    <label for="input-reenterpassword">Reenter Password</label> <br />
+    <input
+      name="input-reenterpassword"
+      :type="passwordType"
+      v-model="repeatedPassword"
+      placeholder="Reenter Password"
+    />
+  </div>
+  <button @click="togglePasswordVisibility">{{ passwordType == 'text' ? '😐' : '😑' }}</button>
 
   <label class="checkbox-wrapper">
     <input
@@ -132,9 +156,7 @@ function getUserErrors(): string[] {
 
   <button @click="createUser()" class="btn-primary">Create user</button>
 
-  <ul>
-    <li v-for="e in errors">{{ e }}</li>
-  </ul>
+  <ErrorView :errors="errors"></ErrorView>
   </div>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
