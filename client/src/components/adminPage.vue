@@ -5,6 +5,7 @@ import api from '../services/api';
 import User from '../models/User';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 import ErrorView from './elements/Error-View.vue';
 
 const router = useRouter();
@@ -101,19 +102,19 @@ function togglePasswordVisibility(): void {
 </script>
 
 <template>
+  <mobile-header></mobile-header>
   <h1 class="section-heading">Manage Accounts</h1>
-<div class="mobile-container">
-  <h2>Registered Users</h2>
-  <ul>
-    <li v-for="user in users">
-      {{ user.userName }} &nbsp; Admin: {{ user.isAdmin }}
-      <button @click="deleteUser(user)" class="btn-caution btn-square">
-        X
-      </button>
-    </li>
-  </ul>
-
-  <h2>Create user</h2>
+  <div class="mobile-container">
+    <h2>Registered Users</h2>
+    <ul>
+      <li v-for="user in users">
+        {{ user.userName }} &nbsp; Admin: {{ user.isAdmin }}
+        <button @click="deleteUser(user)" class="btn-caution btn-square">
+          X
+        </button>
+      </li>
+    </ul>
+    <h2>Create user</h2>
   <div class="labeled-input">
     <label for="input-username">Username</label> <br />
     <input
@@ -160,7 +161,7 @@ function togglePasswordVisibility(): void {
   </div>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <MobileNavBar></MobileNavBar>
+
 </template>
 
 <style scoped></style>

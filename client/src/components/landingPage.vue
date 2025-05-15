@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api'
 import Event from '../models/Event';
+import MobileHeader from "./elements/Mobile-Header.vue";
 const router = useRouter();
 
 const EVENT_API = "events";
@@ -37,7 +38,9 @@ onMounted(async() => {
 </script>
 
 <template>
-  
+  <mobile-header>
+    <button @click="redirectToLogin" class="btn-small">Log In</button>
+  </mobile-header>
   <h1>Campina Band</h1>
   
   <div v-if="upcomingEvent !== null && errorMsg.length <= 0">
@@ -52,7 +55,7 @@ onMounted(async() => {
   </div>
   <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
 
-  <button @click="redirectToLogin" class="btn-primary">Log In</button>
+
 
 </template>
 

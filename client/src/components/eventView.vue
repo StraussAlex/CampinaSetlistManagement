@@ -6,6 +6,7 @@ import Event from '../models/Event';
 import { Setlist } from '../models/Setlist';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -49,34 +50,54 @@ async function loadEventDetails() :Promise<void>{
     console.log("An error in showing event details has occured: " + error);
   }
 }
-
+const DateFormatter = new Intl.DateTimeFormat('en-GB');
 onMounted(() => loadEventDetails());
 </script>
 
 <template>
-  <h1>Event Details</h1>
-  
-  <p>{{ eventName }}</p>
-  <p>{{ eventLocation }}</p>
-  <p>{{ eventDate }}</p>
+  <mobile-header>
+    <button @click="editEvent" class="btn-small">Edit</button>
+  </mobile-header>
+  <h1 class="section-heading">Event Details</h1>
 
-  <p v-if="eventIsPublic">This event is public</p>
-  <p v-else>This event is private</p>
+  <div class="mobile-container">
 
-  <h3>Setlists</h3>
-    <div v-if="eventSetlists.length !== 0" class="flex">
+    <div class="details-box bottom-line">
+      <h3>{{ eventName }}</h3>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h3>{{ eventLocation }}</h3>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h3>{{  eventDate }}</h3>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h3 v-if="eventIsPublic">This event is public</h3>
+      <h3 v-else>This event is private</h3>
+    </div>
+
+    <div class="details-box">
+      <h3>Setlists</h3>
+      <div v-if="eventSetlists.length !== 0" class="flex">
       <span v-for="setlist in eventSetlists" >
          <button class="list" @click="setlistDetails(setlist._id)">{{ setlist.name }}</button>
       </span>
+      </div>
+      <p v-else> *There are no setlists assigned to this event*</p>
     </div>
-    <p v-else> *There are no setlists assigned to this event*</p>
-  <br>
-    
-  <button @click="editEvent" class="btn-primary">Edit</button>
+
+  </div>
+
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-   <MobileNavBar></MobileNavBar> 
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>
-
+  h3{
+    text-align: center;
+    margin:0;
+  }
 </style>

@@ -5,6 +5,13 @@ import api from '../services/api'
 import { Song, SongFile } from '../models/Song';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
+
+import '/src/stylesheets/list.css'
+import '/src/stylesheets/input.css'
+import '/src/stylesheets/header.css'
+import '/src/stylesheets/search.css'
+
 
 const router = useRouter();
 const route = useRoute();
@@ -63,56 +70,53 @@ onMounted(() => loadSongDetails());
 </script>
 
 <template>
+  <mobile-header>
+    <button @click="editSong" class="btn-small">Edit</button>
+  </mobile-header>
+  <h1 class="section-heading">Setlist Overview</h1>
+  <div class="mobile-container">
 
-
-    <div class="details-box">
-    <h2>{{ songTitle }}</h2>
-    <h3>{{ songArtist }}</h3>
+    <div class="details-box bottom-line">
+      <h2>{{ songTitle }}</h2>
+      <h3>{{ songArtist }}</h3>
     </div>
-
-    <br>
 
     <!-- Irgendwie vlt schön formatieren mit den breaks und so idk -->
-     <!-- jaja, ich mach ja schon  -->
-    <div class="details-box">
-    <h3 >Additional Information</h3>
-    <p>{{ songNotes }}</p>
-    </div>
-    <br>
+    <!-- jaja, ich mach ja schon  -->
 
-     <div class="details-box">
-    <h3>Lyrics</h3>
-      <div v-if="songLyrics.length !== 0">
-        <p>{{ songLyrics }}</p>
+    <div class="details-box bottom-line">
+      <h3>Additional Information</h3>
+      <div v-if="songNotes.length !== 0">
+        <p>{{ songNotes }}</p>
       </div>
-      <p v-else>*No lyrics were added to this song*</p>
-    <br>
-     </div>
+      <p v-else>*No Notes were added to this song*</p>
 
-      <div class="details-box">
-    <h3>Links</h3>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h3>Lyrics</h3>
+        <div v-if="songLyrics.length !== 0">
+          <p>{{ songLyrics }}</p>
+        </div>
+        <p v-else>*No lyrics were added to this song*</p>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h3>Links</h3>
       <ul>
         <li v-for="songLink in songLinks">
           {{ songLink }}
         </li>
       </ul>
-      </div>
-
-    <br>
-
-     <div class="details-box">
-    <h3>Files</h3>
-    <ul>
-      <li v-for="file in songFiles">
-        <p>{{ file.instrument }}: <em>{{ file.filepath.split("/")[1].split("-")[1] }}</em></p>
-        <button @click="download(file)" class="btn-secondary">Download</button>
-      </li>
-    </ul>
     </div>
 
-    <button @click="editSong" class="btn-primary">Edit</button>
-    <!-- <NavigationBarBottom></NavigationBarBottom> -->
-     <MobileNavBar></MobileNavBar> 
+    <div class="details-box bottom-line" v-for="file in songFiles">
+      <h3>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
+      <button @click="download(file)" class="btn-small">Download</button>
+    </div>
+  </div>
+  <!-- <NavigationBarBottom></NavigationBarBottom> -->
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

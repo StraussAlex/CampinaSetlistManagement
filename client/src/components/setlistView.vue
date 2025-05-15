@@ -6,11 +6,13 @@ import { Setlist } from '../models/Setlist';
 import { Song } from '../models/Song';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 import '/src/stylesheets/list.css'
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
+
 
 const router = useRouter();
 const route = useRoute();
@@ -56,29 +58,44 @@ onMounted(() => loadSetlistDetails());
 </script>
 
 <template>
-  <h3>Setlist Overview</h3>
-  <h4>{{ setlistName }}</h4>
+  <mobile-header>
+    <button @click="editSetlist" class="btn-small">Edit</button>
+  </mobile-header>
+  <h1 class="section-heading">Setlist Overview</h1>
+  <h2 class="bottom-line">{{ setlistName }}</h2>
+  <div class="mobile-container">
+
     <!-- <p>{{ setlistName }}</p> -->
 
     <!-- <h2>Songs</h2> -->
-      <div v-if="setlistSongs.length !== 0" class="flex">
+    <div v-if="setlistSongs.length !== 0" class="flex">
         <span v-for="setlistSong in setlistSongs">
           <button @click="songDetails(setlistSong._id)" class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
         </span>
-      </div>
-      <!-- <ul v-if="setlistSongs.length !== 0">
-        <li v-for="setlistSong in setlistSongs">
-          <button @click="songDetails(setlistSong._id)" class="btn-secondary">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
-        </li>
-      </ul> -->
-      <p v-else> *No songs were added to this setlist*</p>
+    </div>
+    <!-- <ul v-if="setlistSongs.length !== 0">
+      <li v-for="setlistSong in setlistSongs">
+        <button @click="songDetails(setlistSong._id)" class="btn-secondary">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
+      </li>
+    </ul> -->
+    <p v-else> *No songs were added to this setlist*</p>
     <br>
+  </div>
+
     
-    <button @click="editSetlist" class="btn-primary">Edit</button>
+
     <!-- <NavigationBarBottom></NavigationBarBottom> -->
-     <MobileNavBar></MobileNavBar> 
+    <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>
-
+.bottom-line::after{
+  content: "";
+  display: block;
+  position: absolute;
+  margin: 20px 5vw 0 5vw;
+  width: 90vw;
+  height: 1px;
+  border-bottom: 1px solid var(--primary)
+}
 </style>

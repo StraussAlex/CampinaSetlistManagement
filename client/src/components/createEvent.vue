@@ -10,6 +10,7 @@ import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import SlotOverlay  from "./elements/SlotOverlay.vue"
 import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
 import ErrorView from './elements/Error-View.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 
 const router = useRouter();
@@ -170,68 +171,82 @@ const openSheet = () => {
 </script>
 
 
-<template>    
-    <h1>{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
-    <div class="flex">
+<template>
+    <mobile-header>
+      <button v-if="isEditingRoute()" @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' class="btn-caution btn-small">Delete</button>
+    </mobile-header>
+    <h1 class="section-heading">{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
 
-    <ErrorView :errors="errors"></ErrorView>
-    
-    <label for = "input-event-name" class="labeled-input">Event name
-    <input name = "input-event-name" v-model = "eventName"></label>
+    <div class="mobile-container">
 
-    <br><br>
+      <ErrorView :errors="errors"></ErrorView>
 
-    <label for = "input-event-place">Event location</label>
-    <input name = "input-event-place" v-model = "eventLocation">
+      <div class="details-box bottom-line">
+        <div class="labeled-input">
+          <label for="input-event-name">Event name</label>
+          <input name="input-event-name" v-model = "eventName">
+        </div>
+      </div>
 
-    <br><br>
+      <div class="details-box bottom-line">
+        <div class="labeled-input">
+          <label for="input-event-place">Event location</label>
+          <input name="input-event-place" v-model="eventLocation">
+        </div>
+      </div>
 
-    <label for = "input-event-time">Event Date</label>
-    <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
+      <div class="details-box bottom-line">
+        <div class="labeled-input">
+          <label for = "input-event-time">Event Date</label>
+          <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
+        </div>
+      </div>
 
-    <br><br>
+      <div class="details-box bottom-line">
+        <div class="labeled-input">
+          <label class="checkbox-wrapper">Public Event</label>
+          <input
+              name="input-is-public"
+              type="checkbox"
+              v-model="eventIsPublic"
+              class="checkbox-input"
+          >
+          <span class="custom-checkbox"></span>
+          <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
+        </div>
+      </div>
 
-    <!-- <label for = "input-is-public">Public event</label>
-    <input type="checkbox" name = "input-is-public" v-model = "eventIsPublic"> -->
+      <div class="details-box">
+        <div class="labeled-input">
+          <h3>Setlists</h3>
+            <div v-if="setlistsInEvent.length !== 0">
+              <div v-for="(list, index) in setlistsInEvent">
+                <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
+                <p>{{ list.name }}</p>
+              </div>
+            </div>
+            <p v-else>No setlists</p>
+          <button @click="toggleSlotOverlay">Add Settlist</button>
+        </div>
+      </div>
 
-    <label class="checkbox-wrapper">
-    <input 
-      name="input-is-public" 
-      type="checkbox" 
-      v-model="eventIsPublic" 
-      class="checkbox-input"
-    >
-    <span class="custom-checkbox"></span>
-    Public Event
-  </label>
+      <div class="details-box">
+        <div class="labeled-input">
 
+        </div>
+      </div>
 
-
-    <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
-
-    <h2>Setlists</h2>
-    <div>
-        <ul v-if="setlistsInEvent.length !== 0">
-        <li v-for="(list, index) in setlistsInEvent">{{ list.name }}
-            <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
-        </li>
-        </ul>
-        <p v-else>No setlists</p>
     </div>
-    <button @click="toggleSlotOverlay">Add Settlist</button>
-    <hr>
-</div>
     <!-- <ul>
         <li v-for="warning in warnings">{{ warning }}</li>
     </ul> -->
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
-    <button @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' v-if="isEditingRoute()" class="btn-caution">Delete Event</button>
     <button @click="openSheet">Overlay</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <!-- <NavigationBarBottom></NavigationBarBottom> -->
-    <MobileNavBar></MobileNavBar> 
+    <!-- <MobileNavBar></MobileNavBar> -->
 
     <SlotOverlay v-model="slotOverlayActive">
       <h3>Select Setlists</h3>
@@ -244,8 +259,8 @@ const openSheet = () => {
         <p v-else>No setlists available</p>
       </div>
     </SlotOverlay>
-    <bottom-sheet-overlay ref="sheet"/>
 
+    <bottom-sheet-overlay ref="sheet"/>
 </template>
 
 <style scoped>

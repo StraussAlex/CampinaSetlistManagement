@@ -12,6 +12,7 @@ import '/src/stylesheets/list.css';
 import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const router = useRouter();
 
@@ -84,6 +85,9 @@ onMounted(() => loadSongs());
 </script>
 
 <template>
+  <mobile-header>
+    <button @click="createNewSong" class="btn-small">+ Add</button>
+  </mobile-header>
   <h1 class="section-heading">Songs</h1>
   <div class="mobile-container">
     <div>
@@ -108,11 +112,9 @@ onMounted(() => loadSongs());
       </span>
     </div>
     <p v-else>No songs yet</p>
-
-    <button @click="createNewSong" class="btn-primary">Create new song</button>
   </div>
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <MobileNavBar></MobileNavBar>
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped></style>

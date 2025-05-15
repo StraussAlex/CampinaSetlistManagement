@@ -13,6 +13,7 @@ import '/src/stylesheets/list.css';
 import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const router = useRouter();
 
@@ -86,6 +87,9 @@ function onSortingChanged(sort: string): void {
 </script>
 
 <template>
+  <mobile-header>
+    <button @click="createNewSetlist" class="btn-small">+ Add</button>
+  </mobile-header>
   <h1 class="section-heading">Setlists</h1>
   <div class="mobile-container">
     <div>
@@ -113,12 +117,9 @@ function onSortingChanged(sort: string): void {
 
     <p v-else>No setlists yet</p>
 
-    <button @click="createNewSetlist" class="btn-primary">
-      Create new setlist
-    </button>
   </div>
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <MobileNavBar></MobileNavBar>
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped></style>

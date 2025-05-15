@@ -7,15 +7,14 @@ import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
-
 import draggableComponent from 'vuedraggable';
 
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
-import '/src/stylesheets/overlay.css'
 import '/src/stylesheets/list.css'
 import ErrorView from './elements/Error-View.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -167,12 +166,18 @@ function activateOverlay(handler: () => void, text: string){
 </script>
 
 <template>
-  <h1>{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
+  <mobile-header>
+    <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution btn-small">Delete</button>
+  </mobile-header>
+  <h1 class="section-heading">{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
+  <div class="mobile-container">
+    <ErrorView :errors="errors"></ErrorView>
 
-  <ErrorView :errors="errors"></ErrorView>
+    <div class="details-box border-bottom">
+      <label for="input-setlist-name">Setlist Name</label>
+      <input name="input-setlist-name" v-model="setlistName">
+    </div>
 
-  <label for="input-setlist-name">Setlist Name</label>
-  <input name="input-setlist-name" v-model="setlistName">
 
   <p>Setlist</p>
 
@@ -210,24 +215,23 @@ function activateOverlay(handler: () => void, text: string){
     <p v-else>Empty setlist</p>
   </div> -->
 
-  <hr>
+    <p>Song selection</p>
+    <div>
+      <ul v-if="songs.length !== 0">
+        <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
+          <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
+        </li>
+      </ul>
+      <p v-else>No songs available</p>
+    </div>
 
-  <p>Song selection</p>
-  <div>
-    <ul v-if="songs.length !== 0">
-      <li v-for="song in availableSongs">{{ song.artist }} - {{ song.title }}
-        <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
-      </li>
-    </ul>
-    <p v-else>No songs available</p>
+    <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
+
   </div>
-
-  <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
-  <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution">Delete setlist</button>
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-   <MobileNavBar></MobileNavBar> 
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

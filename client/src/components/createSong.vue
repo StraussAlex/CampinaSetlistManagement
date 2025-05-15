@@ -5,13 +5,13 @@ import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api';
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
-
 import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
-import '/src/stylesheets/overlay.css';
+
 import YesNoOverlay from './elements/YesNo-Overlay.vue';
 import ErrorView from './elements/Error-View.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 //import {create} from "axios";
 
 const SONG_API = 'songs';
@@ -36,6 +36,7 @@ const errors = ref<string[]>([]);
 const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
+
 
 const buttonText = ref<string>(
   isEditingRoute() ? 'Update Song' : 'Create Song'
@@ -199,71 +200,87 @@ function activateOverlay(handler: () => void, text: string) {
 </script>
 
 <template>
-  <h1>Create Song</h1>
+  <mobile-header>
+    <button
+        v-if="isEditingRoute()"
+        @click="activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')"
+        class="btn-caution btn-small">Delete</button>
+  </mobile-header>
+  <h1 class="section-heading">Create Song</h1>
   <div class="mobile-container">
-  <ErrorView :errors="errors"></ErrorView>
+    <ErrorView :errors="errors"></ErrorView>
 
-  <div class="labeled-input">
-    <label for="input-song-name">Song Name</label>
-    <input name="input-song-name" v-model="songTitle" placeholder="Song Name" />
-  </div>
-  <br />
-
-    <div class="labeled-input">
-  <label for="input-song-artist">Artist</label>
-  <input name="input-song-artist" v-model="songArtist" placeholder="Artist Name" />
-</div>
-
-  <br />
-
-    <div class="labeled-input">
-  <label for="input-song-notes">Additional notes</label>
-  <textarea name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
+    <div class="details-box bottom-line">
+      <div class=" labeled-input">
+        <label for="input-song-name">Song Name</label>
+        <input name="input-song-name" v-model="songTitle" placeholder="Song Name" />
+      </div>
     </div>
 
-  <h2>Links</h2>
-  <ul>
-    <li v-for="(link, index) in songLinks">
-      {{ link }}
-      <button @click="deleteLink(index)" class="btn-caution btn-square">
-        X
+    <div class="details-box bottom-line">
+      <div class=" labeled-input">
+        <label for="input-song-artist">Artist</label>
+        <input name="input-song-artist" v-model="songArtist" placeholder="Artist Name" />
+      </div>
+    </div>
+
+    <div class="details-box bottom-line">
+      <div class=" labeled-input">
+        <label for="input-song-notes">Additional notes</label>
+        <textarea name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
+      </div>
+    </div>
+
+    <div class="details-box bottom-line">
+      <h2>Links</h2>
+      <ul>
+        <li v-for="(link, index) in songLinks">
+          {{ link }}
+          <button @click="deleteLink(index)" class="btn-caution btn-square">
+            X
+          </button>
+        </li>
+      </ul>
+
+      <div class="labeled-input">
+        <label for="input-song-link">Add link</label>
+        <input name="input-song-link" v-model="currentLink" />
+      </div>
+      <button @click="insertLink" class="btn-secondary btn-small">
+        + Add link
       </button>
-    </li>
-  </ul>
-
-    <div class="labeled-input">
-  <label for="input-song-link">Add link</label>
-  <input name="input-song-link" v-model="currentLink" />
     </div>
-  <button @click="insertLink" class="btn-secondary btn-small">
-    + Add link
-  </button>
- 
 
-  <h2>Lyrics</h2>
-  <div class="labeled-input">
-  <label for="input-song-lyrics">Lyrics</label>
-  <textarea name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
-  </div>
+    <div class="details-box bottom-line">
+      <div class="labeled-input">
+        <label for="input-song-lyrics">Lyrics</label>
+        <textarea name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
+      </div>
+    </div>
+
   <!-- <p>
     Insert song lyrics here. If left empty, try to fetch lyrics from external
     resource?
   </p> -->
 
   <div>
-    <input type="text" v-model="newInstrumentName" /> <br>
-    <button @click="addInstrumentInput" class="btn-secondary btn-small">
-      + Add Instrument
-    </button>
+    <div class="details-box">
+      <div class="labeled-input">
+        <label for="input-instrument">Add New Instrument</label>
+        <input name="input-instrument" v-model="newInstrumentName" />
+      </div>
+      <button @click="addInstrumentInput" class="btn-secondary btn-small">
+        + Add Instrument
+      </button>
+    </div>
 
-    <div v-for="(file, index) in files">
-      <button @click="deleteInstrument(index)">X</button>
-      <label>{{ file.instrument }}</label>
-      <label v-if="file.filepath === 'None'">File: None</label>
-      <label v-else
-        >File: {{ file.filepath.split('/')[1].split('-')[1] }}</label
-      >
+
+
+    <div class="details-box bottom-line" v-for="(file, index) in files">
+      <h3 v-if="file.filepath === 'None'">{{ file.instrument }}: No File</h3>
+      <h3 v-else>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
       <input type="file" :id="file.instrument" :name="file.instrument" />
+      <button @click="deleteInstrument(index)">Remove instrument</button>
     </div>
   </div>
 
@@ -278,15 +295,6 @@ function activateOverlay(handler: () => void, text: string) {
   >
     {{ buttonText }}
   </button>
-  <button
-    v-if="isEditingRoute()"
-    @click="
-      activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')
-    "
-    class="btn-caution"
-  >
-    Delete song
-  </button>
   </div>
   <YesNoOverlay
     v-model="overlayActive"
@@ -296,7 +304,7 @@ function activateOverlay(handler: () => void, text: string) {
 
   <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <MobileNavBar></MobileNavBar>
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped></style>

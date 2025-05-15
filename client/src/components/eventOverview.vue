@@ -7,6 +7,7 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import SortAction from './elements/Sort-Action.vue';
 import SearchBar from './elements/Search-Bar.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const router = useRouter();
 function createEvent(): void {
@@ -120,46 +121,102 @@ function onSortingChanged(sort: string): void {
   filteredEvents.value = sortedEvents;
 }
 
+const DateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+});
+
 const labelNewest = ref<string>('Newest');
 const labelOldest = ref<string>('Oldest');
 </script>
 
 <template>
-  <h1 class="section-heading">Events</h1>
-
-  <div>
-    <SearchBar @search-change="onSearchChange"></SearchBar>
-    <SortAction
-      @sort-change="onSortingChanged"
-      :sort-options="[
+  <mobile-header>
+    <button @click="createEvent" class="btn-small">+ Add</button>
+  </mobile-header>
+  <h1 class="section-heading">Home</h1>
+  <h2 class="bottom-line">Upcoming Events</h2>
+  <div class="mobile-container">
+    <div>
+      <SearchBar @search-change="onSearchChange"></SearchBar>
+      <SortAction
+          @sort-change="onSortingChanged"
+          :sort-options="[
         { value: 'newest', display: labelNewest },
         { value: 'oldest', display: labelOldest },
       ]"
-    ></SortAction>
-    <br />
-    <label for="input-show-all">Show all events</label>
-    <input
-      type="checkbox"
-      name="input-show-all"
-      v-model="showAllEvents"
-      @change="onSearchChange(currentQuery)"
-    />
+      ></SortAction>
+      <br/>
+
+      <label for="input-show-all">Show all events</label>
+      <input
+          type="checkbox"
+          name="input-show-all"
+          v-model="showAllEvents"
+          @change="onSearchChange(currentQuery)"
+      />
+    </div>
+
+    <div v-if="filteredEvents.length !== 0" class="flex">
+      <div v-for="event in filteredEvents" @click="viewEvent(event._id)" class="EventWrapper">
+        <div class="EventDateWrapper">
+          <p >{{DateFormatter.format(new Date(event.date)).replace(' ', '. ')}}</p>
+        </div>
+        <div class="EventTextWrapper">
+          <h4>{{ event.name }}</h4>
+          <p>{{event.location}}</p>
+        </div>
+      </div>
+    </div>
+    <p v-else>No events are created yet</p>
   </div>
 
-  <div v-if="filteredEvents.length !== 0" class="flex">
-    <span v-for="event in filteredEvents">
-      <button @click="viewEvent(event._id)" class="list">
-        {{ event.name }} | {{ event.getFullDate }}
-      </button>
-    </span>
-  </div>
-  <p v-else>No events are created yet</p>
 
-  <button @click="createEvent" class="btn-primary">Create Event</button>
+
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- Um "Mobile Nav Bar"-Ansicht zu aktivieren, ist "NavigationBarBottom"-Tag zu löschen und "MobileNavBar" zu unkommentieren -->
-  <MobileNavBar></MobileNavBar>
+  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+.bottom-line::after{
+  content: "";
+  display: block;
+  position: absolute;
+  margin: 20px 5vw 0 5vw;
+  width: 90vw;
+  height: 1px;
+  border-bottom: 1px solid var(--primary)
+}
+.EventWrapper{
+  display: flex;
+  padding: 0 5vw;
+}
+.EventDateWrapper{
+  display: inline-block;
+  width: 75px;
+  height: 75px;
+  line-height: 75px;
+  margin: 20px;
+  text-align: center;
+  background-color: var(--secondary);
+}
+.EventWrapper h3,h4,p{
+  margin: 0;
+}
+.EventTextWrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 5vw;
+}
+.EventDateWrapper p{
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  font-family: "Krona One";
+  font-size: 20px;
+}
+</style>

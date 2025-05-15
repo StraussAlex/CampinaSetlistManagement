@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 import '/src/stylesheets/input.css'
+import MobileHeader from "./elements/Mobile-Header.vue";
 
 const currentUsername = ref<string>('admin');
 const currentPassword = ref<string>('password123');
@@ -41,6 +42,7 @@ async function loginUser(): Promise<void> {
 </script>
 
 <template>
+  <mobile-header></mobile-header>
   <h1>Login</h1>
   <label for="username">
     Username

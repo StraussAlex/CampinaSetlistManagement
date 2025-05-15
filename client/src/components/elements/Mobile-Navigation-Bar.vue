@@ -32,6 +32,7 @@ onMounted(async() => {
 </script>
 
 <template>
+
   <div class="mobile-navigation-bar">
     <div 
       class="icon-container" 

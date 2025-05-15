@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import './App.css';
 import { ref, onMounted } from 'vue'
+import MobileNavBar from "./components/elements/Mobile-Navigation-Bar.vue";
+import '/src/stylesheets/input.css';
 
 const theme = ref<'light' | 'dark'>('light')
 
@@ -26,9 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <button @click="toggleTheme" class="btn-square">
-      {{ theme === 'light' ? '🌙' : '☀️' }}
-    </button>
+
   <!-- <p>use route / to see event overview</p>
   <p>use route /songs to see song overview</p>
   <p>use route /setlists to see setlist overview</p>
@@ -36,8 +36,17 @@ onMounted(() => {
   <p>use route /songs/:id to see song details</p>
   <p>use route /setlists/:id to see setlist details</p> -->
   <router-view></router-view>
+  <label class="switch">
+    <input @click="toggleTheme" type="checkbox">
+    <span class="slider round"></span>
+  </label>
+  <MobileNavBar></MobileNavBar>
 </template>
 
 <style scoped>
-
+  .switch{
+    position: fixed;
+    left: 10px;
+    bottom: 10%;
+  }
 </style>
