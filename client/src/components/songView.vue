@@ -73,7 +73,7 @@ onMounted(() => loadSongDetails());
   <mobile-header>
     <button @click="editSong" class="btn-small">Edit</button>
   </mobile-header>
-  <h1 class="section-heading">Setlist Overview</h1>
+  <h1 class="section-heading">Song Details</h1>
   <div class="mobile-container">
 
     <div class="details-box bottom-line">

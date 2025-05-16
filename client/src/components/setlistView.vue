@@ -61,7 +61,7 @@ onMounted(() => loadSetlistDetails());
   <mobile-header>
     <button @click="editSetlist" class="btn-small">Edit</button>
   </mobile-header>
-  <h1 class="section-heading">Setlist Overview</h1>
+  <h1 class="section-heading">Setlist Details</h1>
   <h2 class="bottom-line">{{ setlistName }}</h2>
   <div class="mobile-container">
 

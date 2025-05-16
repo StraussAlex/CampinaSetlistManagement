@@ -196,6 +196,7 @@ const labelOldest = ref<string>('Oldest');
 .EventDateWrapper{
   display: inline-block;
   width: 75px;
+  min-width: 75px;
   height: 75px;
   line-height: 75px;
   margin: 20px;
