@@ -22,6 +22,7 @@
     margin-bottom: 2%;
     position: relative;
     padding-top: 5px;
+    cursor: pointer;
 }
 
 .mobile-navigation-bar img {

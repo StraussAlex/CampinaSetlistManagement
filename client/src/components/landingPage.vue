@@ -41,7 +41,7 @@ onMounted(async() => {
   <mobile-header>
     <button @click="redirectToLogin" class="btn-small">Log In</button>
   </mobile-header>
-  <h1>Campina Band</h1>
+  <h1 class="section-heading">Campina Band</h1>
   
   <div v-if="upcomingEvent !== null && errorMsg.length <= 0">
     <h2>Our next gig</h2>

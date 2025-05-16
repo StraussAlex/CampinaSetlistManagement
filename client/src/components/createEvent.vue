@@ -204,15 +204,16 @@ const openSheet = () => {
 
       <div class="details-box bottom-line">
         <div class="labeled-input">
-          <label class="checkbox-wrapper">Public Event</label>
-          <input
-              name="input-is-public"
-              type="checkbox"
-              v-model="eventIsPublic"
-              class="checkbox-input"
-          >
-          <span class="custom-checkbox"></span>
-          <p style="font-size: x-small;">A public event can be displayed on the public landing page as an upcoming event. If you don't want this, keep the event private</p>
+          <label class="checkbox-wrapper">
+            <input
+                name="input-is-public"
+                type="checkbox"
+                v-model="eventIsPublic"
+                class="checkbox-input"
+            />
+            <span class="custom-checkbox"></span>
+            Public Event
+          </label>
         </div>
       </div>
 

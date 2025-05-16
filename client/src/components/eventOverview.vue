@@ -192,6 +192,7 @@ const labelOldest = ref<string>('Oldest');
 .EventWrapper{
   display: flex;
   padding: 0 5vw;
+  cursor: pointer;
 }
 .EventDateWrapper{
   display: inline-block;

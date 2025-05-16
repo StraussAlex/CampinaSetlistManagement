@@ -43,29 +43,38 @@ async function loginUser(): Promise<void> {
 
 <template>
   <mobile-header></mobile-header>
-  <h1>Login</h1>
-  <label for="username">
-    Username
-    <input
-      type="text"
-      name="username"
-      v-model="currentUsername"
-      placeholder="admin"
-    />
-  </label>
-  <br />
-  <label for="password">
-    Password
-    <input
-      type="password"
-      name="password"
-      v-model="currentPassword"
-      placeholder="password123"
-    />
-  </label>
-  <br />
-  <button @click="loginUser" class="btn-primary">Log In</button>
+  <div id="login-centering" class="flex">
+    <div>
+      <h1>Login</h1>
+      <label for="username">
+        Username
+        <input
+            type="text"
+            name="username"
+            v-model="currentUsername"
+            placeholder="admin"
+        />
+      </label>
+      <br />
+      <label for="password">
+        Password
+        <input
+            type="password"
+            name="password"
+            v-model="currentPassword"
+            placeholder="password123"
+        />
+      </label>
+      <br/>
+      <button @click="loginUser" class="btn-primary">Log In</button>
+    </div>
+  </div>
   <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 </template>
 
-<style></style>
+<style>
+  #login-centering{
+    height: 70vh;
+    justify-content: space-around;
+  }
+</style>
