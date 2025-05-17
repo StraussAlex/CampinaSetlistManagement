@@ -8,7 +8,6 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import SlotOverlay  from "./elements/SlotOverlay.vue"
-import BottomSheetOverlay from './elements/Bottom-Sheet-Overlay.vue';
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 
@@ -163,11 +162,8 @@ function toggleSlotOverlay(){
   slotOverlayActive.value = !slotOverlayActive.value
 }
 
-const sheet = ref<InstanceType<typeof BottomSheetOverlay>>();
 
-const openSheet = () => {
-  sheet.value?.open();
-};
+
 </script>
 
 
@@ -242,7 +238,6 @@ const openSheet = () => {
     </ul> -->
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
-    <button @click="openSheet">Overlay</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <!-- <NavigationBarBottom></NavigationBarBottom> -->
