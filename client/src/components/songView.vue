@@ -104,7 +104,7 @@ onMounted(() => loadSongDetails());
       <div v-if="songNotes.length !== 0">
         <pre>{{ songNotes }}</pre>
       </div>
-      <p v-else>*No Notes were added to this song*</p>
+      <p v-else>No notes were added to this song</p>
 
     </div>
 
