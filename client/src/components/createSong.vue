@@ -57,7 +57,10 @@ onMounted(async () => {
       songLinks.value = song.links;
       files.value = song.files;
 
-      nextTick(() => resizeLyrics());
+      nextTick(() => {
+        resizeLyrics();
+        resizeNotes();
+      });
 
       /*
       for (const file of song.files) {
@@ -201,9 +204,16 @@ function activateOverlay(handler: () => void, text: string) {
 }
 
 const lyricsTextarea = ref<HTMLTextAreaElement | null>(null);
-
 function resizeLyrics(): void {
   const textarea = lyricsTextarea.value;
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+}
+const notesTextarea = ref<HTMLTextAreaElement | null>(null);
+function resizeNotes(): void {
+  const textarea = notesTextarea.value;
   if (textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
@@ -240,7 +250,7 @@ function resizeLyrics(): void {
     <div class="details-box bottom-line">
       <div class=" labeled-input">
         <label for="input-song-notes">Additional notes</label>
-        <textarea name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
+        <textarea @input="resizeNotes" ref="notesTextarea" name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
       </div>
     </div>
 
@@ -267,7 +277,7 @@ function resizeLyrics(): void {
     <div class="details-box bottom-line">
       <div class="labeled-input">
         <label for="input-song-lyrics">Lyrics</label>
-        <textarea @input="resizeLyrics" ref="lyricsTextarea" id="lyrics-field" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
+        <textarea @input="resizeLyrics" ref="lyricsTextarea" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
       </div>
     </div>
 
@@ -322,9 +332,9 @@ function resizeLyrics(): void {
 
 <style scoped>
 
-#lyrics-field {
-  height: auto;
+textarea {
   resize: none;
+  height: auto;
 }
 
 </style>
