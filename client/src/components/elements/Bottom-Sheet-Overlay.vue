@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import "../../stylesheets/bottom-sheet-overlay.css";
 
-// Refs for DOM elements
 const bottomSheet = ref<HTMLDivElement | null>(null);
 const sheetOverlay = ref<HTMLDivElement | null>(null);
 const sheetContent = ref<HTMLDivElement | null>(null);
@@ -44,11 +43,10 @@ const showBottomSheet = () => {
 const setupBottomSheet = () => {
   if (!bottomSheet.value || !sheetOverlay.value) return;
 
-  // включаем сразу show + no-transition
   bottomSheet.value.classList.add("show", "no-transition");
   document.body.style.overflowY = "auto";
 
-  updateSheetHeight(5);
+  updateSheetHeight(2);
 
   requestAnimationFrame(() => {
     if (!bottomSheet.value) return;
@@ -94,13 +92,17 @@ const dragStop = () => {
   } else if (h < 45) {
     updateSheetHeight(40);
    } else if (h < 80) {
-      updateSheetHeight(75);
+    updateSheetHeight(75);
   } else {
     updateSheetHeight(100);
     if (!sheetOverlay.value) return;
     sheetOverlay.value.style.background = "rgba(0,0,0,0.5)";
   }
 };
+
+const openBottomSheetWithBtn = (num: Number) => {
+  updateSheetHeight(num);
+}
 
 onMounted(() => {
   dragIcon.value?.addEventListener("mousedown", dragStart);
@@ -114,6 +116,7 @@ onMounted(() => {
 
 defineExpose({
   setupBottomSheet,
+  openBottomSheetWithBtn,
   hideBottomSheet
 })
 </script>

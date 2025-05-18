@@ -84,7 +84,7 @@ onMounted(async() => {
       errors.value.push("Failed to load setlist.");
     }
   }
-  openSheet();
+  setupSheet();
 });
 
 const setlistName = ref<string>("");
@@ -167,10 +167,12 @@ function activateOverlay(handler: () => void, text: string){
 }
 
 const sheetRef = ref<InstanceType<typeof BottomSheetOverlay> | null>(null);
-  const openSheet = () => {
-    sheetRef.value?.setupBottomSheet()
+const setupSheet = () => {
+    sheetRef.value?.setupBottomSheet();
 }
-
+const openSheet = () => {
+  sheetRef.value?.openBottomSheetWithBtn(70);
+}
 
 </script>
 
