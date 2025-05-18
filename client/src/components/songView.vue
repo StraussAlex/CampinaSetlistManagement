@@ -41,6 +41,8 @@ async function loadSongDetails() :Promise<void>{
     songNotes.value = song.notes;
     songLinks.value = Array(song.links);
     songFiles.value = song.files;
+
+    lyricsDisplay.value = song.lyrics.split('\n')[0] + "\n...";
     
   } catch(error){
     console.log("An error in showing song details has occured: " + error);
@@ -65,6 +67,19 @@ async function download(songFile: SongFile){
     console.error('Error downloading the song file:', error);
   }
 }
+const lyricsExpandBtnLabel = ref<string>('⬇️');
+const lyricsExpanded = ref<boolean>(false);
+
+const lyricsDisplay = ref<string>("");
+function toggleLyricsExpand(): void {
+  lyricsExpanded.value = !lyricsExpanded.value;
+  lyricsExpandBtnLabel.value = lyricsExpanded.value ? '⬆️' : '⬇️';
+
+  lyricsDisplay.value = lyricsExpanded.value ? songLyrics.value : lyricsDisplay.value = songLyrics.value.split('\n')[0] + "\n...";
+}
+function copyLyricsToClipBoard(): void {
+  navigator.clipboard.writeText(songLyrics.value);
+}
 
 onMounted(() => loadSongDetails());
 </script>
@@ -87,18 +102,20 @@ onMounted(() => loadSongDetails());
     <div class="details-box bottom-line">
       <h3>Additional Information</h3>
       <div v-if="songNotes.length !== 0">
-        <p>{{ songNotes }}</p>
+        <pre>{{ songNotes }}</pre>
       </div>
-      <p v-else>*No Notes were added to this song*</p>
+      <p v-else>No notes were added to this song</p>
 
     </div>
 
     <div class="details-box bottom-line">
       <h3>Lyrics</h3>
+      <button v-if="songLyrics.length !== 0" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
+      <button v-if="songLyrics.length !== 0" @click="copyLyricsToClipBoard">📋</button>
         <div v-if="songLyrics.length !== 0">
-          <p>{{ songLyrics }}</p>
+          <pre>{{ lyricsDisplay }}</pre>
         </div>
-        <p v-else>*No lyrics were added to this song*</p>
+        <p v-else>No lyrics were added to this song</p>
     </div>
 
     <div class="details-box bottom-line">
