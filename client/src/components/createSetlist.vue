@@ -6,7 +6,7 @@ import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
 import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
-import DraggableOverlay from "./elements/Bottom-Sheet-Overlay.vue"
+import BottomSheetOverlay from "./elements/Bottom-Sheet-Overlay.vue"
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import draggableComponent from 'vuedraggable';
 
@@ -21,8 +21,6 @@ const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
 const originalCreationDate = ref<string>('');
-
-const sheet = ref<InstanceType<typeof DraggableOverlay>>();
 
 const overlayActive = ref<boolean>(false);
 const overlayYesHandler = ref<() => void>(() => {});
@@ -86,6 +84,7 @@ onMounted(async() => {
       errors.value.push("Failed to load setlist.");
     }
   }
+  openSheet();
 });
 
 const setlistName = ref<string>("");
@@ -167,6 +166,12 @@ function activateOverlay(handler: () => void, text: string){
   console.log("isActive: " + overlayActive.value)
 }
 
+const sheetRef = ref<InstanceType<typeof BottomSheetOverlay> | null>(null);
+  const openSheet = () => {
+    sheetRef.value?.setupBottomSheet()
+}
+
+
 </script>
 
 <template>
@@ -228,7 +233,7 @@ function activateOverlay(handler: () => void, text: string){
       </ul>
       <p v-else>No songs available</p>
     </div>
-    <button @click="sheet?.open()">Overlay</button>
+    <button @click="openSheet">Overlay</button>
     <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
 
   </div>
@@ -236,7 +241,7 @@ function activateOverlay(handler: () => void, text: string){
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
-<DraggableOverlay ref="sheet" />
+  <BottomSheetOverlay ref="sheetRef" />
 </template>
 
 <style scoped>
