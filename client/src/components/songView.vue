@@ -110,8 +110,8 @@ onMounted(() => loadSongDetails());
 
     <div class="details-box bottom-line">
       <h3>Lyrics</h3>
-      <button @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
-      <button @click="copyLyricsToClipBoard">📋</button>
+      <button v-if="songLyrics.length !== 0" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
+      <button v-if="songLyrics.length !== 0" @click="copyLyricsToClipBoard">📋</button>
         <div v-if="songLyrics.length !== 0">
           <pre>{{ lyricsDisplay }}</pre>
         </div>
