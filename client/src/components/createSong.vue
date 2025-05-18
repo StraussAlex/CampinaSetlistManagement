@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { Song, SongFile } from '../models/Song';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api';
@@ -56,6 +56,8 @@ onMounted(async () => {
       currentNotes.value = song.notes;
       songLinks.value = song.links;
       files.value = song.files;
+
+      nextTick(() => resizeLyrics());
 
       /*
       for (const file of song.files) {
@@ -197,6 +199,17 @@ function activateOverlay(handler: () => void, text: string) {
   overlayActive.value = true;
   console.log('isActive: ' + overlayActive.value);
 }
+
+const lyricsTextarea = ref<HTMLTextAreaElement | null>(null);
+
+function resizeLyrics(): void {
+  const textarea = lyricsTextarea.value;
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+}
+
 </script>
 
 <template>
@@ -206,7 +219,7 @@ function activateOverlay(handler: () => void, text: string) {
         @click="activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')"
         class="btn-caution btn-small">Delete</button>
   </mobile-header>
-  <h1 class="section-heading">Create Song</h1>
+  <h1 class="section-heading">{{ buttonText }}</h1>
   <div class="mobile-container">
     <ErrorView :errors="errors"></ErrorView>
 
@@ -254,7 +267,7 @@ function activateOverlay(handler: () => void, text: string) {
     <div class="details-box bottom-line">
       <div class="labeled-input">
         <label for="input-song-lyrics">Lyrics</label>
-        <textarea name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
+        <textarea @input="resizeLyrics" ref="lyricsTextarea" id="lyrics-field" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
       </div>
     </div>
 
@@ -307,4 +320,11 @@ function activateOverlay(handler: () => void, text: string) {
   <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+
+#lyrics-field {
+  height: auto;
+  resize: none;
+}
+
+</style>
