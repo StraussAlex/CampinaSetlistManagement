@@ -175,7 +175,7 @@ async function createNewSong(): Promise<void> {
         const response = await api.post(SONG_API, song);
         song._id = response.data.insertedId;
       }
-      router.push(`/songs/${editingId}`);
+      router.push(isEditingRoute() ? `/songs/${editingId}` : '/songs');
     } catch (error) {
       errors.value.push('Error creating an event: ' + error);
     }
