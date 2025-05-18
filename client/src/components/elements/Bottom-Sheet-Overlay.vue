@@ -136,7 +136,7 @@ defineExpose({
             This modal allows user to view its contents, drag it up or down, and close it. It also works on
             touch-enabled devices.
           </p>
-          <p>Lorem Ipsum are simply dummy text... [и так далее — можешь оставить или сократить текст]</p>
+          <p>Lorem Ipsum are simply dummy text...</p>
           <button></button>
         </div>
       </div>
