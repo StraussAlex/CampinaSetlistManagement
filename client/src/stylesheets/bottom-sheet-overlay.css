@@ -16,13 +16,13 @@ body {
     padding: 15px 22px;
     background: #4A98F7;
     transition: 0.3s ease;
- .bottom-sheet {
+ .bottom-sheet {/* es ist so dumm, aber da ich nicht versucht habe, dieses Segment zu teilen, funktioniert die Animation einfach anders, was zu Fehlern führt*/
   position: fixed;
   left: 0; bottom: 0;
   width: 100%; height: 100vh;
   display: flex; flex-direction: column; justify-content: flex-end;
   pointer-events: none;
-  transition: opacity 0.1s linear;    /* ← здесь только opacity */
+  transition: opacity 0.1s linear;   
   z-index: 999;
 }
 
@@ -32,7 +32,7 @@ body {
 
 .bottom-sheet.no-transition,
 .bottom-sheet.dragging {
-  transition: none !important;        /* ← блокируем всё */
+  transition: none !important;      
 }
 
 /* сам «ящик» */
