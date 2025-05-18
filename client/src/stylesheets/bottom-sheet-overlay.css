@@ -106,7 +106,7 @@ body {
 
 
 .bottom-sheet .content {
-    width: 100%;
+    width: 95%;
     position: relative;
     background: var(--background);
     max-height: 100vh;
