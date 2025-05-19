@@ -27,7 +27,7 @@
 
 .mobile-navigation-bar img {
     height: 26px;
-    width: 26px;
+    width: 27px;
     position: absolute;
     z-index: 2;
     transition: transform 0.15s ease-out;
@@ -61,10 +61,9 @@
     height: 52px;
     transition: all 0.1s ease;
 }
-
 .icon-container.active img {
     transform: scale(1.2);
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease;   
 }
 
 img {

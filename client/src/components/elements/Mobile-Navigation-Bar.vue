@@ -39,7 +39,7 @@ onMounted(async() => {
       @click="navigateTo('/events')" 
       :class="{ active: route.name === 'events' }"
     >
-      <img src="../temporary-images/home.png" />
+      <img src="../../assets/Icons/HomeClicked.png" />
       <div class="ani_square"></div>
     </div>
 
@@ -48,7 +48,7 @@ onMounted(async() => {
       @click="navigateTo('/setlists')" 
       :class="{ active: route.name === 'setlists' }"
     >
-      <img class="setlists" src="../temporary-images/list.png" />
+      <img class="icon unclicked" src="../../assets/Icons/SetlistClicked.png" />
       <div class="ani_square"></div>
     </div>
 
@@ -57,7 +57,7 @@ onMounted(async() => {
       @click="navigateTo('/songs')" 
       :class="{ active: route.name === 'songs' }"
     >
-      <img class="tracks" src="../temporary-images/music.png" />
+      <img class="tracks" src="../../assets/Icons/SongsClicked.png" />
       <div class="ani_square"></div>
     </div>
 
@@ -67,14 +67,14 @@ onMounted(async() => {
       @click="navigateTo('/manage-users')" 
       :class="{ active: route.name === 'admin-page' }"
     >
-      <img class="users" src="../temporary-images/profile-user.png" />
+      <img class="users" src="../../assets/Icons/SettingsClicked.png" />
       <div class="ani_square"></div>
     </div>
 
     <div 
       class="icon-container" 
       @click="logoutUser()">
-      <img class="users" src="../temporary-images/logout.png" />
+      <img class="users" src="../temporary-images/logout.png" alt = "Logout"/>
       <div class="ani_square"></div>
     </div>
   </div>
