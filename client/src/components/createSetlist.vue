@@ -246,7 +246,7 @@ const openSheet = () => {
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
-  <BottomSheetOverlay ref="sheetRef" />
+  <BottomSheetOverlay ref="sheetRef" @add-song="addSongToSetlist"/>
 </template>
 
 <style scoped>
