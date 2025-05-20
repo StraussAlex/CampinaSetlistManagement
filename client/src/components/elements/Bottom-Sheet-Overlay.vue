@@ -1,15 +1,52 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import "../../stylesheets/bottom-sheet-overlay.css";
+import type { Song } from "../../models/Song";
+import api from "../../services/api";
+
+import { defineEmits } from 'vue'
+const emit = defineEmits<{
+  (e: 'add-song', song: Song): void
+}>()
 
 const bottomSheet = ref<HTMLDivElement | null>(null);
 const sheetOverlay = ref<HTMLDivElement | null>(null);
 const sheetContent = ref<HTMLDivElement | null>(null);
 const dragIcon = ref<HTMLDivElement | null>(null);
 
+const setlistSongs = ref<Song[]>([]);
+
 let isDragging = false;
 let startY = 0;
 let startHeight = 0;
+
+const SONG_API = "songs";
+const songs = ref<Song[]>([]);
+const availableSongs = ref<Song[]>([]);
+
+const errors = ref<string[]>([]);
+
+async function loadSongs(): Promise<void> {
+  try {
+    const response = await api.get(SONG_API);
+    songs.value = response.data;
+
+    availableSongs.value = [];
+    for(let i = 0; i < songs.value.length; i++) {
+      if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
+    }
+
+  } catch(error) {
+    errors.value.push("Error loading songs: " + error);
+  }
+}
+
+function songAlreadyInSetlist(song: Song): boolean {
+  for(let i: number = 0; i < setlistSongs.value.length; i++) {
+    if(setlistSongs.value[i]._id == song._id) return true;
+  }
+  return false;
+}
 
 const updateSheetHeight = (raw: number) => {
   if (!sheetContent.value || !bottomSheet.value || !sheetOverlay.value) return;
@@ -33,12 +70,6 @@ const updateSheetHeight = (raw: number) => {
   }
 };
 
-const showBottomSheet = () => {
-  if (!bottomSheet.value || !sheetOverlay.value) return;
-  bottomSheet.value.classList.add("show");
-  document.body.style.overflowY = "auto";
-  updateSheetHeight(2);
-};
 
 const setupBottomSheet = () => {
   if (!bottomSheet.value || !sheetOverlay.value) return;
@@ -100,11 +131,11 @@ const dragStop = () => {
   }
 };
 
-const openBottomSheetWithBtn = (num: Number) => {
+const openBottomSheetWithBtn = (num: number) => {
   updateSheetHeight(num);
 }
 
-onMounted(() => {
+onMounted(async () => {
   dragIcon.value?.addEventListener("mousedown", dragStart);
   window.addEventListener("mousemove", dragging);
   window.addEventListener("mouseup", dragStop);
@@ -112,6 +143,9 @@ onMounted(() => {
   dragIcon.value?.addEventListener("touchstart", dragStart);
   window.addEventListener("touchmove", dragging);
   window.addEventListener("touchend", dragStop);
+
+  await loadSongs();
+
 });
 
 defineExpose({
@@ -133,14 +167,15 @@ defineExpose({
         </div>
 
         <div class="body">
-          <h2>Bottom Sheet Modal</h2>
-          <p>
-            Create a bottom sheet modal that functions similarly to Facebook modal using HTML CSS and JavaScript.
-            This modal allows user to view its contents, drag it up or down, and close it. It also works on
-            touch-enabled devices.
-          </p>
-          <p>Lorem Ipsum are simply dummy text...</p>
-          <button></button>
+          <h2></h2>
+          <div>
+            <ul v-if="songs.length !== 0">
+              <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
+                <button @click="emit('add-song', song)" class="btn-secondary btn-small"> + Add song</button>
+              </li>
+            </ul>
+            <p v-else>No songs available</p>
+          </div>
         </div>
       </div>
     </div>
