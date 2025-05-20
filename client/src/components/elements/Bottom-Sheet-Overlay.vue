@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import "../../stylesheets/bottom-sheet-overlay.css";
 import type { Song } from "../../models/Song";
 import api from "../../services/api";
+import SearchBar from './Search-Bar.vue';
 
 import { defineEmits } from 'vue'
 const emit = defineEmits<{
@@ -30,6 +31,8 @@ async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
     songs.value = response.data;
+    filteredSongs.value = songs.value;
+    onSortingChanged('newest');
 
     availableSongs.value = [];
     for(let i = 0; i < songs.value.length; i++) {
@@ -46,6 +49,49 @@ function songAlreadyInSetlist(song: Song): boolean {
     if(setlistSongs.value[i]._id == song._id) return true;
   }
   return false;
+}
+const filteredSongs = ref<Song[]>(songs.value);
+function onSearchChange(query: string): void {
+  filteredSongs.value = songs.value.filter(
+    (song) =>
+      song.title.toLowerCase().includes(query.toLowerCase()) ||
+      song.artist.toLowerCase().includes(query.toLowerCase())
+  );
+  onSortingChanged(currentSort.value);
+}
+const currentSort = ref<string>('asc');
+function onSortingChanged(sort: string): void {
+  currentSort.value = sort;
+  const sortedSongs = [...filteredSongs.value];
+
+  switch (sort) {
+    case 'asc':
+      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case 'desc':
+      sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case 'oldest':
+      sortedSongs.sort(
+        (a, b) =>
+          new Date(a.creationDate).getTime() -
+          new Date(b.creationDate).getTime()
+      );
+      break;
+    case 'newest':
+      sortedSongs.sort(
+        (a, b) =>
+          new Date(b.creationDate).getTime() -
+          new Date(a.creationDate).getTime()
+      );
+      break;
+    default:
+      //Sollts an error geben sortier i alphabetisch, bitte ändern wenns ned passt
+      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+  }
+
+  filteredSongs.value = sortedSongs;
 }
 
 const updateSheetHeight = (raw: number) => {
@@ -145,7 +191,6 @@ onMounted(async () => {
   window.addEventListener("touchend", dragStop);
 
   await loadSongs();
-
 });
 
 defineExpose({
@@ -154,7 +199,6 @@ defineExpose({
   hideBottomSheet
 })
 </script>
-
 
 <template>
   <div>
@@ -167,13 +211,14 @@ defineExpose({
         </div>
 
         <div class="body">
-          <h2></h2>
+          <SearchBar @search-change="onSearchChange"></SearchBar>
           <div>
-            <ul v-if="songs.length !== 0">
-              <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
-                <button @click="emit('add-song', song)" class="btn-secondary btn-small"> + Add song</button>
-              </li>
-            </ul>
+              <ul id="overlay-ul" v-if="filteredSongs.length !== 0" class="flex">
+                <li v-for="song in filteredSongs">
+                  <button @click="emit('add-song', song)" class="btn-secondary btn-small"> + </button>
+                  {{ song.artist }} - {{ song.title }}
+                </li>
+              </ul>
             <p v-else>No songs available</p>
           </div>
         </div>
@@ -181,6 +226,3 @@ defineExpose({
     </div>
   </div>
 </template>
-
-
-
