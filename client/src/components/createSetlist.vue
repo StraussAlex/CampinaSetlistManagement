@@ -184,13 +184,15 @@ const openSheet = () => {
   <div class="mobile-container">
     <ErrorView :errors="errors"></ErrorView>
 
-    <div class="details-box border-bottom">
-      <label for="input-setlist-name">Setlist Name</label>
-      <input name="input-setlist-name" v-model="setlistName">
+    <div class="details-box bottom-line">
+      <div class=" labeled-input">
+        <label for="input-setlist-name">Setlist Name</label>
+        <input name="input-setlist-name" v-model="setlistName">
+      </div>
     </div>
 
 
-  <p>Setlist</p>
+    <!-- <p>Setlist</p> -->
 
 <!-- Old code from before I added dragging -->
   <!-- <div v-if="setlistSongs.length !== 0" class="flex">
@@ -210,7 +212,7 @@ const openSheet = () => {
 
     <template #item="{ element, index }">
       <div class="list">
-        {{ index + 1 }}. {{ element.title }} | {{ element.artist }}
+        <span>{{ index + 1 }}. {{ element.title }} | {{ element.artist }}</span>
         <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
       </div>
     </template>
@@ -228,11 +230,12 @@ const openSheet = () => {
 
     <p>Song selection</p>
     <div>
-      <ul v-if="songs.length !== 0">
-        <li v-for="song in songs">{{ song.artist }} - {{ song.title }}
+      <div v-if="songs.length !== 0">
+        <div class="list" v-for="song in songs">
+          <span>{{ song.artist }} - {{ song.title }}</span>
           <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
-        </li>
-      </ul>
+        </div>
+      </div>
       <p v-else>No songs available</p>
     </div>
     <button @click="openSheet">Overlay</button>

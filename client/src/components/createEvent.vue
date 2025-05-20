@@ -217,9 +217,9 @@ function toggleSlotOverlay(){
         <div class="labeled-input">
           <h3>Setlists</h3>
             <div v-if="setlistsInEvent.length !== 0">
-              <div v-for="(list, index) in setlistsInEvent">
+              <div class="list" v-for="(list, index) in setlistsInEvent">
+                <span>{{ list.name }}</span>
                 <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
-                <p>{{ list.name }}</p>
               </div>
             </div>
             <p v-else>No setlists</p>

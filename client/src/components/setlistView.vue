@@ -70,7 +70,7 @@ onMounted(() => loadSetlistDetails());
     <!-- <h2>Songs</h2> -->
     <div v-if="setlistSongs.length !== 0" class="flex">
         <span v-for="setlistSong in setlistSongs">
-          <button @click="songDetails(setlistSong._id)" class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
+          <div @click="songDetails(setlistSong._id)" class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}</div>
         </span>
     </div>
     <!-- <ul v-if="setlistSongs.length !== 0">

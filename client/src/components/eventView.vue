@@ -83,7 +83,9 @@ onMounted(() => loadEventDetails());
       <h3>Setlists</h3>
       <div v-if="eventSetlists.length !== 0" class="flex">
       <span v-for="setlist in eventSetlists" >
-         <button class="list" @click="setlistDetails(setlist._id)">{{ setlist.name }}</button>
+         <div class="list" @click="setlistDetails(setlist._id)">
+           <span>{{ setlist.name }}</span>
+         </div>
       </span>
       </div>
       <p v-else> *There are no setlists assigned to this event*</p>

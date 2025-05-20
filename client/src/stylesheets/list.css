@@ -1,10 +1,13 @@
 .list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-color: var(--primary);
     background-color: var(--background);
     color: var(--text);
     padding: 15px 30px;
-    width: 100%;
-    margin: 6px;
+    /* width: 100%; */
+    margin: 5px;
     font-size: 16px;
     /* font-weight: 500; */
     /* border-width: 2px; */
@@ -12,16 +15,25 @@
     font-family: "Krona One";
 }
 
-.list > em {
+.list em {
     font-size: small;
     color: var(--primary);
+}
+
+div.list{
+    cursor:pointer;
+}
+.list > button{
+    margin: 0;
 }
 
 .flex {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-left: -6px; 
+    /*
+    margin-left: -6px;
+     */
     /* ! for whatever reason hat das ein offset von 12 pixeln, wird dadurch behoben? */
     /* align-items: flex-start; */
 }

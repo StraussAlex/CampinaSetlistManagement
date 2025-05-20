@@ -302,8 +302,11 @@ function resizeNotes(): void {
     <div class="details-box bottom-line" v-for="(file, index) in files">
       <h3 v-if="file.filepath === 'None'">{{ file.instrument }}: No File</h3>
       <h3 v-else>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
-      <input type="file" :id="file.instrument" :name="file.instrument" />
-      <button @click="deleteInstrument(index)">Remove instrument</button>
+      <div>
+        <input type="file" :id="file.instrument" :name="file.instrument" />
+        <button @click="deleteInstrument(index)">X</button>
+      </div>
+
     </div>
   </div>
 
