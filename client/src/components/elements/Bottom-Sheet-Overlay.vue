@@ -100,6 +100,14 @@ function onSortingChanged(sort: string): void {
   filteredSongs.value = sortedSongs;
 }
 
+function getYPosition(e: MouseEvent | TouchEvent): number {
+  if ('touches' in e) {
+    return e.touches[0].pageY;
+  } else {
+    return e.pageY;
+  }
+}
+
 const updateSheetHeight = (raw: number) => {
   if (!sheetContent.value || !bottomSheet.value || !sheetOverlay.value) return;
 
@@ -121,7 +129,6 @@ const updateSheetHeight = (raw: number) => {
     sheetOverlay.value.style.background = "transparent";
   }
 };
-
 
 const setupBottomSheet = () => {
   if (!bottomSheet.value || !sheetOverlay.value) return;
@@ -149,15 +156,14 @@ const dragStart = (e: MouseEvent | TouchEvent) => {
   if (!sheetContent.value || !bottomSheet.value) return;
   bottomSheet.value.classList.add("dragging");
   isDragging = true;
-  startY = e instanceof TouchEvent ? e.touches[0].pageY : e.pageY;
+  startY = getYPosition(e);
   startHeight = parseInt(sheetContent.value.style.height || "50");
   
 };
 
 const dragging = (e: MouseEvent | TouchEvent) => {
   if (!isDragging || !sheetContent.value) return;
-
-  const currentY = e instanceof TouchEvent ? e.touches[0].pageY : e.pageY;
+  const currentY = getYPosition(e);
   const delta = startY - currentY;
   const newHeight = startHeight + (delta / window.innerHeight) * 100;
   updateSheetHeight(newHeight);
