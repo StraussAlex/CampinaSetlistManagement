@@ -107,7 +107,7 @@ body {
 }
 
 input[name="search-input"]{
-    width: 400px;
+    width: 80%;
 }
 
 #overlay-ul {
