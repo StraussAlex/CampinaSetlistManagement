@@ -171,7 +171,7 @@ const openSheet = () => {
     <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution btn-small">Delete</button>
   </mobile-header>
   <h1 class="section-heading">{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
-  <div class="mobile-container">
+  <div class="content-container">
     <ErrorView :errors="errors"></ErrorView>
 
     <div class="details-box bottom-line">

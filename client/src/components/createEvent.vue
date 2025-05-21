@@ -173,7 +173,7 @@ function toggleSlotOverlay(){
     </mobile-header>
     <h1 class="section-heading">{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
 
-    <div class="mobile-container">
+    <div class="content-container">
 
       <ErrorView :errors="errors"></ErrorView>
 

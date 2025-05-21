@@ -104,16 +104,14 @@ function togglePasswordVisibility(): void {
 <template>
   <mobile-header></mobile-header>
   <h1 class="section-heading">Manage Accounts</h1>
-  <div class="mobile-container">
+  <div class="content-container">
     <h2>Registered Users</h2>
-    <ul>
-      <li v-for="user in users">
-        {{ user.userName }} &nbsp; Admin: {{ user.isAdmin }}
+      <div class="list" v-for="user in users">
+        <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
         <button @click="deleteUser(user)" class="btn-caution btn-square">
           X
         </button>
-      </li>
-    </ul>
+      </div>
     <h2>Create user</h2>
   <div class="labeled-input">
     <label for="input-username">Username</label> <br />

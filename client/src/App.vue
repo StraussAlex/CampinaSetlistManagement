@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import MobileNavBar from "./components/elements/Mobile-Navigation-Bar.vue";
 import '/src/stylesheets/input.css';
 import {useRoute} from "vue-router";
+import MobileHeader from "./components/elements/Mobile-Header.vue";
 const route = useRoute();
 const theme = ref<'light' | 'dark'>('light')
 
@@ -48,7 +49,9 @@ onMounted(() => {
   <p>use route /create-song to see add song page</p>
   <p>use route /songs/:id to see song details</p>
   <p>use route /setlists/:id to see setlist details</p> -->
+
   <router-view></router-view>
+
   <label class="switch">
     <input @click="toggleTheme" type="checkbox">
     <span class="slider round"></span>

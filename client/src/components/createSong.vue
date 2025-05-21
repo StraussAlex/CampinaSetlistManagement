@@ -230,7 +230,7 @@ function resizeNotes(): void {
         class="btn-caution btn-small">Delete</button>
   </mobile-header>
   <h1 class="section-heading">{{ buttonText }}</h1>
-  <div class="mobile-container">
+  <div class="content-container">
     <ErrorView :errors="errors"></ErrorView>
 
     <div class="details-box bottom-line">

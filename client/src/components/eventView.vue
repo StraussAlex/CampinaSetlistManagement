@@ -60,7 +60,7 @@ onMounted(() => loadEventDetails());
   </mobile-header>
   <h1 class="section-heading">Event Details</h1>
 
-  <div class="mobile-container">
+  <div class="content-container">
 
     <div class="details-box bottom-line">
       <h3>{{ eventName }}</h3>

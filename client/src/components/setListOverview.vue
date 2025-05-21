@@ -91,7 +91,7 @@ function onSortingChanged(sort: string): void {
     <button @click="createNewSetlist" class="btn-small">+ Add</button>
   </mobile-header>
   <h1 class="section-heading">Setlists</h1>
-  <div class="mobile-container">
+  <div class="content-container">
     <div>
       <SearchBar @search-change="onSearchChange"></SearchBar>
       <SortAction

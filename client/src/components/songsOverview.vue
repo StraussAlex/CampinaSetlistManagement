@@ -89,7 +89,7 @@ onMounted(() => loadSongs());
     <button @click="createNewSong" class="btn-small">+ Add</button>
   </mobile-header>
   <h1 class="section-heading">Songs</h1>
-  <div class="mobile-container">
+  <div class="content-container">
     <div>
       <SearchBar @search-change="onSearchChange"></SearchBar>
       <SortAction

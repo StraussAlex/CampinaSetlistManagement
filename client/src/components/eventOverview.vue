@@ -136,7 +136,7 @@ const labelOldest = ref<string>('Oldest');
   </mobile-header>
   <h1 class="section-heading">Home</h1>
   <h2 class="bottom-line">Upcoming Events</h2>
-  <div class="mobile-container">
+  <div class="content-container">
     <div>
       <SearchBar @search-change="onSearchChange"></SearchBar>
       <SortAction

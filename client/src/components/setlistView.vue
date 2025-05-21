@@ -63,7 +63,7 @@ onMounted(() => loadSetlistDetails());
   </mobile-header>
   <h1 class="section-heading">Setlist Details</h1>
   <h2 class="bottom-line">{{ setlistName }}</h2>
-  <div class="mobile-container">
+  <div class="content-container">
 
     <!-- <p>{{ setlistName }}</p> -->
 
