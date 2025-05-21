@@ -204,6 +204,12 @@ defineExpose({
   openBottomSheetWithBtn,
   hideBottomSheet
 })
+
+function onAddSong(song: Song): void {
+  emit('add-song', song);
+  onSearchChange(currentQuery.value);
+  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
+}
 </script>
 
 <template>
@@ -221,7 +227,7 @@ defineExpose({
           <div>
               <ul id="overlay-ul" v-if="filteredSongs.length !== 0" class="flex">
                 <li v-for="song in filteredSongs">
-                  <button @click="emit('add-song', song)" class="btn-secondary btn-small"> + </button>
+                  <button @click="onAddSong(song)" class="btn-secondary btn-small"> + </button>
                   {{ song.artist }} - {{ song.title }}
                 </li>
               </ul>
