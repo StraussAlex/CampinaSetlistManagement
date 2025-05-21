@@ -47,11 +47,6 @@ async function loadSongs(): Promise<void> {
     const response = await api.get(SONG_API);
     songs.value = response.data;
 
-    availableSongs.value = [];
-    for(let i = 0; i < songs.value.length; i++) {
-      if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
-    }
-
   } catch(error) {
     errors.value.push("Error loading songs: " + error);
   }
@@ -78,6 +73,7 @@ onMounted(async() => {
         })
 
       setlistSongs.value = fullSongs;
+      availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
 
     } catch (error) {
       console.log(error);
@@ -93,20 +89,14 @@ const setlistSongs = ref<Song[]>([]);
 function removeSong(index: number): void {
   setlistSongs.value.splice(index, 1);
 
-  availableSongs.value = [];
-  for(let i = 0; i < songs.value.length; i++) {
-    if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
-  }
+  availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
 }
 function addSongToSetlist(song: Song) {
   if(songAlreadyInSetlist(song)) return;
 
   setlistSongs.value.push(song);
 
-  availableSongs.value = [];
-  for(let i = 0; i < songs.value.length; i++) {
-    if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
-  }
+  availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
 }
 function songAlreadyInSetlist(song: Song): boolean {
   for(let i: number = 0; i < setlistSongs.value.length; i++) {
@@ -231,7 +221,7 @@ const openSheet = () => {
     <p>Song selection</p>
     <div>
       <div v-if="songs.length !== 0">
-        <div class="list" v-for="song in songs">
+        <div class="list" v-for="song in availableSongs">
           <span>{{ song.artist }} - {{ song.title }}</span>
           <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
         </div>
@@ -246,7 +236,7 @@ const openSheet = () => {
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
-  <BottomSheetOverlay ref="sheetRef" @add-song="addSongToSetlist"/>
+  <BottomSheetOverlay :setlist-songs="setlistSongs" ref="sheetRef" @add-song="addSongToSetlist"/>
 </template>
 
 <style scoped>

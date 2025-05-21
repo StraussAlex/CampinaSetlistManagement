@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import "../../stylesheets/bottom-sheet-overlay.css";
 import type { Song } from "../../models/Song";
 import api from "../../services/api";
@@ -10,12 +10,16 @@ const emit = defineEmits<{
   (e: 'add-song', song: Song): void
 }>()
 
+interface Props {
+  setlistSongs : Song[]
+}
+
+const props = defineProps<Props>();
+
 const bottomSheet = ref<HTMLDivElement | null>(null);
 const sheetOverlay = ref<HTMLDivElement | null>(null);
 const sheetContent = ref<HTMLDivElement | null>(null);
 const dragIcon = ref<HTMLDivElement | null>(null);
-
-const setlistSongs = ref<Song[]>([]);
 
 let isDragging = false;
 let startY = 0;
@@ -23,21 +27,21 @@ let startHeight = 0;
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
-const availableSongs = ref<Song[]>([]);
-
+// const availableSongs = ref<Song[]>([]);
+const currentQuery = ref<string>("");
 const errors = ref<string[]>([]);
+watch(props, () => {
+  onSearchChange(currentQuery.value);
+  filteredSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
+})
 
 async function loadSongs(): Promise<void> {
   try {
     const response = await api.get(SONG_API);
     songs.value = response.data;
-    filteredSongs.value = songs.value;
-    onSortingChanged('newest');
-
-    availableSongs.value = [];
-    for(let i = 0; i < songs.value.length; i++) {
-      if(!songAlreadyInSetlist(songs.value[i])) availableSongs.value.push(songs.value[i]);
-    }
+    // filteredSongs.value = songs.value;
+    // onSortingChanged('newest');
+    filteredSongs.value = response.data;
 
   } catch(error) {
     errors.value.push("Error loading songs: " + error);
@@ -45,17 +49,19 @@ async function loadSongs(): Promise<void> {
 }
 
 function songAlreadyInSetlist(song: Song): boolean {
-  for(let i: number = 0; i < setlistSongs.value.length; i++) {
-    if(setlistSongs.value[i]._id == song._id) return true;
+  for(let i: number = 0; i < props.setlistSongs.length; i++) {
+    if(props.setlistSongs[i]._id == song._id) return true;
   }
   return false;
 }
 const filteredSongs = ref<Song[]>(songs.value);
 function onSearchChange(query: string): void {
+  currentQuery.value = query;
   filteredSongs.value = songs.value.filter(
     (song) =>
-      song.title.toLowerCase().includes(query.toLowerCase()) ||
-      song.artist.toLowerCase().includes(query.toLowerCase())
+      (song.title.toLowerCase().includes(query.toLowerCase()) ||
+      song.artist.toLowerCase().includes(query.toLowerCase())) &&
+      !songAlreadyInSetlist(song)
   );
   onSortingChanged(currentSort.value);
 }
