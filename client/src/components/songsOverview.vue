@@ -106,7 +106,7 @@ onMounted(() => loadSongs());
     <div v-if="filteredSongs.length !== 0" class="flex">
       <span v-for="song in filteredSongs">
         <div @click="viewSong(song._id)" class="list">
-          <span>{{ song.artist }} - {{ song.title }}</span>
+          <span>{{ song.title }} | {{ song.artist }}</span>
         </div>
         <!-- <button @click="editSong(song._id)">Edit song</button> -->
       </span>

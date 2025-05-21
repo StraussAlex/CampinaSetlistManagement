@@ -7,17 +7,24 @@
     color: var(--text);
     padding: 15px 30px;
     /* width: 100%; */
-    margin: 5px;
+    margin: 6px;
     font-size: 16px;
     /* font-weight: 500; */
     /* border-width: 2px; */
     text-align: left;
     font-family: "Krona One";
+
 }
+
+/* span {
+        flex-shrink: 0;
+        overflow: hidden;
+} */
 
 .list em {
     font-size: small;
     color: var(--primary);
+    font-family: Roboto;
 }
 
 div.list{
@@ -34,7 +41,7 @@ div.list{
     /*
     margin-left: -6px;
      */
-    /* ! for whatever reason hat das ein offset von 12 pixeln, wird dadurch behoben? */
+
     /* align-items: flex-start; */
 }
 
@@ -51,13 +58,13 @@ div.list{
 
 .details-box > h2 {
   text-transform: none;
-  font-size: larger;
+  font-size: 20px;
   line-height: normal;
 }
 
 .details-box > h3 {
   text-transform: none;
-  font-size: large;
+  font-size: 18px;
 }
 
 .details-box.bottom-line{
