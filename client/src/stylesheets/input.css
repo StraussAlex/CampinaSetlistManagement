@@ -2,7 +2,7 @@
 button, div.list {
     border-radius: 7px;
     padding: 12px 24px;
-    margin: 5px;
+    margin: 6px;
     border: 1px solid var(--text);
     font-weight: 400;
     background-color: var(--background);
