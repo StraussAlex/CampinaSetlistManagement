@@ -63,42 +63,44 @@ function onSearchChange(query: string): void {
       song.artist.toLowerCase().includes(query.toLowerCase())) &&
       !songAlreadyInSetlist(song)
   );
-  onSortingChanged(currentSort.value);
-}
-const currentSort = ref<string>('asc');
-function onSortingChanged(sort: string): void {
-  currentSort.value = sort;
-  const sortedSongs = [...filteredSongs.value];
 
-  switch (sort) {
-    case 'asc':
-      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
-      break;
-    case 'desc':
-      sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
-      break;
-    case 'oldest':
-      sortedSongs.sort(
-        (a, b) =>
-          new Date(a.creationDate).getTime() -
-          new Date(b.creationDate).getTime()
-      );
-      break;
-    case 'newest':
-      sortedSongs.sort(
-        (a, b) =>
-          new Date(b.creationDate).getTime() -
-          new Date(a.creationDate).getTime()
-      );
-      break;
-    default:
-      //Sollts an error geben sortier i alphabetisch, bitte ändern wenns ned passt
-      sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
-      break;
-  }
-
-  filteredSongs.value = sortedSongs;
+  //Wird nicht gebraucht ig? Es kann ja in der create setlist page nur gesucht werden, nicht sortiert
+  // onSortingChanged(currentSort.value);
 }
+// const currentSort = ref<string>('asc');
+// function onSortingChanged(sort: string): void {
+//   currentSort.value = sort;
+//   const sortedSongs = [...filteredSongs.value];
+
+//   switch (sort) {
+//     case 'asc':
+//       sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+//       break;
+//     case 'desc':
+//       sortedSongs.sort((a, b) => b.title.localeCompare(a.title));
+//       break;
+//     case 'oldest':
+//       sortedSongs.sort(
+//         (a, b) =>
+//           new Date(a.creationDate).getTime() -
+//           new Date(b.creationDate).getTime()
+//       );
+//       break;
+//     case 'newest':
+//       sortedSongs.sort(
+//         (a, b) =>
+//           new Date(b.creationDate).getTime() -
+//           new Date(a.creationDate).getTime()
+//       );
+//       break;
+//     default:
+//       //Sollts an error geben sortier i alphabetisch, bitte ändern wenns ned passt
+//       sortedSongs.sort((a, b) => a.title.localeCompare(b.title));
+//       break;
+//   }
+
+//   filteredSongs.value = sortedSongs;
+// }
 
 function getYPosition(e: MouseEvent | TouchEvent): number {
   if ('touches' in e) {
