@@ -1,5 +1,7 @@
 @import '../style.css';
 
+
+
 .mobile-navigation-bar {
     display: flex;
     align-items: center;
@@ -11,6 +13,12 @@
     left: 0;
     background-color: var(--background);
     border-top: solid 2px var(--primary);
+}
+
+@media only screen and (min-width: 600px) {
+    .mobile-navigation-bar {
+        display: none;
+    }
 }
 
 .icon-container {

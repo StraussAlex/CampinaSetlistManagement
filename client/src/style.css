@@ -68,6 +68,7 @@ a {
 }
 a:hover {
   color: #535bf2;
+  cursor: pointer;
 }
 
 body {
@@ -77,7 +78,7 @@ body {
   min-height: 100vh;
   width: 100vw;
   font-family: "Roboto";
-  padding-bottom: 90px; /* ! needed for navbar on the botttom */
+  padding-top: 110px;
 }
 
 main {
@@ -153,6 +154,18 @@ button:focus-visible {
   margin: 0 5vw;
 }
 
-@media only screen and (max-width: 600px) {
+.switch.themeSwitch{
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
 
+@media only screen and (max-width: 600px) {
+  body {
+    padding-top: 0;
+    padding-bottom: 90px; /* ! needed for navbar on the botttom */
+  }
+  .switch.themeSwitch{
+    bottom: 10%;
+  }
 }

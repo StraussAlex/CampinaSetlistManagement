@@ -1,10 +1,14 @@
 <script setup lang="ts">
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
+function navigateTo(path: string): void {
+  router.push(path);
+}
 </script>
 
 <template>
   <header>
-    <img src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
+    <img @click="navigateTo('/')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
     <span><slot></slot></span>
 
   </header>
@@ -26,7 +30,7 @@
     justify-content: space-around;
   }
   @media only screen and (min-width: 600px) {
-    span {
+    header {
       display: none;
     }
   }

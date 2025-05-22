@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import './App.css';
+import './style.css';
 import { ref, onMounted } from 'vue'
 import MobileNavBar from "./components/elements/Mobile-Navigation-Bar.vue";
 import '/src/stylesheets/input.css';
 import {useRoute} from "vue-router";
 import MobileHeader from "./components/elements/Mobile-Header.vue";
+import DesktopHeader from "./components/elements/Desktop-Header.vue";
 const route = useRoute();
 const theme = ref<'light' | 'dark'>('light')
 
@@ -49,10 +50,10 @@ onMounted(() => {
   <p>use route /create-song to see add song page</p>
   <p>use route /songs/:id to see song details</p>
   <p>use route /setlists/:id to see setlist details</p> -->
-
+  <DesktopHeader></DesktopHeader>
   <router-view></router-view>
 
-  <label class="switch">
+  <label class="switch themeSwitch">
     <input @click="toggleTheme" type="checkbox">
     <span class="slider round"></span>
   </label>
@@ -60,9 +61,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-  .switch{
-    position: fixed;
-    left: 10px;
-    bottom: 10%;
-  }
+
 </style>
