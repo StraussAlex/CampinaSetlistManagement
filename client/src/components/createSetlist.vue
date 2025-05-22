@@ -243,17 +243,56 @@ function onSearchChange(query: string): void {
       </div>
       <p v-else>No songs available</p>
     </div>
-    <button @click="openSheet">Overlay</button>
+    <!--<button @click="openSheet">Overlay</button>-->
+    
     <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
-
+  
   </div>
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
+  <div class = "round-btn" @click="openSheet">
+    <div class = "horizontal"></div>
+    <div class = "vertical"></div>
+  </div>
   <BottomSheetOverlay :setlist-songs="setlistSongs" ref="sheetRef" @add-song="addSongToSetlist"/>
 </template>
 
 <style scoped>
+.round-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  position: fixed;
+  right: 2.1vw;
+  bottom: 103px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  transition: transform 0.2s ease-in, background-color 0.2s ease-in;
+}
+
+.round-btn:hover {
+  background-color: var(--primary-darker);
+}
+
+.horizontal, .vertical {
+  position: absolute;
+  background-color: var(--background);
+  border-radius: 100px;
+}
+
+.horizontal {
+  width: 40px;
+  height: 7px;
+}
+
+.vertical {
+  width: 7px;
+  height: 40px;
+}
 
 </style>
