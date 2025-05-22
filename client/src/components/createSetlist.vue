@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
@@ -16,6 +16,7 @@ import '/src/stylesheets/search.css'
 import '/src/stylesheets/list.css'
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
+import SearchBar from './elements/Search-Bar.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -29,7 +30,6 @@ const overlayText = ref<string>("")
 
 const SONG_API = "songs";
 const songs = ref<Song[]>([]);
-const availableSongs = ref<Song[]>([]);
 const SETLIST_API = "setlists";
 
 const buttonText = ref<string>(isEditingRoute() ? "Update setlist" : "Save setlist");
@@ -73,7 +73,7 @@ onMounted(async() => {
         })
 
       setlistSongs.value = fullSongs;
-      availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
+      onSearchChange("");
 
     } catch (error) {
       console.log(error);
@@ -81,6 +81,7 @@ onMounted(async() => {
     }
   }
   setupSheet();
+  onSearchChange("");
 });
 
 const setlistName = ref<string>("");
@@ -88,16 +89,17 @@ const setlistSongs = ref<Song[]>([]);
 
 function removeSong(index: number): void {
   setlistSongs.value.splice(index, 1);
-
-  availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
 }
 function addSongToSetlist(song: Song) {
   if(songAlreadyInSetlist(song)) return;
 
   setlistSongs.value.push(song);
-
-  availableSongs.value = songs.value.filter(song => !songAlreadyInSetlist(song));
 }
+
+watch(setlistSongs.value, () => {
+  onSearchChange(currentQuery.value);
+});
+
 function songAlreadyInSetlist(song: Song): boolean {
   for(let i: number = 0; i < setlistSongs.value.length; i++) {
     if(setlistSongs.value[i]._id == song._id) return true;
@@ -164,6 +166,18 @@ const openSheet = () => {
   sheetRef.value?.openBottomSheetWithBtn(70);
 }
 
+const filteredSongs = ref<Song[]>(songs.value);
+const currentQuery = ref<string>("");
+
+function onSearchChange(query: string): void {
+  currentQuery.value = query;
+  filteredSongs.value = songs.value.filter(
+    (song) =>
+      (song.title.toLowerCase().includes(query.toLowerCase()) ||
+      song.artist.toLowerCase().includes(query.toLowerCase())) &&
+      !songAlreadyInSetlist(song)
+  );
+}
 </script>
 
 <template>
@@ -218,10 +232,11 @@ const openSheet = () => {
     <p v-else>Empty setlist</p>
   </div> -->
 
-    <p>Song selection</p>
+    <p>Song selection (ws nur für desktop, sollte man auf mobile hiden)</p>
+    <SearchBar @search-change="onSearchChange"></SearchBar>
     <div>
-      <div v-if="songs.length !== 0">
-        <div class="list" v-for="song in availableSongs">
+      <div v-if="filteredSongs.length !== 0">
+        <div class="list" v-for="song in filteredSongs">
           <span>{{ song.artist }} - {{ song.title }}</span>
           <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
         </div>

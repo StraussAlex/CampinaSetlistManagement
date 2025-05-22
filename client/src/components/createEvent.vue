@@ -223,7 +223,7 @@ function toggleSlotOverlay(){
               </div>
             </div>
             <p v-else>No setlists</p>
-          <button @click="toggleSlotOverlay">Add Settlist</button>
+          <button @click="toggleSlotOverlay">Add Setlist</button>
         </div>
       </div>
 
