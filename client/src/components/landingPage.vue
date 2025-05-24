@@ -38,27 +38,68 @@ onMounted(async() => {
 </script>
 
 <template>
-  <mobile-header>
-    <button @click="redirectToLogin" class="btn-small">Log In</button>
-  </mobile-header>
-  <h1 class="section-heading">Campina Band</h1>
-  
-  <div v-if="upcomingEvent !== null && errorMsg.length <= 0">
-    <h2>Our next gig</h2>
-    <p>What: {{ upcomingEvent.name }}</p>
-    <p>Where: {{ upcomingEvent.location }}</p>
-    <p>When: {{ upcomingEvent.getFullDate }}</p>
+  <div class="app">
+    <div class="header-wrapper">
+      <mobile-header>
+        <button @click="redirectToLogin" class="btn-small">Log In</button>
+      </mobile-header>
+    </div>
+    <div class = "shadow-wrapper">
+      <h1 class="section-heading">Campina Band</h1>
+      <div v-if="upcomingEvent !== null && errorMsg.length <= 0">
+        <h2>Our next gig</h2>
+        <p>What: {{ upcomingEvent.name }}</p>
+        <p>Where: {{ upcomingEvent.location }}</p>
+        <p>When: {{ upcomingEvent.getFullDate }}</p>
+      </div>
+      <div v-else>
+        <p>It's quiet here - for now</p>
+        <p>Check later to not miss upcoming events!</p>
+      </div>
+      <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
+    </div>
   </div>
-  <div v-else>
-    <p>It's quiet here - for now</p>
-    <p>Check later to not miss upcoming events!</p>
-  </div>
-  <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
-
-
-
 </template>
 
 <style scoped>
+.section-heading{
+  background: none;
+}
+.app {
+  background-image: url("../assets/Icons/landingPageBackground.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left;
+  background-position-y: bottom;
+  overflow-x: hidden;
+  position: fixed;
+  min-height: 100vh; 
+  width: 100%;
+}
 
+.shadow-wrapper{
+  background: linear-gradient(
+  180deg,
+  color-mix(in srgb, var(--background) 100%, transparent) 0%,
+  color-mix(in srgb, var(--background) 98%, transparent) 10%,
+  color-mix(in srgb, var(--background) 96%, transparent) 20%,
+  color-mix(in srgb, var(--background) 93%, transparent) 30%,
+  color-mix(in srgb, var(--background) 88%, transparent) 40%,
+  color-mix(in srgb, var(--background) 80%, transparent) 50%,
+  color-mix(in srgb, var(--background) 70%, transparent) 60%,
+  color-mix(in srgb, var(--background) 60%, transparent) 70%,
+  color-mix(in srgb, var(--background) 40%, transparent) 80%,
+  color-mix(in srgb, var(--background) 20%, transparent) 90%,
+  color-mix(in srgb, var(--background) 0%, transparent) 100%
+);
+  padding-bottom: 400px;
+}
+
+.h1,h2,p{
+  text-shadow: var(--background) 2px 2px 20px;
+}
+
+.header-wrapper{
+  background-color: var(--background);
+}
 </style>
