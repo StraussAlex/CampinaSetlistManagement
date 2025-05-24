@@ -134,8 +134,12 @@ const labelOldest = ref<string>('Oldest');
   <mobile-header>
     <button @click="createEvent" class="btn-small">+ Add</button>
   </mobile-header>
-  <h1 class="section-heading">Home</h1>
-  <h2 class="bottom-line">Upcoming Events</h2>
+    <div class="h-wrapper">
+      <div class="visibility-wrapper">
+        <h1 class="section-heading">Home</h1>
+        <h2 class="bottom-line">Upcoming Events</h2>
+    </div>
+  </div>
   <div class="content-container">
     <div>
       <SearchBar @search-change="onSearchChange"></SearchBar>
@@ -180,15 +184,17 @@ const labelOldest = ref<string>('Oldest');
 </template>
 
 <style scoped>
+/*
 .bottom-line::after{
   content: "";
   display: block;
   position: absolute;
-  margin: 20px 5vw 0 5vw;
+  margin: 100px 5vw 0 5vw;
   width: 90vw;
   height: 1px;
   border-bottom: 1px solid var(--primary)
 }
+*/
 .EventWrapper{
   display: flex;
   padding: 0 5vw;
@@ -221,4 +227,24 @@ const labelOldest = ref<string>('Oldest');
   font-family: "Krona One";
   font-size: 20px;
 }
+
+.bottom-line{
+  padding-top: 7%;
+  padding-bottom: 9%;
+}
+
+.h-wrapper{
+  background-image: url("../assets/Icons/upcomingEvents.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-position-y: center;
+  overflow-x: hidden;
+}
+
+.visibility-wrapper{
+  background-color: color-mix(in srgb, var(--background) 35%, transparent);
+  padding-bottom: 1%;
+}
+
 </style>
