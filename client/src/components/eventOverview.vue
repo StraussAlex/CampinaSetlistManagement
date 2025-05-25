@@ -243,8 +243,13 @@ const labelOldest = ref<string>('Oldest');
 }
 
 .visibility-wrapper{
-  background-color: color-mix(in srgb, var(--background) 35%, transparent);
+  background-color: color-mix(in srgb, var(--background) 30%, transparent);
   padding-bottom: 1%;
+}
+
+h1,h2{
+  color: var(--text);
+  text-shadow: var(--background) 2px 2px 3px;
 }
 
 </style>

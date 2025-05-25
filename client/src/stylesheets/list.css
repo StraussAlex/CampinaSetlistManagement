@@ -80,6 +80,7 @@ div.list{
     font-size: 24px;
 }
 
+/*
 .section-heading::after{
     content: "";
     display: block;
@@ -90,6 +91,7 @@ div.list{
     height: 1.5px;
     border-bottom: 1px solid var(--primary)
 }
+*/
 
 
 

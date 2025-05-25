@@ -171,7 +171,11 @@ function toggleSlotOverlay(){
     <mobile-header>
       <button v-if="isEditingRoute()" @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' class="btn-caution btn-small">Delete</button>
     </mobile-header>
-    <h1 class="section-heading">{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
+    <div class="h-wrapper">
+      <div class="visibility-wrapper">
+        <h1 class="section-heading">{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
+      </div>
+    </div>
 
     <div class="content-container">
 
@@ -260,5 +264,25 @@ function toggleSlotOverlay(){
 </template>
 
 <style scoped>
+.h-wrapper{
+  background-image: url("../assets/Icons/eventCreation.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-position-y: center;
+  overflow-x: hidden;
+}
+
+.section-heading{
+  color:#fafcfe;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  text-shadow: #06111b 1px 1px 3px;
+}
+
+.visibility-wrapper{
+  background-color: color-mix(in srgb, var(--background) 20%, transparent);
+  padding-bottom: 1%;
+}
 
 </style>
