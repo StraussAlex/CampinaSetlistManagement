@@ -295,4 +295,43 @@ function onSearchChange(query: string): void {
   height: 40px;
 }
 
+@media only screen and (max-width: 500px){
+  .round-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .horizontal {
+    width: 24px;
+    height: 4px;
+  }
+
+  .vertical {
+    width: 4px;
+    height: 24px;
+  } 
+  @media only screen and (max-height: 950px){
+    .round-btn{
+      bottom: 9.7%;
+    }
+  }
+}
+
+@media only screen and (min-height: 950px){
+  .round-btn {
+    width: 100px;
+    height: 100px;
+  }
+  .horizontal {
+    width: 40px;
+    height: 7px;
+  }
+
+  .vertical {
+    width: 7px;
+    height: 40px;
+  } 
+  
+}
+
 </style>

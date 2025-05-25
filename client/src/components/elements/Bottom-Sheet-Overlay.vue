@@ -234,7 +234,7 @@ function onAddSong(song: Song): void {
           <SearchBar @search-change="onSearchChange"></SearchBar>
           <div>
               <ul id="overlay-ul" v-if="filteredSongs.length !== 0" class="flex">
-                <li v-for="song in filteredSongs">
+                <li id="entrance"v-for="song in filteredSongs">
                   <button @click="onAddSong(song)" class="btn-secondary btn-small"> + </button>
                   {{ song.artist }} - {{ song.title }}
                 </li>
