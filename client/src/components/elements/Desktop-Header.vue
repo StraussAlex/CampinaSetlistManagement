@@ -71,6 +71,7 @@ onMounted(async() => {
   }
   nav > span {
     font-size: 20px;
+    font-weight: 500;
   }
   nav > span:hover {
     cursor: pointer;
