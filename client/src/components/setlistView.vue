@@ -4,15 +4,15 @@ import { useRoute, useRouter } from 'vue-router';
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
 import { Song } from '../models/Song';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+
 import MobileHeader from "./elements/Mobile-Header.vue";
 
 import '/src/stylesheets/list.css'
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
-
+import {useWindowSize} from "@vueuse/core";
+const { width } = useWindowSize()
 
 const router = useRouter();
 const route = useRoute();
@@ -58,10 +58,11 @@ onMounted(() => loadSetlistDetails());
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button @click="editSetlist" class="btn-small">Edit</button>
   </mobile-header>
   <h1 class="section-heading">Setlist Details</h1>
+  <button v-if="width > 600" @click="editSetlist" class="btn-small btn-inline-sectionheading">Edit</button>
   <h2 class="bottom-line">{{ setlistName }}</h2>
   <div class="content-container">
 

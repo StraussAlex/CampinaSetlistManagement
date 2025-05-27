@@ -3,8 +3,7 @@ import { ref, onMounted, nextTick } from 'vue';
 import { Song, SongFile } from '../models/Song';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+
 import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
@@ -12,8 +11,9 @@ import '/src/stylesheets/search.css';
 import YesNoOverlay from './elements/YesNo-Overlay.vue';
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
-//import {create} from "axios";
 
+import {useWindowSize} from "@vueuse/core";
+const { width } = useWindowSize()
 const SONG_API = 'songs';
 
 const songTitle = ref<string>('');
@@ -223,13 +223,17 @@ function resizeNotes(): void {
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button
         v-if="isEditingRoute()"
         @click="activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')"
         class="btn-caution btn-small">Delete</button>
   </mobile-header>
   <h1 class="section-heading">{{ buttonText }}</h1>
+  <button
+      v-if="isEditingRoute() && width > 600"
+      @click="activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')"
+      class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
   <div class="content-container">
     <ErrorView :errors="errors"></ErrorView>
 

@@ -4,8 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Song } from '../models/Song'
 import { Setlist, SetlistSong } from '../models/Setlist'
 import api from '../services/api'
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+
 import BottomSheetOverlay from "./elements/Bottom-Sheet-Overlay.vue"
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import draggableComponent from 'vuedraggable';
@@ -17,7 +16,9 @@ import '/src/stylesheets/list.css'
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 import SearchBar from './elements/Search-Bar.vue';
+import {useWindowSize} from "@vueuse/core";
 
+const { width } = useWindowSize()
 const router = useRouter();
 const route = useRoute();
 const editingId = route.params.id;
@@ -181,10 +182,17 @@ function onSearchChange(query: string): void {
 </script>
 
 <template>
-  <mobile-header>
-    <button v-if="isEditingRoute()" @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")' class="btn-caution btn-small">Delete</button>
+  <mobile-header v-if="width < 600">
+    <button
+        v-if="isEditingRoute()"
+        @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")'
+        class="btn-caution btn-small">Delete</button>
   </mobile-header>
   <h1 class="section-heading">{{ isEditingRoute() ? "Update Setlist" : "Create Setlist" }}</h1>
+  <button
+      v-if="isEditingRoute() && width > 600"
+      @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")'
+      class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
   <div class="content-container">
     <ErrorView :errors="errors"></ErrorView>
 

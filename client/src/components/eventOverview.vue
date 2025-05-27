@@ -3,11 +3,11 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Event from '../models/Event';
 import api from '../services/api';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import SortAction from './elements/Sort-Action.vue';
 import SearchBar from './elements/Search-Bar.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
+import { useWindowSize } from '@vueuse/core'
+const { width } = useWindowSize()
 
 const router = useRouter();
 function createEvent(): void {
@@ -121,17 +121,26 @@ function onSortingChanged(sort: string): void {
   filteredEvents.value = sortedEvents;
 }
 
-const DateFormatter = new Intl.DateTimeFormat('en-GB', {
+const DateFormatterShort = new Intl.DateTimeFormat('en-GB', {
   day: '2-digit',
   month: 'short',
 });
+const DateFormatterLong = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'long',
+});
+const TimeFormatter = new Intl.DateTimeFormat('en-GB', {
+  hour: "numeric",
+  minute: "numeric",
+});
+
 
 const labelNewest = ref<string>('Newest');
 const labelOldest = ref<string>('Oldest');
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button @click="createEvent" class="btn-small">+ Add</button>
   </mobile-header>
     <div class="h-wrapper">
@@ -150,6 +159,7 @@ const labelOldest = ref<string>('Oldest');
         { value: 'oldest', display: labelOldest },
       ]"
       ></SortAction>
+      <button v-if="width > 600" @click="createEvent" class="btn-small">+ Add</button>
       <br/>
 
       <label for="input-show-all">Show all events</label>
@@ -163,13 +173,31 @@ const labelOldest = ref<string>('Oldest');
 
     <div v-if="filteredEvents.length !== 0" class="flex">
       <div v-for="event in filteredEvents" @click="viewEvent(event._id)" class="EventWrapper">
-        <div class="EventDateWrapper">
-          <p >{{DateFormatter.format(new Date(event.date)).replace(' ', '. ')}}</p>
+
+        <div class="EventDate">
+          <span v-if="width < 600">{{DateFormatterShort.format(new Date(event.date)).replace(' ', '. ')}}</span>
+          <span v-else>{{DateFormatterLong.format(new Date(event.date)).replace(' ', '. ')}}</span>
         </div>
-        <div class="EventTextWrapper">
-          <h4>{{ event.name }}</h4>
-          <p>{{event.location}}</p>
+
+        <div class="EventName">
+          <span>{{ event.name }}</span>
         </div>
+
+        <div class="EventLocation">
+          <span v-if="width > 600">Location: &nbsp;</span><span>{{event.location}}</span>
+        </div>
+        <div class="EventTime">
+          <span v-if="width > 600">Time:&nbsp;{{TimeFormatter.format(new Date(event.date))}}</span>
+        </div>
+
+        <!--
+        <div class="EventBody" v-if="width > 600">
+          <p>Location: {{event.location}}</p>
+          <p>Time: {{TimeFormatter.format(new Date(event.date))}}</p>
+        </div>
+        -->
+        `
+
       </div>
     </div>
     <p v-else>No events are created yet</p>
@@ -184,55 +212,11 @@ const labelOldest = ref<string>('Oldest');
 </template>
 
 <style scoped>
-/*
-.bottom-line::after{
-  content: "";
-  display: block;
-  position: absolute;
-  margin: 100px 5vw 0 5vw;
-  width: 90vw;
-  height: 1px;
-  border-bottom: 1px solid var(--primary)
-}
-*/
-.EventWrapper{
-  display: flex;
-  padding: 0 5vw;
-  cursor: pointer;
-}
-.EventDateWrapper{
-  display: inline-block;
-  width: 75px;
-  min-width: 75px;
-  height: 75px;
-  line-height: 75px;
-  margin: 20px;
-  text-align: center;
-  background-color: var(--secondary);
-}
-.EventWrapper h3,h4,p{
-  margin: 0;
-}
-.EventTextWrapper{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0 5vw;
-}
-.EventDateWrapper p{
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
-  font-family: "Krona One";
-  font-size: 20px;
-}
 
 .bottom-line{
   padding-top: 7%;
   padding-bottom: 9%;
 }
-
 .h-wrapper{
   background-image: url("../assets/Icons/upcomingEvents.jpg");
   background-repeat: no-repeat;
@@ -241,15 +225,102 @@ const labelOldest = ref<string>('Oldest');
   background-position-y: center;
   overflow-x: hidden;
 }
-
 .visibility-wrapper{
   background-color: color-mix(in srgb, var(--background) 30%, transparent);
   padding-bottom: 1%;
 }
-
 h1,h2{
   color: var(--text);
   text-shadow: var(--background) 2px 2px 3px;
+}
+
+.EventWrapper{
+  display: flex;
+  padding: 0 5vw;
+  cursor: pointer;
+}
+.EventWrapper h3,h4,p,span{
+  margin: 0;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: normal;
+  font-family: "Krona One";
+}
+.EventWrapper{
+  display: grid;
+  margin: 20px;
+  grid-template-columns: 35px 35px 20px auto auto;
+  grid-template-rows: 35px 35px ;
+  grid-template-areas:
+  "date date . name name"
+  "date date . location location";
+}
+.EventDate{
+  grid-area: date;
+  background-color: var(--secondary);
+  line-height: 70px;
+}
+.EventDate span, .EventName span{
+  font-size: 20px;
+}
+.EventName{
+  grid-area: name;
+  text-align: left;
+  line-height: 35px;
+}
+.EventLocation{
+  grid-area: location;
+  text-align: left;
+  line-height: 35px;
+}
+.EventTime{
+  display: none;
+  text-align: left;
+}
+
+@media only screen and (min-width: 600px) {
+  div.flex:has(> .EventWrapper){
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .EventWrapper{
+    flex-grow: 1;
+    row-gap: 10px;
+    width: 330px;
+    background-color: var(--secondary-lighter);
+    border-radius: 15px;
+    padding: 20px;
+    grid-template-columns: 70px 70px 0px auto auto;
+    grid-template-rows: 35px 35px 35px 35px;
+    grid-template-areas:
+    "date date . name name"
+    "date date . name name"
+    "location location location location location"
+    "time time time time time";
+  }
+  .EventDate{
+    line-height: 80px;
+  }
+  .EventName{
+    margin-left: -30px;
+    padding-left: 50px;
+    z-index: 1;
+    background-color: var(--secondary-darker);
+    line-height: 80px;
+    border-radius: 15px;
+  }
+  .EventDate{
+    border-radius: 15px;
+    z-index: 2;
+  }
+  .EventLocation{
+    grid-area: location;
+  }
+  .EventTime{
+    display: inline-block;
+    grid-area: time;
+  }
 }
 
 </style>

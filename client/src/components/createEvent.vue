@@ -4,13 +4,13 @@ import { useRoute, useRouter } from 'vue-router';
 import  Event  from '../models/Event'
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
+
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 import SlotOverlay  from "./elements/SlotOverlay.vue"
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
-
+import {useWindowSize} from "@vueuse/core";
+const { width } = useWindowSize()
 
 const router = useRouter();
 const route = useRoute();
@@ -168,14 +168,21 @@ function toggleSlotOverlay(){
 
 
 <template>
-    <mobile-header>
-      <button v-if="isEditingRoute()" @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")' class="btn-caution btn-small">Delete</button>
+    <mobile-header v-if="width < 600">
+      <button
+          v-if="isEditingRoute()"
+          @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")'
+          class="btn-caution btn-small">Delete</button>
     </mobile-header>
     <div class="h-wrapper">
       <div class="visibility-wrapper">
         <h1 class="section-heading">{{ isEditingRoute() ? "Update Event" : "Create Event" }}</h1>
       </div>
     </div>
+    <button
+      v-if="isEditingRoute() && width > 600"
+      @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")'
+      class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
 
     <div class="content-container">
 

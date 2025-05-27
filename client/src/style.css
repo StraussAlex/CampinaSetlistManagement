@@ -159,7 +159,11 @@ button:focus-visible {
   left: 10px;
   bottom: 10px;
 }
+.desktop-action-button{
+  display: none;
+}
 
+/* Media Query for mobile screens  */
 @media only screen and (max-width: 600px) {
   body {
     padding-top: 0;
@@ -167,5 +171,13 @@ button:focus-visible {
   }
   .switch.themeSwitch{
     bottom: 10%;
+  }
+
+}
+
+/* Media Query for desktop screens  */
+@media only screen and (min-width: 600px) {
+  .mobile-only{
+    display:none;
   }
 }

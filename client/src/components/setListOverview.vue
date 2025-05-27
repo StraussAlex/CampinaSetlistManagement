@@ -3,8 +3,6 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Setlist } from '../models/Setlist';
 import api from '../services/api';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 
 import SortAction from './elements/Sort-Action.vue';
 import SearchBar from './elements/Search-Bar.vue';
@@ -14,7 +12,9 @@ import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
 import MobileHeader from "./elements/Mobile-Header.vue";
+import { useWindowSize } from '@vueuse/core'
 
+const { width } = useWindowSize()
 const router = useRouter();
 
 const SETLIST_API = 'setlists';
@@ -87,7 +87,7 @@ function onSortingChanged(sort: string): void {
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button @click="createNewSetlist" class="btn-small">+ Add</button>
   </mobile-header>
   <h1 class="section-heading">Setlists</h1>
@@ -103,6 +103,7 @@ function onSortingChanged(sort: string): void {
           { value: 'desc', display: 'Z-A' },
         ]"
       ></SortAction>
+      <button v-if="width > 600" @click="createNewSetlist" class="btn-small">+ Add</button>
     </div>
 
     <div v-if="filteredSetlists.length !== 0" class="flex">

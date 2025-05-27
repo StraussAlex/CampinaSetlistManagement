@@ -4,6 +4,16 @@ import {onMounted, ref} from "vue";
 import api from "../../services/api.ts";
 const router = useRouter();
 const route = useRoute();
+
+function displayNav():boolean{
+  switch (route.name) {
+    case "login":
+      return false;
+    case "landing-page":
+      return false;
+  }
+  return true;
+}
 function navigateTo(path: string): void {
   router.push(path);
 }
@@ -30,7 +40,7 @@ onMounted(async() => {
 <template>
   <header>
     <img @click="navigateTo('/')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
-    <nav>
+    <nav v-if="displayNav()">
       <span @click="navigateTo('/events')"  :class="{ active: route.name === 'events' }">
         HOME
       </span>
@@ -47,10 +57,17 @@ onMounted(async() => {
         LOGOUT
       </span>
     </nav>
+    <div v-else>
+      <button @click="navigateTo('/login')" class="btn-empty">Log In</button>
+    </div>
   </header>
 </template>
 
 <style scoped>
+
+  img{
+    cursor: pointer;
+  }
   header{
     height: 110px;
     padding: 15px 6vw;
@@ -80,7 +97,11 @@ onMounted(async() => {
   nav > span.active {
     color: var(--background);
   }
-
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
   @media only screen and (max-width: 600px) {
     header {
       display: none;

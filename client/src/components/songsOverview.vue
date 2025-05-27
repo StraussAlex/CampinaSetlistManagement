@@ -3,8 +3,6 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Song } from '../models/Song';
 import api from '../services/api';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import SearchBar from './elements/Search-Bar.vue';
 import SortAction from './elements/Sort-Action.vue';
 
@@ -13,7 +11,9 @@ import '/src/stylesheets/input.css';
 import '/src/stylesheets/header.css';
 import '/src/stylesheets/search.css';
 import MobileHeader from "./elements/Mobile-Header.vue";
+import { useWindowSize } from '@vueuse/core'
 
+const { width } = useWindowSize()
 const router = useRouter();
 
 const SONG_API = 'songs';
@@ -85,7 +85,7 @@ onMounted(() => loadSongs());
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button @click="createNewSong" class="btn-small">+ Add</button>
   </mobile-header>
   <h1 class="section-heading">Songs</h1>
@@ -101,6 +101,7 @@ onMounted(() => loadSongs());
           { value: 'desc', display: 'Z-A' },
         ]"
       ></SortAction>
+      <button v-if="width > 600" @click="createNewSong" class="btn-small">+ Add</button>
     </div>
 
     <div v-if="filteredSongs.length !== 0" class="flex">

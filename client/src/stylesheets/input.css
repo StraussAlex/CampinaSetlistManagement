@@ -43,7 +43,6 @@ button, div.list {
     background-color: var(--accent);
     color: var(--background);
     border-color: var(--accent-darker);
-
 }
 
 .btn-caution:hover {
@@ -74,6 +73,20 @@ button, div.list {
     padding: 10px;
     font-size: small;
     line-height: 0;
+}
+.btn-empty {
+    background: none;
+    border: solid var(--text) 3px;
+    border-radius: 20px;
+}
+
+/* joa, nicht besonders elegant aber der button muss halt irgendwo hin*/
+.btn-inline-sectionheading{
+    position: relative;
+    left: 40vw;
+    /*
+    bottom: 54px;
+     */
 }
 
 /* Text Input */

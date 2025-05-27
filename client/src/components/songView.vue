@@ -3,14 +3,15 @@ import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api'
 import { Song, SongFile } from '../models/Song';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 
 import '/src/stylesheets/list.css'
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
+import {useWindowSize} from "@vueuse/core";
+const { width } = useWindowSize()
+
 
 
 const router = useRouter();
@@ -85,10 +86,11 @@ onMounted(() => loadSongDetails());
 </script>
 
 <template>
-  <mobile-header>
+  <mobile-header v-if="width < 600">
     <button @click="editSong" class="btn-small">Edit</button>
   </mobile-header>
   <h1 class="section-heading">Song Details</h1>
+  <button v-if="width > 600" @click="editSong" class="btn-small btn-inline-sectionheading">Edit</button>
   <div class="content-container">
 
     <div class="details-box bottom-line">

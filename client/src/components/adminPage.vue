@@ -7,6 +7,7 @@ import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
 import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 import ErrorView from './elements/Error-View.vue';
+import YesNoOverlay from "./elements/YesNo-Overlay.vue";
 
 const router = useRouter();
 const USER_API = 'users';
@@ -21,6 +22,9 @@ type PasswordVisibility =  'password' | 'text';
 const passwordType = ref<PasswordVisibility>('password');
 
 const errors = ref<string[]>([]);
+const overlayActive = ref<boolean>(false);
+const overlayYesHandler = ref<() => void>(() => {});
+const overlayText = ref<string>("")
 
 onMounted(() => {
   loadUsers();
@@ -96,6 +100,13 @@ function getUserErrors(): string[] {
   return e;
 }
 
+function activateOverlay(handler: (user: User) => void, text: string, user: User){
+  overlayYesHandler.value = () => handler(user);
+  overlayText.value = text
+  overlayActive.value = true
+  console.log("isActive: " + overlayActive.value)
+}
+
 function togglePasswordVisibility(): void {
   passwordType.value = passwordType.value == 'password' ? 'text' : 'password';
 }
@@ -108,7 +119,7 @@ function togglePasswordVisibility(): void {
     <h2>Registered Users</h2>
       <div class="list" v-for="user in users">
         <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
-        <button @click="deleteUser(user)" class="btn-caution btn-square">
+        <button @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
           X
         </button>
       </div>
@@ -157,6 +168,8 @@ function togglePasswordVisibility(): void {
 
   <ErrorView :errors="errors"></ErrorView>
   </div>
+
+  <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
 
