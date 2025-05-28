@@ -11,6 +11,8 @@ function displayNav():boolean{
       return false;
     case "landing-page":
       return false;
+    case "not-found-page":
+      return false;
   }
   return true;
 }
@@ -58,7 +60,7 @@ onMounted(async() => {
       </span>
     </nav>
     <div v-else>
-      <button @click="navigateTo('/login')" class="btn-empty">Log In</button>
+      <button v-if="route.name !== 'not-found-page'" @click="navigateTo('/login')" class="btn-empty">Log In</button>
     </div>
   </header>
 </template>

@@ -12,6 +12,7 @@ import setlistView from './components/setlistView.vue'
 import createEvent from './components/createEvent.vue'
 import eventView from './components/eventView.vue'
 import adminPage from './components/adminPage.vue'
+import errorPage from './components/errorPage.vue'
 
 import landingPage from './components/landingPage.vue'
 import login from './components/login.vue'
@@ -108,6 +109,11 @@ const router = createRouter({
         component: adminPage,
         meta: { requiresAuth: true, requiresAdmin: true }
       },
+      { 
+        path: '/:catchAll(.*)*', 
+        name: 'not-found-page', 
+        component: errorPage
+      }
     ]
   });
   

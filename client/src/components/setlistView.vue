@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import api from '../services/api'
 import { Setlist } from '../models/Setlist';
@@ -23,7 +23,6 @@ const SETLIST_API = "setlists";
 
 const setlistName = ref('');
 const setlistSongs = ref<Song[]>([]);
-
 function editSetlist(): void {
   router.push({ name: 'edit-setlist', params: { id: String(setlistId) } });
 }
@@ -38,17 +37,15 @@ async function loadSetlistDetails() :Promise<void>{
     const setlist = response.data;
     setlistName.value = setlist.name;
 
-    const songsData: Song[] = [];
+    const songsData: Song[] = await Promise.all(
+      setlist.songs.map(async (songEntry: any) => {
+        const songResponse = await api.get(`/songs/${songEntry.songId}`);
+        const fullSong = songResponse.data;
+        return { ...fullSong, position: songEntry.position };
+      })
+    );
 
-    for (const songEntry of setlist.songs) {
-      const songResponse = await api.get(`/songs/${songEntry.songId}`);
-      const fullSong = songResponse.data;
-      songsData.push({ ...fullSong, position: songEntry.position });
-
-      setTimeout(() => {
-        setlistSongs.value = songsData;
-      }, 200);
-    }
+    setlistSongs.value = songsData;
   } catch(error){
     console.log("An error in showing song details has occured: " + error);
   }

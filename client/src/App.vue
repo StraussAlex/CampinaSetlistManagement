@@ -26,6 +26,8 @@ function displayNav():boolean {
       return false;
     case "landing-page":
       return false;
+    case "not-found-page":
+      return false;
   }
   return true;
 }
