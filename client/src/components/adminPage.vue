@@ -16,6 +16,7 @@ const currentUsername = ref<string>('');
 const currentPassword = ref<string>('');
 const repeatedPassword = ref<string>('');
 const currentIsAdmin = ref<boolean>(false);
+const currentUserId = ref<bigint>();
 
 type PasswordVisibility =  'password' | 'text';
 
@@ -28,15 +29,22 @@ const overlayText = ref<string>("")
 
 onMounted(() => {
   loadUsers();
+  getCurrentUserId();
 });
 const users = ref<User[]>([]);
 async function loadUsers(): Promise<void> {
   try {
     const response = await api.get(USER_API);
     users.value = response.data;
+    console.log(users.value)
   } catch (error) {
     console.log(error);
   }
+}
+async function getCurrentUserId(): Promise<void> {
+  const authresponse = await api.get('/auth', { withCredentials: true });
+  currentUserId.value = authresponse.data.user.id;
+  console.log(currentUserId.value)
 }
 
 async function deleteUser(user: User): Promise<void> {
@@ -119,7 +127,10 @@ function togglePasswordVisibility(): void {
     <h2>Registered Users</h2>
       <div class="list" v-for="user in users">
         <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
-        <button @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
+        <button v-if="currentUserId != user._id" @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
+          X
+        </button>
+        <button v-else class="btn-disabled btn-square" disabled>
           X
         </button>
       </div>

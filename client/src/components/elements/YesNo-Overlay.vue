@@ -13,21 +13,14 @@ function toggleOverlay(){
 }
 function yes(){
   emit('yes')
-  console.log("yes")
   toggleOverlay()
 }
 function no(){
-  console.log("no")
   toggleOverlay()
 }
 
 onMounted(()=>{
   //text.value = props.text
-
-  watch(isActive, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      console.log("watcher: " + newVal)
-    }})
 })
 </script>
 

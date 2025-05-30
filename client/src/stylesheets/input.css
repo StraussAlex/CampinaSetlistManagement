@@ -48,7 +48,11 @@ button, div.list {
 .btn-caution:hover {
     background-color: var(--accent-lighter);
     border-color: var(--accent);
+}
 
+.btn-disabled {
+    background: lightgrey;
+    border-color: darkgrey;
 }
 
 

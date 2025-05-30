@@ -35,7 +35,6 @@ async function logoutUser()  {
 onMounted(async() => {
   const response = await api.get('/auth', { withCredentials: true });
   user.value  = response.data.user;
-  console.log(user);
 });
 </script>
 
@@ -80,6 +79,7 @@ onMounted(async() => {
     position: fixed;
     top: 0;
     background-color: var(--secondary-lighter);
+    z-index: 1;
   }
   nav {
     min-width: 420px;

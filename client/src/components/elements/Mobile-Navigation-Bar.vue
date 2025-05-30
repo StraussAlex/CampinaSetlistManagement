@@ -16,7 +16,7 @@ const user = ref<any|null>(null);
 async function logoutUser()  {
   try {
     const response = await api.post('/login/logout', {}, { withCredentials: true })
-    console.log(response.data.message)
+    //console.log(response.data.message)
     router.push('/')
   } catch (error: any) {
     console.error('Logout failed', error.response?.data)
@@ -26,7 +26,7 @@ async function logoutUser()  {
 onMounted(async() => {
     const response = await api.get('/auth', { withCredentials: true });
     user.value  = response.data.user;
-    console.log(user);
+    //console.log(user);
 });
 
 </script>
