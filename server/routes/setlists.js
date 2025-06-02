@@ -47,11 +47,19 @@ router.put("/:id", async (req, res) => {
   }
 });
 router.delete('/:id', async(req, res) => {
-  try {
-    res.json(await req.db.collection(SETLIST_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)}));
-  } catch(error) {
-    console.log(error);
-  }
+    try {
+        const deleteResult = await req.db.collection(SETLIST_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)});
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).json({ error: 'Setlist not found.' });
+        }
+        await req.db.collection("Events").updateMany(
+            { 'setlistIds': req.params.id },
+            { $pull: { setlistIds: req.params.id } }
+        );
+        return res.status(200).json({ message: 'Setlist deleted' });
+    } catch(error) {
+        console.log(error);
+    }
 });
 
 module.exports = router;

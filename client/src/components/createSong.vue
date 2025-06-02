@@ -234,98 +234,91 @@ function resizeNotes(): void {
       v-if="isEditingRoute() && width > 600"
       @click="activateOverlay(deleteSong, 'Are you sure you want to delete this Song?')"
       class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
+
+  <ErrorView :errors="errors"></ErrorView>
   <div class="content-container">
-    <ErrorView :errors="errors"></ErrorView>
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <div class=" labeled-input">
+          <label for="input-song-name">Song Name</label>
+          <input name="input-song-name" v-model="songTitle" placeholder="Song Name" />
+        </div>
+      </div>
+      <div class="details-box bottom-line">
+        <div class=" labeled-input">
+          <label for="input-song-artist">Artist</label>
+          <input name="input-song-artist" v-model="songArtist" placeholder="Artist Name" />
+        </div>
+      </div>
+      <div class="details-box bottom-line">
+        <h2>Links</h2>
+        <ul>
+          <li v-for="(link, index) in songLinks">
+            {{ link }}
+            <button @click="deleteLink(index)" class="btn-caution btn-square">
+              X
+            </button>
+          </li>
+        </ul>
 
-    <div class="details-box bottom-line">
-      <div class=" labeled-input">
-        <label for="input-song-name">Song Name</label>
-        <input name="input-song-name" v-model="songTitle" placeholder="Song Name" />
+        <div class="labeled-input">
+          <label for="input-song-link">Add link</label>
+          <input name="input-song-link" v-model="currentLink" />
+        </div>
+        <button @click="insertLink" class="btn-secondary btn-small">
+          + Add link
+        </button>
+      </div>
+      <div class="details-box bottom-line">
+        <div class=" labeled-input">
+          <label for="input-song-notes">Additional notes</label>
+          <textarea @input="resizeNotes" ref="notesTextarea" name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
+        </div>
       </div>
     </div>
-
-    <div class="details-box bottom-line">
-      <div class=" labeled-input">
-        <label for="input-song-artist">Artist</label>
-        <input name="input-song-artist" v-model="songArtist" placeholder="Artist Name" />
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <div class="labeled-input">
+          <label for="input-song-lyrics">Lyrics</label>
+          <textarea @input="resizeLyrics" ref="lyricsTextarea" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
+        </div>
       </div>
     </div>
-
-    <div class="details-box bottom-line">
-      <div class=" labeled-input">
-        <label for="input-song-notes">Additional notes</label>
-        <textarea @input="resizeNotes" ref="notesTextarea" name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
-      </div>
-    </div>
-
-    <div class="details-box bottom-line">
-      <h2>Links</h2>
-      <ul>
-        <li v-for="(link, index) in songLinks">
-          {{ link }}
-          <button @click="deleteLink(index)" class="btn-caution btn-square">
-            X
-          </button>
-        </li>
-      </ul>
-
-      <div class="labeled-input">
-        <label for="input-song-link">Add link</label>
-        <input name="input-song-link" v-model="currentLink" />
-      </div>
-      <button @click="insertLink" class="btn-secondary btn-small">
-        + Add link
-      </button>
-    </div>
-
-    <div class="details-box bottom-line">
-      <div class="labeled-input">
-        <label for="input-song-lyrics">Lyrics</label>
-        <textarea @input="resizeLyrics" ref="lyricsTextarea" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
-      </div>
-    </div>
-
-  <!-- <p>
-    Insert song lyrics here. If left empty, try to fetch lyrics from external
-    resource?
-  </p> -->
-
-  <div>
-    <div class="details-box">
-      <div class="labeled-input">
-        <label for="input-instrument">Add New Instrument</label>
-        <input name="input-instrument" v-model="newInstrumentName" />
-      </div>
-      <button @click="addInstrumentInput" class="btn-secondary btn-small">
-        + Add Instrument
-      </button>
-    </div>
-
-
-
-    <div class="details-box bottom-line" v-for="(file, index) in files">
-      <h3 v-if="file.filepath === 'None'">{{ file.instrument }}: No File</h3>
-      <h3 v-else>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
-      <div>
-        <input type="file" :id="file.instrument" :name="file.instrument" />
-        <button @click="deleteInstrument(index)">X</button>
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <div class="details-box">
+        <div class="labeled-input">
+          <label for="input-instrument">Add New Instrument</label>
+          <input name="input-instrument" v-model="newInstrumentName" />
+        </div>
+        <button @click="addInstrumentInput" class="btn-secondary btn-small">
+          + Add Instrument
+        </button>
       </div>
 
+      <div class="details-box bottom-line" v-for="(file, index) in files">
+        <h3 v-if="file.filepath === 'None'">{{ file.instrument }}: No File</h3>
+        <h3 v-else>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
+        <div>
+          <input type="file" :id="file.instrument" :name="file.instrument" />
+          <button @click="deleteInstrument(index)">X</button>
+        </div>
+
+      </div>
     </div>
   </div>
-
   <button
-    @click="
+      @click="
       activateOverlay(
         createNewSong,
         `Are you sure you want to ${buttonText.split(' ')[0]} this Song?`
       )
     "
-    class="btn-primary"
+      class="btn-primary"
   >
     {{ buttonText }}
   </button>
-  </div>
   <YesNoOverlay
     v-model="overlayActive"
     :text="overlayText"

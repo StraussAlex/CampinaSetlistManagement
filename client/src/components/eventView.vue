@@ -59,35 +59,35 @@ onMounted(() => loadEventDetails());
   </mobile-header>
   <h1 class="section-heading">Event Details</h1>
   <button v-if="width > 600" @click="editEvent" class="btn-small btn-inline-sectionheading">Edit</button>
-  <div class="content-container">
-
-    <div class="details-box bottom-line">
-      <h3>{{ eventName }}</h3>
-    </div>
-
-    <div class="details-box bottom-line">
-      <h3>{{ eventLocation }}</h3>
-    </div>
-
-    <div class="details-box bottom-line">
-      <h3>{{  eventDate }}</h3>
-    </div>
-
-    <div class="details-box bottom-line">
-      <h3 v-if="eventIsPublic">This event is public</h3>
-      <h3 v-else>This event is private</h3>
-    </div>
-
-    <div class="details-box">
-      <h3>Setlists</h3>
-      <div v-if="eventSetlists.length !== 0" class="flex">
-      <span v-for="setlist in eventSetlists" >
-         <div class="list" @click="setlistDetails(setlist._id)">
-           <span>{{ setlist.name }}</span>
-         </div>
-      </span>
+  <div class="content-container fitScreenHeight">
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <h3>{{ eventName }}</h3>
       </div>
-      <p v-else> *There are no setlists assigned to this event*</p>
+      <div class="details-box bottom-line">
+        <h3>{{ eventLocation }}</h3>
+      </div>
+      <div class="details-box bottom-line">
+        <h3>{{  eventDate }}</h3>
+      </div>
+      <div class="details-box bottom-line">
+        <h3 v-if="eventIsPublic">This event is public</h3>
+        <h3 v-else>This event is private</h3>
+      </div>
+    </div>
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <h3>Setlists</h3>
+      <div class="details-box scrollable-container">
+        <div v-if="eventSetlists.length !== 0" class="flex">
+          <span v-for="setlist in eventSetlists" >
+           <div class="list" @click="setlistDetails(setlist._id)">
+             <span>{{ setlist.name }}</span>
+           </div>
+          </span>
+        </div>
+        <p v-else> *There are no setlists assigned to this event*</p>
+      </div>
     </div>
 
   </div>

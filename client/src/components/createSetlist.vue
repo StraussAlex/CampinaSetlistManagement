@@ -90,11 +90,15 @@ const setlistSongs = ref<Song[]>([]);
 
 function removeSong(index: number): void {
   setlistSongs.value.splice(index, 1);
+  onSearchChange(currentQuery.value);
+  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
 }
-function addSongToSetlist(song: Song) {
-  if(songAlreadyInSetlist(song)) return;
 
+function addSongToSetlist(song: Song) {
+  //if(songAlreadyInSetlist(song)) return;
   setlistSongs.value.push(song);
+  onSearchChange(currentQuery.value);
+  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
 }
 
 watch(setlistSongs.value, () => {
@@ -193,78 +197,57 @@ function onSearchChange(query: string): void {
       v-if="isEditingRoute() && width > 600"
       @click='activateOverlay(deleteSetlist, "Are you sure you want to delete this Setlist?")'
       class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
-  <div class="content-container">
-    <ErrorView :errors="errors"></ErrorView>
-
-    <div class="details-box bottom-line">
-      <div class=" labeled-input">
-        <label for="input-setlist-name">Setlist Name</label>
-        <input name="input-setlist-name" v-model="setlistName">
-      </div>
-    </div>
-
-
-    <!-- <p>Setlist</p> -->
-
-<!-- Old code from before I added dragging -->
-  <!-- <div v-if="setlistSongs.length !== 0" class="flex">
-    <span v-for="(setlistSong, index) in setlistSongs">
-      <div class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}
-        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
-      </div>
-    </span>
-  </div>
-  <p v-else>Empty setlist</p> -->
-
-  <draggableComponent
-    v-model="setlistSongs"
-    item-key="_id"
-    class="flex"
-    :animation="200">
-
-    <template #item="{ element, index }">
-      <div class="list">
-        <span>{{ index + 1 }}. {{ element.title }} | {{ element.artist }}</span>
-        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
-      </div>
-    </template>
-  </draggableComponent>
-
-<!-- Old code from where i  -->
-  <!-- <div>
-    <ul v-if="setlistSongs.length !== 0">
-      <li v-for="(song, index) in setlistSongs">{{ song.artist }} - {{ song.title }}
-        <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
-      </li>
-    </ul>
-    <p v-else>Empty setlist</p>
-  </div> -->
-
-    <p>Song selection (ws nur für desktop, sollte man auf mobile hiden)</p>
-    <SearchBar @search-change="onSearchChange"></SearchBar>
-    <div>
-      <div v-if="filteredSongs.length !== 0">
-        <div class="list" v-for="song in filteredSongs">
-          <span>{{ song.artist }} - {{ song.title }}</span>
-          <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
+  <ErrorView :errors="errors"></ErrorView>
+  <div class="content-container fitScreenHeight">
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <div class=" labeled-input">
+          <label for="input-setlist-name">Setlist Name</label>
+          <input name="input-setlist-name" v-model="setlistName">
         </div>
       </div>
-      <p v-else>No songs available</p>
+      <div class="scrollable-container">
+        <draggableComponent
+            v-model="setlistSongs"
+            item-key="_id"
+            class="flex"
+            :animation="200">
+
+          <template #item="{ element, index }">
+            <div class="list">
+              <span>{{ index + 1 }}. {{ element.title }} | {{ element.artist }}</span>
+              <button @click="removeSong(index)" class="btn-caution btn-square">X</button>
+            </div>
+          </template>
+        </draggableComponent>
+      </div>
     </div>
-    <!--<button @click="openSheet">Overlay</button>-->
-    
-    <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
-  
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div v-if="width > 600" class="content-block">
+      <SearchBar @search-change="onSearchChange"></SearchBar>
+      <div class="scrollable-container">
+        <div v-if="filteredSongs.length !== 0">
+          <div class="list" v-for="song in filteredSongs">
+            <span>{{ song.artist }} - {{ song.title }}</span>
+            <button @click="addSongToSetlist(song)" class="btn-secondary btn-small"> + Add song</button>
+          </div>
+        </div>
+        <p v-else>No songs available</p>
+      </div>
+    </div>
+
   </div>
+  <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
+
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
-  <div class = "round-btn" @click="openSheet">
-    <div class = "horizontal"></div>
-    <div class = "vertical"></div>
+  <div v-if="width < 600" class="round-btn" @click="openSheet">
+    <div class="horizontal"></div>
+    <div class="vertical"></div>
   </div>
-  <BottomSheetOverlay :setlist-songs="setlistSongs" ref="sheetRef" @add-song="addSongToSetlist"/>
+  <BottomSheetOverlay v-if="width < 600" :setlist-songs="setlistSongs" ref="sheetRef" @add-song="addSongToSetlist"/>
 </template>
 
 <style scoped>

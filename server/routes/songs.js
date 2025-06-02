@@ -54,7 +54,15 @@ router.post('/', async(req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try {
-    res.json(await req.db.collection(SONG_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)}));
+    const deleteResult = await req.db.collection(SONG_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)});
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({ error: 'Song not found.' });
+    }
+    await req.db.collection("Setlists").updateMany(
+        { 'songs.songId': req.params.id },
+        { $pull: { songs: { songId: req.params.id } } }
+    );
+    return res.status(200).json({ message: 'Song deleted' });
   } catch(error) {
     console.log(error);
   }

@@ -3,12 +3,12 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
 import User from '../models/User';
-import NavigationBarBottom from './elements/Navigation-Bar-Bottom.vue';
-import MobileNavBar from './elements/Mobile-Navigation-Bar.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 import ErrorView from './elements/Error-View.vue';
 import YesNoOverlay from "./elements/YesNo-Overlay.vue";
+import {useWindowSize} from "@vueuse/core";
 
+const { width } = useWindowSize()
 const router = useRouter();
 const USER_API = 'users';
 
@@ -123,60 +123,67 @@ function togglePasswordVisibility(): void {
 <template>
   <mobile-header></mobile-header>
   <h1 class="section-heading">Manage Accounts</h1>
-  <div class="content-container">
-    <h2>Registered Users</h2>
-      <div class="list" v-for="user in users">
-        <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
-        <button v-if="currentUserId != user._id" @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
-          X
-        </button>
-        <button v-else class="btn-disabled btn-square" disabled>
-          X
-        </button>
+  <div class="content-container fitScreenHeight">
+    <div class="content-block">
+      <h2>Registered Users</h2>
+      <div class="scrollable-container">
+        <div class="list" v-for="user in users">
+          <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
+          <button v-if="currentUserId != user._id" @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
+            X
+          </button>
+          <button v-else class="btn-disabled btn-square" disabled>
+            X
+          </button>
+        </div>
       </div>
-    <h2>Create user</h2>
-  <div class="labeled-input">
-    <label for="input-username">Username</label> <br />
-    <input
-      type="text"
-      name="input-username"
-      v-model="currentUsername"
-      placeholder="Username"
-    />
-  </div>
-  <div class="labeled-input">
-    <label for="input-password">Password</label> <br />
-    <input
-      name="input-password"
-      :type="passwordType"
-      v-model="currentPassword"
-      placeholder="Password"
-    />
-  </div>
-  <div class="labeled-input">
-    <label for="input-reenterpassword">Reenter Password</label> <br />
-    <input
-      name="input-reenterpassword"
-      :type="passwordType"
-      v-model="repeatedPassword"
-      placeholder="Reenter Password"
-    />
-  </div>
-  <button @click="togglePasswordVisibility">{{ passwordType == 'text' ? '😐' : '😑' }}</button>
 
-  <label class="checkbox-wrapper">
-    <input
-      name="input-isadmin"
-      type="checkbox"
-      v-model="currentIsAdmin"
-      class="checkbox-input"
-    />
-    <span class="custom-checkbox"></span>
-    Is Admin
-  </label>
+    </div>
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <h2>Create user</h2>
+      <div class="labeled-input">
+        <label for="input-username">Username</label> <br />
+        <input
+            type="text"
+            name="input-username"
+            v-model="currentUsername"
+            placeholder="Username"
+        />
+      </div>
+      <div class="labeled-input">
+        <label for="input-password">Password</label> <br />
+        <input
+            name="input-password"
+            :type="passwordType"
+            v-model="currentPassword"
+            placeholder="Password"
+        />
+      </div>
+      <div class="labeled-input">
+        <label for="input-reenterpassword">Reenter Password</label> <br />
+        <input
+            name="input-reenterpassword"
+            :type="passwordType"
+            v-model="repeatedPassword"
+            placeholder="Reenter Password"
+        />
+      </div>
+      <button @click="togglePasswordVisibility">{{ passwordType == 'text' ? '😐' : '😑' }}</button>
 
-  <button @click="createUser()" class="btn-primary">Create user</button>
+      <label class="checkbox-wrapper">
+        <input
+            name="input-isadmin"
+            type="checkbox"
+            v-model="currentIsAdmin"
+            class="checkbox-input"
+        />
+        <span class="custom-checkbox"></span>
+        Is Admin
+      </label>
 
+      <button @click="createUser()" class="btn-primary">Create user</button>
+    </div>
   <ErrorView :errors="errors"></ErrorView>
   </div>
 
@@ -186,4 +193,8 @@ function togglePasswordVisibility(): void {
 
 </template>
 
-<style scoped></style>
+<style scoped>
+h2{
+  font-size: 20px;
+}
+</style>

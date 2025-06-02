@@ -10,6 +10,8 @@ import SlotOverlay  from "./elements/SlotOverlay.vue"
 import ErrorView from './elements/Error-View.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
 import {useWindowSize} from "@vueuse/core";
+import SearchBar from "./elements/Search-Bar.vue";
+import {Song} from "../models/Song.ts";
 const { width } = useWindowSize()
 
 const router = useRouter();
@@ -71,13 +73,25 @@ const eventName = ref<string>("");
 const eventLocation = ref<string>("");
 const eventDate = ref<string>("");
 const eventIsPublic = ref<boolean>(false);
+const filteredSetlists = ref<Setlist[]>(setlists.value);
+const currentQuery = ref<string>("");
 
+function onSearchChange(query: string): void {
+  filteredSetlists.value = setlists.value.filter((setlist) =>
+    !setlistAlreadyInEvent(setlist)
+  );
+}
 function removeSetlist(index: number): void {
   setlistsInEvent.value.splice(index, 1);
+  onSearchChange(currentQuery.value);
+  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
 }
 function addSetlistToEvent(list: Setlist) {
-  if(setlistAlreadyInEvent(list)) return;
+  console.log("test");
+  //if(setlistAlreadyInEvent(list)) return;
   setlistsInEvent.value.push(list);
+  onSearchChange(currentQuery.value);
+  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
 }
 function setlistAlreadyInEvent(list: Setlist): boolean {
   for(let i: number = 0; i < setlistsInEvent.value.length; i++) {
@@ -162,8 +176,6 @@ function toggleSlotOverlay(){
   slotOverlayActive.value = !slotOverlayActive.value
 }
 
-
-
 </script>
 
 
@@ -184,90 +196,78 @@ function toggleSlotOverlay(){
       @click='activateOverlay(deleteEvent, "Are you sure you want to delete this Event?")'
       class="btn-caution btn-small btn-inline-sectionheading">Delete</button>
 
+  <ErrorView :errors="errors"></ErrorView>
     <div class="content-container">
-
-      <ErrorView :errors="errors"></ErrorView>
-
-      <div class="details-box bottom-line">
-        <div class="labeled-input">
-          <label for="input-event-name">Event name</label>
-          <input name="input-event-name" v-model = "eventName">
+      <div class="content-block">
+        <div class="details-box bottom-line">
+          <div class="labeled-input">
+            <label for="input-event-name">Event name</label>
+            <input name="input-event-name" v-model = "eventName">
+          </div>
+        </div>
+        <div class="details-box bottom-line">
+          <div class="labeled-input">
+            <label for="input-event-place">Event location</label>
+            <input name="input-event-place" v-model="eventLocation">
+          </div>
+        </div>
+        <div class="details-box bottom-line">
+          <div class="labeled-input">
+            <label for = "input-event-time">Event Date</label>
+            <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
+          </div>
+        </div>
+        <div class="details-box bottom-line">
+          <div class="labeled-input">
+            <label class="checkbox-wrapper">
+              <input
+                  name="input-is-public"
+                  type="checkbox"
+                  v-model="eventIsPublic"
+                  class="checkbox-input"
+              />
+              <span class="custom-checkbox"></span>
+              Public Event
+            </label>
+          </div>
         </div>
       </div>
-
-      <div class="details-box bottom-line">
-        <div class="labeled-input">
-          <label for="input-event-place">Event location</label>
-          <input name="input-event-place" v-model="eventLocation">
-        </div>
-      </div>
-
-      <div class="details-box bottom-line">
-        <div class="labeled-input">
-          <label for = "input-event-time">Event Date</label>
-          <input type="datetime-local" name = "input-event-time" v-model = "eventDate">
-        </div>
-      </div>
-
-      <div class="details-box bottom-line">
-        <div class="labeled-input">
-          <label class="checkbox-wrapper">
-            <input
-                name="input-is-public"
-                type="checkbox"
-                v-model="eventIsPublic"
-                class="checkbox-input"
-            />
-            <span class="custom-checkbox"></span>
-            Public Event
-          </label>
-        </div>
-      </div>
-
-      <div class="details-box">
-        <div class="labeled-input">
-          <h3>Setlists</h3>
-            <div v-if="setlistsInEvent.length !== 0">
-              <div class="list" v-for="(list, index) in setlistsInEvent">
-                <span>{{ list.name }}</span>
-                <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
+      <span v-if="width > 600" class="vertical-divider"></span>
+      <div class="content-block">
+        <div class="details-box">
+          <div class="labeled-input">
+            <h3>Setlists</h3>
+            <button @click="toggleSlotOverlay">Add Setlist</button>
+              <div v-if="setlistsInEvent.length !== 0">
+                <div class="list" v-for="(list, index) in setlistsInEvent">
+                  <span>{{ list.name }}</span>
+                  <button @click="removeSetlist(index)" class="btn-caution btn-square">X</button>
+                </div>
               </div>
-            </div>
-            <p v-else>No setlists</p>
-          <button @click="toggleSlotOverlay">Add Setlist</button>
+              <p v-else>No setlists</p>
+          </div>
         </div>
       </div>
-
-      <div class="details-box">
-        <div class="labeled-input">
-
-        </div>
-      </div>
-
     </div>
-    <!-- <ul>
-        <li v-for="warning in warnings">{{ warning }}</li>
-    </ul> -->
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
-    <!-- <NavigationBarBottom></NavigationBarBottom> -->
-    <!-- <MobileNavBar></MobileNavBar> -->
-
     <SlotOverlay v-model="slotOverlayActive">
       <h3>Select Setlists</h3>
+      <SearchBar @search-change="onSearchChange"></SearchBar>
       <div>
         <div v-if="setlists.length !== 0">
-          <span v-for="list in setlists">
-            <button @click="addSetlistToEvent(list)" class="btn-secondary"> {{ list.name }} </button>
-          </span>
+          <div class="list" v-for="list in setlists">
+            <span>{{ list.name }}</span>
+            <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small"> + </button>
+          </div>
         </div>
         <p v-else>No setlists available</p>
       </div>
     </SlotOverlay>
 
-    <bottom-sheet-overlay ref="sheet"/>
+    <!--<bottom-sheet-overlay ref="sheet"/> -->
 </template>
 
 <style scoped>

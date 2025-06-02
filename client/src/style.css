@@ -172,12 +172,32 @@ button:focus-visible {
   .switch.themeSwitch{
     bottom: 10%;
   }
-
 }
 
 /* Media Query for desktop screens  */
 @media only screen and (min-width: 600px) {
   .mobile-only{
     display:none;
+  }
+  .content-container {
+    display: flex;
+  }
+  .content-container.fitScreenHeight{
+    height: calc(100vh - 275px);
+  }
+  .content-block{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+  }
+  .vertical-divider{
+    border: grey 0.5px solid;
+    margin: 0 2em;
+  }
+  .scrollable-container{
+    flex-grow: 1;
+    height: 100%;
+    overflow: auto;
   }
 }

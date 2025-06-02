@@ -150,57 +150,48 @@ const labelOldest = ref<string>('Oldest');
     </div>
   </div>
   <div class="content-container">
-    <div>
-      <SearchBar @search-change="onSearchChange"></SearchBar>
-      <SortAction
-          @sort-change="onSortingChanged"
-          :sort-options="[
+    <div class="content-block">
+      <div>
+        <SearchBar @search-change="onSearchChange"></SearchBar>
+        <SortAction
+            @sort-change="onSortingChanged"
+            :sort-options="[
         { value: 'newest', display: labelNewest },
         { value: 'oldest', display: labelOldest },
       ]"
-      ></SortAction>
-      <button v-if="width > 600" @click="createEvent" class="btn-small">+ Add</button>
-      <br/>
+        ></SortAction>
+        <button v-if="width > 600" @click="createEvent" class="btn-small">+ Add</button>
+        <br/>
 
-      <label for="input-show-all">Show all events</label>
-      <input
-          type="checkbox"
-          name="input-show-all"
-          v-model="showAllEvents"
-          @change="onSearchChange(currentQuery)"
-      />
-    </div>
-
-    <div v-if="filteredEvents.length !== 0" class="flex">
-      <div v-for="event in filteredEvents" @click="viewEvent(event._id)" class="EventWrapper">
-
-        <div class="EventDate">
-          <span v-if="width < 600">{{DateFormatterShort.format(new Date(event.date)).replace(' ', '. ')}}</span>
-          <span v-else>{{DateFormatterLong.format(new Date(event.date)).replace(' ', '. ')}}</span>
-        </div>
-
-        <div class="EventName">
-          <span>{{ event.name }}</span>
-        </div>
-
-        <div class="EventLocation">
-          <span v-if="width > 600">Location: &nbsp;</span><span>{{event.location}}</span>
-        </div>
-        <div class="EventTime">
-          <span v-if="width > 600">Time:&nbsp;{{TimeFormatter.format(new Date(event.date))}}</span>
-        </div>
-
-        <!--
-        <div class="EventBody" v-if="width > 600">
-          <p>Location: {{event.location}}</p>
-          <p>Time: {{TimeFormatter.format(new Date(event.date))}}</p>
-        </div>
-        -->
-        `
-
+        <label for="input-show-all">Show all events</label>
+        <input
+            type="checkbox"
+            name="input-show-all"
+            v-model="showAllEvents"
+            @change="onSearchChange(currentQuery)"
+        />
       </div>
+
+      <div v-if="filteredEvents.length !== 0" class="flex">
+        <div v-for="event in filteredEvents" @click="viewEvent(event._id)" class="EventWrapper">
+          <div class="EventDate">
+            <span v-if="width < 600">{{DateFormatterShort.format(new Date(event.date)).replace(' ', '. ')}}</span>
+            <span v-else>{{DateFormatterLong.format(new Date(event.date)).replace(' ', '. ')}}</span>
+          </div>
+          <div class="EventName">
+            <span>{{ event.name }}</span>
+          </div>
+          <div class="EventLocation">
+            <span v-if="width > 600">Location: &nbsp;</span><span>{{event.location}}</span>
+          </div>
+          <div class="EventTime">
+            <span v-if="width > 600">Time:&nbsp;{{TimeFormatter.format(new Date(event.date))}}</span>
+          </div>
+        </div>
+      </div>
+      <p v-else>No events are created yet</p>
     </div>
-    <p v-else>No events are created yet</p>
+
   </div>
 
 

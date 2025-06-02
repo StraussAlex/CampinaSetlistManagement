@@ -60,30 +60,17 @@ onMounted(() => loadSetlistDetails());
   </mobile-header>
   <h1 class="section-heading">Setlist Details</h1>
   <button v-if="width > 600" @click="editSetlist" class="btn-small btn-inline-sectionheading">Edit</button>
-  <h2 class="bottom-line">{{ setlistName }}</h2>
+  <h2>{{ setlistName }}</h2>
+
   <div class="content-container">
-
-    <!-- <p>{{ setlistName }}</p> -->
-
-    <!-- <h2>Songs</h2> -->
     <div v-if="setlistSongs.length !== 0" class="flex">
         <span v-for="setlistSong in setlistSongs">
           <div @click="songDetails(setlistSong._id)" class="list">{{ setlistSong.title }} | {{ setlistSong.artist }}</div>
         </span>
     </div>
-    <!-- <ul v-if="setlistSongs.length !== 0">
-      <li v-for="setlistSong in setlistSongs">
-        <button @click="songDetails(setlistSong._id)" class="btn-secondary">{{ setlistSong.title }} | {{ setlistSong.artist }}</button>
-      </li>
-    </ul> -->
     <p v-else> *No songs were added to this setlist*</p>
     <br>
   </div>
-
-    
-
-    <!-- <NavigationBarBottom></NavigationBarBottom> -->
-    <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

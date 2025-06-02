@@ -91,51 +91,49 @@ onMounted(() => loadSongDetails());
   </mobile-header>
   <h1 class="section-heading">Song Details</h1>
   <button v-if="width > 600" @click="editSong" class="btn-small btn-inline-sectionheading">Edit</button>
+
   <div class="content-container">
-
-    <div class="details-box bottom-line">
-      <h2>{{ songTitle }}</h2>
-      <h3>{{ songArtist }}</h3>
-    </div>
-
-    <!-- Irgendwie vlt schön formatieren mit den breaks und so idk -->
-    <!-- jaja, ich mach ja schon  -->
-
-    <div class="details-box bottom-line">
-      <h3>Additional Information</h3>
-      <div v-if="songNotes.length !== 0">
-        <pre>{{ songNotes }}</pre>
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <h2>{{ songTitle }}</h2>
+        <h3>{{ songArtist }}</h3>
       </div>
-      <p v-else>No notes were added to this song</p>
-
+      <div class="details-box bottom-line">
+        <h3>Links</h3>
+        <ul>
+          <li v-for="songLink in songLinks">
+            {{ songLink }}
+          </li>
+        </ul>
+      </div>
+      <div class="details-box bottom-line">
+        <h3>Additional Information</h3>
+        <div v-if="songNotes.length !== 0">
+          <pre>{{ songNotes }}</pre>
+        </div>
+        <p v-else>No notes were added to this song</p>
+      </div>
     </div>
-
-    <div class="details-box bottom-line">
-      <h3>Lyrics</h3>
-      <button v-if="songLyrics.length !== 0" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
-      <button v-if="songLyrics.length !== 0" @click="copyLyricsToClipBoard">📋</button>
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <div class="details-box bottom-line">
+        <h3>Lyrics</h3>
+        <button v-if="songLyrics.length !== 0" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
+        <button v-if="songLyrics.length !== 0" @click="copyLyricsToClipBoard">📋</button>
         <div v-if="songLyrics.length !== 0">
           <pre>{{ lyricsDisplay }}</pre>
         </div>
         <p v-else>No lyrics were added to this song</p>
+      </div>
     </div>
-
-    <div class="details-box bottom-line">
-      <h3>Links</h3>
-      <ul>
-        <li v-for="songLink in songLinks">
-          {{ songLink }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="details-box bottom-line" v-for="file in songFiles">
-      <h3>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
-      <button @click="download(file)" class="btn-small">Download</button>
+    <span v-if="width > 600" class="vertical-divider"></span>
+    <div class="content-block">
+      <div class="details-box bottom-line" v-for="file in songFiles">
+        <h3>{{ file.instrument }}: {{ file.filepath.split("/")[1].split("-")[1] }}</h3>
+        <button @click="download(file)" class="btn-small">Download</button>
+      </div>
     </div>
   </div>
-  <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

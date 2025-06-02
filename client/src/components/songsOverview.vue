@@ -90,29 +90,31 @@ onMounted(() => loadSongs());
   </mobile-header>
   <h1 class="section-heading">Songs</h1>
   <div class="content-container">
-    <div>
-      <SearchBar @search-change="onSearchChange"></SearchBar>
-      <SortAction
-        @sort-change="onSortingChanged"
-        :sort-options="[
+    <div class="content-block">
+      <div>
+        <SearchBar @search-change="onSearchChange"></SearchBar>
+        <SortAction
+            @sort-change="onSortingChanged"
+            :sort-options="[
           { value: 'newest', display: 'Newest' },
           { value: 'oldest', display: 'Oldest' },
           { value: 'asc', display: 'A-Z' },
           { value: 'desc', display: 'Z-A' },
         ]"
-      ></SortAction>
-      <button v-if="width > 600" @click="createNewSong" class="btn-small">+ Add</button>
-    </div>
+        ></SortAction>
+        <button v-if="width > 600" @click="createNewSong" class="btn-small">+ Add</button>
+      </div>
 
-    <div v-if="filteredSongs.length !== 0" class="flex">
+      <div v-if="filteredSongs.length !== 0" class="flex">
       <span v-for="song in filteredSongs">
         <div @click="viewSong(song._id)" class="list">
           <span>{{ song.title }} | {{ song.artist }}</span>
         </div>
         <!-- <button @click="editSong(song._id)">Edit song</button> -->
       </span>
+      </div>
+      <p v-else>No songs yet</p>
     </div>
-    <p v-else>No songs yet</p>
   </div>
   <!-- <NavigationBarBottom></NavigationBarBottom> -->
   <!-- <MobileNavBar></MobileNavBar> -->
