@@ -218,7 +218,7 @@ const labelOldest = ref<string>('Oldest');
 }
 .visibility-wrapper{
   background-color: color-mix(in srgb, var(--background) 30%, transparent);
-  padding-bottom: 1%;
+  padding: 1% 0;
 }
 h1,h2{
   color: var(--text);
@@ -227,7 +227,7 @@ h1,h2{
 
 .EventWrapper{
   display: flex;
-  padding: 0 5vw;
+  padding: 0 3vw;
   cursor: pointer;
 }
 .EventWrapper h3,h4,p,span{

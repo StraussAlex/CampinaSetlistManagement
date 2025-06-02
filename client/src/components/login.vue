@@ -84,9 +84,9 @@ async function loginUser(): Promise<void> {
     justify-content: space-around;
   }
 
-  .section-heading{
+  /* .section-heading{
     background: none;
-  }
+  } */
   .app {
     background-image: url("../assets/Icons/landingPageBackground.jpg");
     background-repeat: no-repeat;

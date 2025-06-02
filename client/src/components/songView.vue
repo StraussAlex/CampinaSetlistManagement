@@ -138,4 +138,19 @@ onMounted(() => loadSongDetails());
 
 <style scoped>
 
+.content-block {
+    max-width: 100%;
+  overflow: hidden;
+
+}
+
+.content-block:has(pre) {
+  overflow: visible;
+}
+
+
+h2 h3{
+  word-wrap: break-word;
+  padding: 0 40px;
+}
 </style>

@@ -73,11 +73,17 @@ div.list{
 .section-heading {
     background-color: var(--secondary);
     width: 100vw;
-    padding: 20px 0;
+    padding: 40px 0;
+    /* margin: 20px 0; */
     /*
     border-bottom: 1px solid var(--primary);
      */
     font-size: 24px;
+}
+
+.visibility-wrapper > .section-heading {
+    padding: 5px;
+    background: none;
 }
 
 /*

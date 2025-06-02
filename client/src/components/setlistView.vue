@@ -74,6 +74,12 @@ onMounted(() => loadSetlistDetails());
 </template>
 
 <style scoped>
+
+h2 {
+  word-wrap: break-word;
+  padding: 0 40px;
+}
+
 .bottom-line::after{
   content: "";
   display: block;

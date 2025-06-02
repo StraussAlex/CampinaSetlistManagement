@@ -123,12 +123,13 @@ function togglePasswordVisibility(): void {
 <template>
   <mobile-header></mobile-header>
   <h1 class="section-heading">Manage Accounts</h1>
+    <ErrorView :errors="errors"></ErrorView>
   <div class="content-container fitScreenHeight">
     <div class="content-block">
       <h2>Registered Users</h2>
       <div class="scrollable-container">
         <div class="list" v-for="user in users">
-          <span>{{ user.userName }} Admin: {{ user.isAdmin }}</span>
+          <span>{{ user.userName }} <em v-if="user.isAdmin">admin</em></span>
           <button v-if="currentUserId != user._id" @click='activateOverlay(deleteUser, "Are you sure you want to delete this User?", user)' class="btn-caution btn-square">
             X
           </button>
@@ -143,7 +144,7 @@ function togglePasswordVisibility(): void {
     <div class="content-block">
       <h2>Create user</h2>
       <div class="labeled-input">
-        <label for="input-username">Username</label> <br />
+        <label for="input-username">Username</label> 
         <input
             type="text"
             name="input-username"
@@ -152,7 +153,7 @@ function togglePasswordVisibility(): void {
         />
       </div>
       <div class="labeled-input">
-        <label for="input-password">Password</label> <br />
+        <label for="input-password">Password</label>
         <input
             name="input-password"
             :type="passwordType"
@@ -161,7 +162,6 @@ function togglePasswordVisibility(): void {
         />
       </div>
       <div class="labeled-input">
-        <label for="input-reenterpassword">Reenter Password</label> <br />
         <input
             name="input-reenterpassword"
             :type="passwordType"
@@ -184,7 +184,7 @@ function togglePasswordVisibility(): void {
 
       <button @click="createUser()" class="btn-primary">Create user</button>
     </div>
-  <ErrorView :errors="errors"></ErrorView>
+
   </div>
 
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
@@ -196,5 +196,11 @@ function togglePasswordVisibility(): void {
 <style scoped>
 h2{
   font-size: 20px;
+
+}
+
+label {
+margin-top: 20px;
+
 }
 </style>
