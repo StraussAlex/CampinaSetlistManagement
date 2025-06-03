@@ -122,6 +122,8 @@ async function createNewSong(): Promise<void> {
 
   if (errors.value.length > 0) return;
 
+  songLinks.value = songLinks.value.filter((link: string) => link.trim().length > 0);
+
   //! WICHTIG: Siehe createEvent und createSetlist, sollte es eine editingRoute sein (mithilfe von Funktion abfragen), das alte creationDate laden und
   //! wie in den anderen beiden create files zwischenspeichern. In der nächsten Zeile basierend auf isEditingRoute entscheiden, ob neues oder bestehendes
   //! creation Date genommen wird
@@ -219,6 +221,17 @@ function resizeNotes(): void {
     textarea.style.height = textarea.scrollHeight + 'px';
   }
 }
+function getDomainName(url: string): string {
+
+  //Wenn wer will kann wer vlt youtube oder spotify einzeln abfangen oder so
+  
+  try {
+    const obj: URL = new URL(url);
+    return obj.hostname;
+  } catch(error) {
+    return url;
+  }
+}
 
 </script>
 
@@ -252,14 +265,22 @@ function resizeNotes(): void {
       </div>
       <div class="details-box bottom-line">
         <h2>Links</h2>
-        <ul>
+        <div v-if="songLinks.length > 0">
+          <div v-for="(link, index) in songLinks" class="list">
+            <a :href="link">{{ getDomainName(link) }}</a>
+            <button @click="deleteLink(index)" class="btn-caution btn-square">X</button>
+          </div>
+        </div>
+        <p v-else>This song has no links yet</p>
+        <br>
+        <!-- <ul>
           <li v-for="(link, index) in songLinks">
             {{ link }}
             <button @click="deleteLink(index)" class="btn-caution btn-square">
               X
             </button>
           </li>
-        </ul>
+        </ul> -->
 
         <div class="labeled-input">
           <label for="input-song-link">Add link</label>
@@ -272,7 +293,7 @@ function resizeNotes(): void {
       <div class="details-box bottom-line">
         <div class=" labeled-input">
           <label for="input-song-notes">Additional notes</label>
-          <textarea @input="resizeNotes" ref="notesTextarea" name="input-song-notes" v-model="currentNotes" placeholder="BPM, Tact, Tuning, Pitch, etc." ></textarea>
+          <textarea @input="resizeNotes" ref="notesTextarea" name="input-song-notes" v-model="currentNotes" placeholder="Who sings, who plays drums, which tuning, how well did practise go etc..." ></textarea>
         </div>
       </div>
     </div>

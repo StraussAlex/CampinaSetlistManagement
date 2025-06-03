@@ -40,7 +40,7 @@ async function loadSongDetails() :Promise<void>{
     songArtist.value = song.artist;
     songLyrics.value = song.lyrics;
     songNotes.value = song.notes;
-    songLinks.value = Array(song.links);
+    songLinks.value = song.links;
     songFiles.value = song.files;
 
     lyricsDisplay.value = song.lyrics.split('\n')[0] + "\n...";
@@ -81,6 +81,17 @@ function toggleLyricsExpand(): void {
 function copyLyricsToClipBoard(): void {
   navigator.clipboard.writeText(songLyrics.value);
 }
+function getDomainName(url: string): string {
+
+  //Wenn wer will kann wer vlt youtube oder spotify einzeln abfangen oder so
+  
+  try {
+    const obj: URL = new URL(url);
+    return obj.hostname;
+  } catch(error) {
+    return url;
+  }
+}
 
 onMounted(() => loadSongDetails());
 </script>
@@ -100,11 +111,12 @@ onMounted(() => loadSongDetails());
       </div>
       <div class="details-box bottom-line">
         <h3>Links</h3>
-        <ul>
-          <li v-for="songLink in songLinks">
-            {{ songLink }}
-          </li>
-        </ul>
+        <div v-if="songLinks.length > 0">
+          <div v-for="link in songLinks" class="list">
+            <a :href="link">{{ getDomainName(link) }}</a>
+          </div>
+        </div>
+        <p v-else>No links were added to this song</p>
       </div>
       <div class="details-box bottom-line">
         <h3>Additional Information</h3>
