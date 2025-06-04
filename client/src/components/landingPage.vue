@@ -45,18 +45,19 @@ onMounted(async() => {
       </mobile-header>
     </div>
     <div class = "shadow-wrapper">
-      <h1 class="section-heading">Campina Band</h1>
-      <div v-if="upcomingEvent !== null && errorMsg.length <= 0">
-        <h2>Our next gig</h2>
-        <p>What: {{ upcomingEvent.name }}</p>
-        <p>Where: {{ upcomingEvent.location }}</p>
-        <p>When: {{ upcomingEvent.getFullDate }}</p>
+      <div class="content-wrapper">
+        <h1 class="section-heading">Campina Band</h1>
+        <div class="next-event-wrapper" v-if="upcomingEvent !== null && errorMsg.length <= 0">
+          <h3>Our next gig</h3>
+          <div><h5>What:</h5> {{ upcomingEvent.name }}</div>
+          <div><h5>Where:</h5> {{ upcomingEvent.location }}</div>
+          <div><h5>When:</h5> {{ upcomingEvent.getFullDate }}</div>
+        </div>
+        <div v-else>
+          <h3>Next gig coming soon!</h3>
+        </div>
+        <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
       </div>
-      <div v-else>
-        <p>It's quiet here - for now</p>
-        <p>Check later to not miss upcoming events!</p>
-      </div>
-      <p v-if="errorMsg.length > 0">{{ errorMsg }}</p>
     </div>
   </div>
 </template>
@@ -64,6 +65,51 @@ onMounted(async() => {
 <style scoped>
 .section-heading{
   background: none;
+}
+h1.section-heading {
+  font-size: 4rem;
+}
+div > h5 {
+  margin: 0;
+}
+.next-event-wrapper > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  align-self: center;
+  width: 100%;
+  padding: 5px 20px;
+}
+@media screen and (max-width: 600px) {
+  h1.section-heading {
+    font-size: 3rem;
+    margin-top: -50px;
+  }
+}
+.next-event-wrapper {
+  border-radius: 12px;
+  border-top: 5px solid var(--primary-lighter);
+  border-bottom: 5px solid var(--primary-lighter);
+  width: 30vw;
+  padding: 12px 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+@media screen and (max-width: 900px) {
+  .next-event-wrapper {
+    width: 90vw;
+  }
+}
+.content-wrapper {
+  height: calc(100vh - 130px);
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .app {
   background-image: url("../assets/Icons/landingPageBackground.jpg");
