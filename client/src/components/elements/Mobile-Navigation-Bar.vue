@@ -48,7 +48,7 @@ onMounted(async() => {
       @click="navigateTo('/setlists')" 
       :class="{ active: route.name === 'setlists' }"
     >
-      <img class="icon unclicked" src="../../assets/Icons/SetlistClicked.png" alt = "Setlists"/>
+      <img class="setlists" src="../../assets/Icons/SetlistClicked.png" alt = "Setlists"/>
       <div class="ani_square"></div>
     </div>
 
