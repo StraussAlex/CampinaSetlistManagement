@@ -119,7 +119,7 @@ div > h5 {
   background-position-y: bottom;
   overflow-x: hidden;
   position: fixed;
-  min-height: 100vh; 
+  height: 100vh; 
   width: 100%;
 }
 
@@ -138,7 +138,7 @@ div > h5 {
   color-mix(in srgb, var(--background) 20%, transparent) 90%,
   color-mix(in srgb, var(--background) 0%, transparent) 100%
 );
-  padding-bottom: 400px;
+  padding-bottom: 5vh;
 }
 
 .h1,h2,p{
