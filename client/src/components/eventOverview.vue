@@ -181,8 +181,8 @@ const labelOldest = ref<string>('Oldest');
           <div class="EventName">
             <span>{{ event.name }}</span>
           </div>
-          <div class="EventLocation">
-            <span v-if="width > 600">Location: &nbsp;</span><span>{{event.location}}</span>
+          <div class="EventLocation" v-if="width > 600">
+            <span>Location: &nbsp;</span><span>{{event.location}}</span>
           </div>
           <div class="EventTime">
             <span v-if="width > 600">Time:&nbsp;{{TimeFormatter.format(new Date(event.date))}}</span>
@@ -225,6 +225,7 @@ h1,h2{
   text-shadow: var(--background) 2px 2px 3px;
 }
 
+
 .EventWrapper{
   display: flex;
   padding: 0 3vw;
@@ -244,7 +245,7 @@ h1,h2{
   grid-template-rows: 35px 35px ;
   grid-template-areas:
   "date date . name name"
-  "date date . location location";
+  "date date . name name";
 }
 .EventDate{
   grid-area: date;
@@ -276,13 +277,13 @@ h1,h2{
     flex-wrap: wrap;
   }
   .EventWrapper{
-    flex-grow: 1;
     row-gap: 10px;
-    width: 330px;
+    width: 45%;
+    min-width: 440px;
     background-color: var(--secondary-lighter);
     border-radius: 15px;
     padding: 20px;
-    grid-template-columns: 70px 70px 0px auto auto;
+    grid-template-columns: 80px 80px 0px auto auto;
     grid-template-rows: 35px 35px 35px 35px;
     grid-template-areas:
     "date date . name name"
@@ -291,7 +292,8 @@ h1,h2{
     "time time time time time";
   }
   .EventDate{
-    line-height: 80px;
+    line-height: 60px;
+    padding: 10px;
   }
   .EventName{
     margin-left: -30px;
