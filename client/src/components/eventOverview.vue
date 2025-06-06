@@ -283,7 +283,7 @@ h1,h2{
     background-color: var(--secondary-lighter);
     border-radius: 15px;
     padding: 20px;
-    grid-template-columns: 80px 80px 0px auto auto;
+    grid-template-columns: 80px 80px 0 auto auto;
     grid-template-rows: 35px 35px 35px 35px;
     grid-template-areas:
     "date date . name name"

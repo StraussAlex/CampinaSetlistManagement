@@ -40,7 +40,7 @@ onMounted(async() => {
 
 <template>
   <header>
-    <img @click="navigateTo('/')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
+    <img @click="navigateTo('/events')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
     <nav v-if="displayNav()">
       <span @click="navigateTo('/events')"  :class="{ active: route.name === 'events' }">
         HOME

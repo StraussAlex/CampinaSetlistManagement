@@ -8,7 +8,7 @@ function navigateTo(path: string): void {
 
 <template>
   <header>
-    <img @click="navigateTo('/')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
+    <img @click="navigateTo('/events')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
     <span><slot></slot></span>
 
   </header>
