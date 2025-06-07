@@ -12,6 +12,7 @@
     "@vueuse/core": "^13.3.0",
     "@webzlodimir/vue-bottom-sheet": "^3.0.5",
     "axios": "^1.8.4",
+    "jspdf": "^3.0.1",
     "redaxios": "^0.5.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

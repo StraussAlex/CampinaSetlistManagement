@@ -12,6 +12,7 @@ import '/src/stylesheets/input.css'
 import '/src/stylesheets/header.css'
 import '/src/stylesheets/search.css'
 import {useWindowSize} from "@vueuse/core";
+import jsPDF from 'jspdf';
 const { width } = useWindowSize()
 
 const router = useRouter();
@@ -27,9 +28,55 @@ function editSetlist(): void {
   router.push({ name: 'edit-setlist', params: { id: String(setlistId) } });
 }
 
-function songDetails(songId:any){
+function songDetails(songId:any): void {
   router.push({ name: "viewsong", params: {id: String(songId)}});
 }
+function exportSetlist(): void {
+  const doc: jsPDF = new jsPDF({
+    orientation: 'p',
+    format: 'a4',
+    unit: 'mm',
+    putOnlyUsedFonts: true
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const title = setlistName.value;
+  
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(30);
+  const titleWidth = doc.getTextWidth(title);
+  doc.text(title, (pageWidth - titleWidth) / 2, 30);
+
+  doc.setLineWidth(0.5);
+  doc.line(20, 35, pageWidth - 20, 35);
+
+  doc.setFont('helvetica', 'normal');
+
+  let y = 50;
+  let lineHeight = 15;
+  let fontSize = 20;
+
+  if(setlistSongs.value.length > 16) {
+    lineHeight = 10;
+    fontSize = 18;
+  }
+
+  doc.setFontSize(fontSize);
+
+  for (let i = 0; i < setlistSongs.value.length; i++) {
+    const song = `${i + 1}. ${setlistSongs.value[i].title} | ${setlistSongs.value[i].artist}`;
+    doc.text(song, 25, y);
+    y += lineHeight;
+
+    if (y > 280) {
+      doc.addPage();
+      y = 20;
+    }
+  }
+
+  doc.save(`${title}.pdf`);
+}
+
 async function loadSetlistDetails() :Promise<void>{
   
   try{
@@ -57,9 +104,11 @@ onMounted(() => loadSetlistDetails());
 <template>
   <mobile-header v-if="width < 600">
     <button @click="editSetlist" class="btn-small">Edit</button>
+    <button @click="exportSetlist" class="btn-small">Export</button>
   </mobile-header>
   <h1 class="section-heading">Setlist Details</h1>
   <button v-if="width > 600" @click="editSetlist" class="btn-small btn-inline-sectionheading">Edit</button>
+  <button v-if="width > 600" @click="exportSetlist" class="btn-small btn-inline-sectionheading">Export</button>
   <h2>{{ setlistName }}</h2>
 
   <div class="content-container">
