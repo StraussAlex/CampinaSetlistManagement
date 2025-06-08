@@ -236,7 +236,7 @@ h1,h2{
   vertical-align: middle;
   display: inline-block;
   line-height: normal;
-  font-family: "Krona One";
+   font-family: "Krona One";
 }
 .EventWrapper{
   display: grid;
@@ -297,10 +297,11 @@ h1,h2{
   }
   .EventName{
     margin-left: -30px;
-    padding-left: 50px;
+    padding: 10px 20px 10px 50px;
+
     z-index: 1;
     background-color: var(--secondary-darker);
-    line-height: 80px;
+    line-height: 60px;
     border-radius: 15px;
   }
   .EventDate{
