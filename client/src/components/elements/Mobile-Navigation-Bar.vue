@@ -25,7 +25,7 @@ async function logoutUser()  {
 
 onMounted(async() => {
     const response = await api.get('/auth', { withCredentials: true });
-    user.value  = response.data.user;
+    user.value = response.data.user;
     //console.log(user);
 });
 

@@ -6,6 +6,7 @@ import api from '../services/api';
 import SortAction from './elements/Sort-Action.vue';
 import SearchBar from './elements/Search-Bar.vue';
 import MobileHeader from "./elements/Mobile-Header.vue";
+import {truncator} from "../services/truncator.ts";
 import { useWindowSize } from '@vueuse/core'
 const { width } = useWindowSize()
 
@@ -179,10 +180,10 @@ const labelOldest = ref<string>('Oldest');
             <span v-else>{{DateFormatterLong.format(new Date(event.date)).replace(' ', '. ')}}</span>
           </div>
           <div class="EventName">
-            <span>{{ event.name }}</span>
+            <span>{{ truncator(event.name) }}</span>
           </div>
           <div class="EventLocation" v-if="width > 600">
-            <span>Location: &nbsp;</span><span>{{event.location}}</span>
+            <span>Location: &nbsp;</span><span>{{truncator(event.location)}}</span>
           </div>
           <div class="EventTime">
             <span v-if="width > 600">Time:&nbsp;{{TimeFormatter.format(new Date(event.date))}}</span>
