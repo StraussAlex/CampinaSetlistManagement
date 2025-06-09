@@ -169,19 +169,23 @@ function togglePasswordVisibility(): void {
             placeholder="Reenter Password"
         />
       </div>
-      <button @click="togglePasswordVisibility">{{ passwordType == 'text' ? '😐' : '😑' }}</button>
+      <div class="adminButtons">
+        <label class="checkbox-wrapper">
+          <input
+              name="input-isadmin"
+              type="checkbox"
+              v-model="currentIsAdmin"
+              class="checkbox-input"
+          />
+          <span class="custom-checkbox"></span>
+          Is Admin
+        </label>
 
-      <label class="checkbox-wrapper">
-        <input
-            name="input-isadmin"
-            type="checkbox"
-            v-model="currentIsAdmin"
-            class="checkbox-input"
-        />
-        <span class="custom-checkbox"></span>
-        Is Admin
-      </label>
-
+        <button @click="togglePasswordVisibility">
+          <img src="../assets/Icons/Viewable.png" height="25" width="25" v-if="passwordType == 'text'"/>
+          <img src="../assets/Icons/NotViewable.png" height="25" width="25" v-else/>
+        </button>
+      </div>
       <button @click="createUser()" class="btn-primary">Create user</button>
     </div>
 
@@ -201,6 +205,22 @@ h2{
 
 label {
 margin-top: 20px;
+
+}
+
+.adminButtons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.adminButtons button{
+  width: 25px;
+  height: 25px;
+  padding: 10px;
+  box-sizing: content-box;
+}
+
+@media only screen and (min-width: 600px) {
 
 }
 </style>

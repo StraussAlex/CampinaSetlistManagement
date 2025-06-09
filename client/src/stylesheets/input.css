@@ -93,6 +93,11 @@ button, div.list {
      */
 }
 
+button.btn-click-feedback:active{
+    background-color: var(--secondary-lighter);
+}
+
+
 /* Text Input */
 input,
 select,
@@ -105,6 +110,9 @@ textarea {
   margin: 10px;
   /* border-width: 2px; */
 }
+
+
+/* Check Boxes */
 
 .checkbox-wrapper {
     display: flex;
@@ -155,8 +163,6 @@ textarea {
     font-family: "Krona One";
 }
 
-
-/* Check Boxes */
 
 
 

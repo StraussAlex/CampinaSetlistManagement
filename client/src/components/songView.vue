@@ -113,7 +113,7 @@ onMounted(() => loadSongDetails());
         <h3>Links</h3>
         <div v-if="songLinks.length > 0">
           <div v-for="link in songLinks" class="list">
-            <a :href="link">{{ getDomainName(link) }}</a>
+            <a :href="link" target="_blank">{{ getDomainName(link) }}</a>
           </div>
         </div>
         <p v-else>No links were added to this song</p>
@@ -130,8 +130,8 @@ onMounted(() => loadSongDetails());
     <div class="content-block">
       <div class="details-box bottom-line">
         <h3>Lyrics</h3>
-        <button v-if="songLyrics.length !== 0" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
-        <button v-if="songLyrics.length !== 0" @click="copyLyricsToClipBoard">📋</button>
+        <button v-if="songLyrics.length !== 0" class="btn-click-feedback" @click="toggleLyricsExpand">{{ lyricsExpandBtnLabel }}</button>
+        <button v-if="songLyrics.length !== 0" class="btn-click-feedback" @click="copyLyricsToClipBoard">📋</button>
         <div v-if="songLyrics.length !== 0">
           <pre>{{ lyricsDisplay }}</pre>
         </div>
