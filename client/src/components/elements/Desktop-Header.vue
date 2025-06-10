@@ -51,7 +51,7 @@ onMounted(async() => {
       <span @click="navigateTo('/songs')"  :class="{ active: route.name === 'songs' }">
         SONGS
       </span>
-      <span v-if="user.isAdmin" @click="navigateTo('/manage-users')"  :class="{ active: route.name === 'admin-page' }">
+      <span v-if="user !== null && user.isAdmin" @click="navigateTo('/manage-users')"  :class="{ active: route.name === 'admin-page' }">
         ADMIN
       </span>
       <span @click="logoutUser()">
