@@ -198,7 +198,7 @@ function onAddSong(song: Song): void {
           <div>
               <ul id="overlay-ul" v-if="filteredSongs.length !== 0" class="flex">
                 <li id="entrance"v-for="song in filteredSongs">
-                  <button @click="onAddSong(song)" class="btn-small"> + </button>
+                  <button @click="onAddSong(song)" class="btn-small-bottom"> + </button>
                   {{ song.artist }} - {{ song.title }}
                 </li>
               </ul>

@@ -251,6 +251,7 @@ function toggleSlotOverlay(){
     </div>
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
+    <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <SlotOverlay v-model="slotOverlayActive">
@@ -285,6 +286,7 @@ function toggleSlotOverlay(){
   padding-top: 10%;
   padding-bottom: 10%;
   text-shadow: #06111b 1px 1px 3px;
+
 }
 
 .visibility-wrapper{

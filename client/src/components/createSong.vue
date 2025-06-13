@@ -340,6 +340,7 @@ function getDomainName(url: string): string {
   >
     {{ buttonText }}
   </button>
+  <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
   <YesNoOverlay
     v-model="overlayActive"
     :text="overlayText"

@@ -238,6 +238,7 @@ function onSearchChange(query: string): void {
 
   </div>
   <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
+  <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
 
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 

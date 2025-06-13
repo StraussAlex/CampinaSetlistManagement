@@ -201,3 +201,12 @@ input[name="search-input"]{
 .sheet-overlay {
     transition: background 0.5s ease, opacity 0.3s ease;
 }
+
+.btn-small-bottom {
+    padding: 5px 10px;
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--background);
+    font-weight: 400;
+    font-size: 15px;
+}

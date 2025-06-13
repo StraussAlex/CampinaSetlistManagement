@@ -10,10 +10,10 @@ button, div.list {
 }
 
 .btn-small {
-    padding: 5px 10px;
-    background-color: var(--background);
+    padding: 10px 40px;
+    background-color: var(--primary);
     border-color: var(--primary);
-    color: var(--text);
+    color: var(--background);
     font-weight: 400;
     font-size: 15px;
 }
