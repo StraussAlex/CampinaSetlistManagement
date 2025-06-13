@@ -103,8 +103,8 @@ onMounted(() => loadSetlistDetails());
 
 <template>
   <mobile-header v-if="width < 600">
-    <button @click="editSetlist" class="btn-small">Edit</button>
-    <button @click="exportSetlist" class="btn-small">Export</button>
+    <button @click="editSetlist" class="btn-small-setlist-mobile">Edit</button>
+    <button @click="exportSetlist" class="btn-small-setlist-mobile">Export</button>
   </mobile-header>
   <h1 class="section-heading">Setlist Details</h1>
   <button v-if="width > 600" @click="editSetlist" class="btn-small btn-inline-sectionheading">Edit</button>
@@ -137,5 +137,15 @@ h2 {
   width: 90vw;
   height: 1px;
   border-bottom: 1px solid var(--primary)
+}
+
+.btn-small-setlist-mobile{
+  padding: 5px 10px;
+  margin: 3px;
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--background);
+  font-weight: 400;
+  font-size: 15px;
 }
 </style>
