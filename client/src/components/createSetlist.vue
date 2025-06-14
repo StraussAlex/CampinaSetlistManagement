@@ -88,29 +88,14 @@ onMounted(async() => {
 const setlistName = ref<string>("");
 const setlistSongs = ref<Song[]>([]);
 
-function removeSong(index: number): void {
-  setlistSongs.value.splice(index, 1);
-  onSearchChange(currentQuery.value);
-  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
-}
 
-function addSongToSetlist(song: Song) {
-  //if(songAlreadyInSetlist(song)) return;
-  setlistSongs.value.push(song);
-  onSearchChange(currentQuery.value);
-  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
-}
+
 
 watch(setlistSongs.value, () => {
   onSearchChange(currentQuery.value);
 });
 
-function songAlreadyInSetlist(song: Song): boolean {
-  for(let i: number = 0; i < setlistSongs.value.length; i++) {
-    if(setlistSongs.value[i]._id == song._id) return true;
-  }
-  return false;
-}
+
 
 async function createNewSetlist(): Promise<void> {
   clearErrors();
@@ -171,6 +156,8 @@ const openSheet = () => {
   sheetRef.value?.openBottomSheetWithBtn(70);
 }
 
+// Filtering Functions
+
 const filteredSongs = ref<Song[]>(songs.value);
 const currentQuery = ref<string>("");
 
@@ -182,6 +169,23 @@ function onSearchChange(query: string): void {
       song.artist.toLowerCase().includes(query.toLowerCase())) &&
       !songAlreadyInSetlist(song)
   );
+}
+function songAlreadyInSetlist(song: Song): boolean {
+  for(let i: number = 0; i < setlistSongs.value.length; i++) {
+    if(setlistSongs.value[i]._id == song._id) return true;
+  }
+  return false;
+}
+function addSongToSetlist(song: Song) {
+  //if(songAlreadyInSetlist(song)) return;
+  setlistSongs.value.push(song);
+  onSearchChange(currentQuery.value);
+  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
+}
+function removeSong(index: number): void {
+  setlistSongs.value.splice(index, 1);
+  onSearchChange(currentQuery.value);
+  filteredSongs.value.filter(song => !songAlreadyInSetlist(song));
 }
 </script>
 

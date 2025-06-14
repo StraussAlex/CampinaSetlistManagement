@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
+
 import '/src/stylesheets/input.css'
 import '/src/stylesheets/overlay.css';
 
@@ -12,18 +12,8 @@ function toggleOverlay(){
   isActive.value = !isActive.value
 }
 function no(){
-  console.log("no")
   toggleOverlay()
 }
-
-onMounted(()=>{
-  //text.value = props.text
-
-  watch(isActive, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      console.log("watcher: " + newVal)
-    }})
-})
 </script>
 
 <template>

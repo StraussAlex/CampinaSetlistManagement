@@ -192,15 +192,7 @@ const labelOldest = ref<string>('Oldest');
       </div>
       <p v-else>No events are created yet</p>
     </div>
-
   </div>
-
-
-
-
-  <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <!-- Um "Mobile Nav Bar"-Ansicht zu aktivieren, ist "NavigationBarBottom"-Tag zu löschen und "MobileNavBar" zu unkommentieren -->
-  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

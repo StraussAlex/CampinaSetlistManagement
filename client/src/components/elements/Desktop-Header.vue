@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import {onMounted, ref} from "vue";
+import {onMounted, onUpdated, ref, watch} from "vue";
 import api from "../../services/api.ts";
 const router = useRouter();
 const route = useRoute();
+
+//const DisplayNav = defineModel()
 
 function displayNav():boolean{
   switch (route.name) {
@@ -25,7 +27,7 @@ const user = ref<any|null>(null);
 async function logoutUser()  {
   try {
     const response = await api.post('/login/logout', {}, { withCredentials: true })
-    console.log(response.data.message)
+    //console.log(response.data.message)
     router.push('/')
   } catch (error: any) {
     console.error('Logout failed', error.response?.data)
@@ -33,8 +35,14 @@ async function logoutUser()  {
 }
 
 onMounted(async() => {
-  const response = await api.get('/auth', { withCredentials: true });
-  user.value = response.data.user;
+
+  watch(displayNav, async(newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      user.value = null;
+      const response = await api.get('/auth', { withCredentials: true });
+      user.value = response.data.user;
+    }
+  })
 });
 </script>
 
@@ -51,7 +59,7 @@ onMounted(async() => {
       <span @click="navigateTo('/songs')"  :class="{ active: route.name === 'songs' }">
         SONGS
       </span>
-      <span v-if="user !== null && user.isAdmin" @click="navigateTo('/manage-users')"  :class="{ active: route.name === 'admin-page' }">
+      <span v-if="user !== null && user.isAdmin" @click="navigateTo('/manage-users')" :class="{ active: route.name === 'admin-page' }">
         ADMIN
       </span>
       <span @click="logoutUser()">

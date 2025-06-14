@@ -76,22 +76,16 @@ const eventIsPublic = ref<boolean>(false);
 const filteredSetlists = ref<Setlist[]>(setlists.value);
 const currentQuery = ref<string>("");
 
+
+// Filtering Functions
+
 function onSearchChange(query: string): void {
-  filteredSetlists.value = setlists.value.filter((setlist) =>
-    !setlistAlreadyInEvent(setlist)
+  currentQuery.value = query;
+  filteredSetlists.value = setlists.value.filter(
+    (setlist) =>
+      setlist.name.toLowerCase().includes(query.toLowerCase()) &&
+      !setlistAlreadyInEvent(setlist)
   );
-}
-function removeSetlist(index: number): void {
-  setlistsInEvent.value.splice(index, 1);
-  onSearchChange(currentQuery.value);
-  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
-}
-function addSetlistToEvent(list: Setlist) {
-  console.log("test");
-  //if(setlistAlreadyInEvent(list)) return;
-  setlistsInEvent.value.push(list);
-  onSearchChange(currentQuery.value);
-  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
 }
 function setlistAlreadyInEvent(list: Setlist): boolean {
   for(let i: number = 0; i < setlistsInEvent.value.length; i++) {
@@ -99,6 +93,18 @@ function setlistAlreadyInEvent(list: Setlist): boolean {
   }
   return false;
 }
+function addSetlistToEvent(list: Setlist) {
+  //if(setlistAlreadyInEvent(list)) return;
+  setlistsInEvent.value.push(list);
+  onSearchChange(currentQuery.value);
+  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
+}
+function removeSetlist(index: number): void {
+  setlistsInEvent.value.splice(index, 1);
+  onSearchChange(currentQuery.value);
+  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
+}
+
 
 // let date: Date = new Date();
 
@@ -258,8 +264,8 @@ function toggleSlotOverlay(){
       <h3>Select Setlists</h3>
       <SearchBar @search-change="onSearchChange"></SearchBar>
       <div>
-        <div v-if="setlists.length !== 0">
-          <div class="list" v-for="list in setlists">
+        <div v-if="filteredSetlists.length !== 0">
+          <div class="list" v-for="list in filteredSetlists">
             <span>{{ list.name }}</span>
             <button @click="addSetlistToEvent(list)" class="btn-secondary btn-small"> + </button>
           </div>
