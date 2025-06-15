@@ -87,7 +87,7 @@ onMounted(async() => {
     position: fixed;
     top: 0;
     background-color: var(--secondary-lighter);
-    z-index: 1;
+    z-index: 99;
   }
   nav {
     min-width: 420px;

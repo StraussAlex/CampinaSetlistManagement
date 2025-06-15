@@ -131,6 +131,15 @@ async function createEvent(): Promise<void> {
     if(eventName.value.length === 0 || eventLocation.value.length === 0) {
         errors.value.push("Name or location of the event cannot be empty.");
     }
+
+    if (!eventDate.value) {
+        errors.value.push("Date of the event cannot be empty");
+    } else {
+        const date = new Date(eventDate.value);
+        if (isNaN(date.getTime()) || eventDate.value.length < 16) {
+            errors.value.push("Invalid date and time format. Please provide both.");
+        }
+    }
     //TODO datum validiern
     //Warnings machen so wenig sinn wenn man trotzdem speichern kann und weitergeleitet wird - man sieht sie nie?
 
