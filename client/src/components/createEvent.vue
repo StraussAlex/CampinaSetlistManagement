@@ -83,7 +83,7 @@ function onSearchChange(query: string): void {
   currentQuery.value = query;
   filteredSetlists.value = setlists.value.filter(
     (setlist) =>
-      setlist.name.toLowerCase().includes(query.toLowerCase()) &&
+      (setlist.name.toLowerCase().includes(query.toLowerCase()) || query === '') &&
       !setlistAlreadyInEvent(setlist)
   );
 }
@@ -97,12 +97,10 @@ function addSetlistToEvent(list: Setlist) {
   //if(setlistAlreadyInEvent(list)) return;
   setlistsInEvent.value.push(list);
   onSearchChange(currentQuery.value);
-  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
 }
 function removeSetlist(index: number): void {
   setlistsInEvent.value.splice(index, 1);
   onSearchChange(currentQuery.value);
-  filteredSetlists.value.filter(list => !setlistAlreadyInEvent(list));
 }
 
 
@@ -188,7 +186,9 @@ function activateOverlay(handler: () => void, text: string){
   console.log("isActive: " + overlayActive.value)
 }
 function toggleSlotOverlay(){
-  slotOverlayActive.value = !slotOverlayActive.value
+  slotOverlayActive.value = !slotOverlayActive.value;
+
+  if(slotOverlayActive.value) onSearchChange('');
 }
 
 </script>
