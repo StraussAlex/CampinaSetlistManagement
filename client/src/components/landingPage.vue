@@ -63,6 +63,10 @@ onMounted(async() => {
 </template>
 
 <style scoped>
+
+
+
+
 .section-heading{
   background: none;
 }

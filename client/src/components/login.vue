@@ -8,19 +8,19 @@ const router = useRouter();
 import '/src/stylesheets/input.css'
 import MobileHeader from "./elements/Mobile-Header.vue";
 
-const currentUsername = ref<string>('admin');
-const currentPassword = ref<string>('password123');
+const currentUsername = ref<string>('');
+const currentPassword = ref<string>('');
 const errorMessage = ref<string>('');
 
 // ! AUTO ADMIN CREATION - DELETE BEFORE PRODUCTION
-onMounted(async () => {
-  try {
-    await api.get('/login/ensure-admin');
-    console.log('Default data check complete');
-  } catch (err) {
-    console.error('Error ensuring default data', err);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     await api.get('/login/ensure-admin');
+//     console.log('Default data check complete');
+//   } catch (err) {
+//     console.error('Error ensuring default data', err);
+//   }
+// });
 // ! END OF "TO DELETE"
 
 async function loginUser(): Promise<void> {
@@ -56,7 +56,7 @@ async function loginUser(): Promise<void> {
             type="text"
             name="username"
             v-model="currentUsername"
-            placeholder="admin"
+            placeholder="username"
         />
       </label>
       <br />
@@ -66,7 +66,7 @@ async function loginUser(): Promise<void> {
             type="password"
             name="password"
             v-model="currentPassword"
-            placeholder="password123"
+            placeholder="password"
         />
       </label>
         <br/>

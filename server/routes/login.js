@@ -4,25 +4,25 @@ const router = express.Router();
 const ACCOUNT_COLLECTION = 'Users';
 
 // ! AUTO ADMIN CREATION - DELETE BEFORE PRODUCTION
-router.get('/ensure-admin', async (req, res) => {
-  try {
-    const existing = await req.db.collection(ACCOUNT_COLLECTION).findOne({ userName: 'admin' })
+// router.get('/ensure-admin', async (req, res) => {
+//   try {
+//     const existing = await req.db.collection(ACCOUNT_COLLECTION).findOne({ userName: 'admin' })
 
-    if (!existing) {
-      await req.db.collection(ACCOUNT_COLLECTION).insertOne({
-        userName: 'admin',
-        passwordHash: 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',
-        isAdmin: true
-      })
-      console.log('Default admin user created')
-    }
+//     if (!existing) {
+//       await req.db.collection(ACCOUNT_COLLECTION).insertOne({
+//         userName: 'admin',
+//         passwordHash: 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',
+//         isAdmin: true
+//       })
+//       console.log('Default admin user created')
+//     }
 
-    res.status(200).json({ message: 'Checked and created if necessary' })
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: 'Error checking default data' })
-  }
-})
+//     res.status(200).json({ message: 'Checked and created if necessary' })
+//   } catch (err) {
+//     console.error(err)
+//     res.status(500).json({ message: 'Error checking default data' })
+//   }
+// })
 // ! END OF "TO DELETE"
 
 
