@@ -8,8 +8,8 @@ const router = useRouter();
 import '/src/stylesheets/input.css'
 import MobileHeader from "./elements/Mobile-Header.vue";
 
-const currentUsername = ref<string>('admin');
-const currentPassword = ref<string>('password123');
+const currentUsername = ref<string>('');
+const currentPassword = ref<string>('');
 const errorMessage = ref<string>('');
 
 async function loginUser(): Promise<void> {
@@ -45,7 +45,7 @@ async function loginUser(): Promise<void> {
             type="text"
             name="username"
             v-model="currentUsername"
-            placeholder="admin"
+            placeholder="username"
         />
       </label>
       <br />
@@ -55,7 +55,7 @@ async function loginUser(): Promise<void> {
             type="password"
             name="password"
             v-model="currentPassword"
-            placeholder="password123"
+            placeholder="password"
         />
       </label>
         <br/>

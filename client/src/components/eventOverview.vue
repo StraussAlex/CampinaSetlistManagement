@@ -242,7 +242,8 @@ h1,h2{
 }
 .EventDate{
   grid-area: date;
-  background-color: var(--secondary);
+  background-color: var(--primary-lighter);
+  color: var(--background);
   line-height: 70px;
 }
 .EventDate span, .EventName span{
@@ -273,7 +274,8 @@ h1,h2{
     row-gap: 10px;
     width: 45%;
     min-width: 440px;
-    background-color: var(--secondary-lighter);
+    /* background-color: var(--secondary-lighter); */
+    border: 1px solid var(--primary);
     border-radius: 15px;
     padding: 20px;
     grid-template-columns: 80px 80px 0 auto auto;
@@ -293,7 +295,7 @@ h1,h2{
     padding: 10px 20px 10px 50px;
 
     z-index: 1;
-    background-color: var(--secondary-darker);
+    background-color: var(--secondary-lighter);
     line-height: 60px;
     border-radius: 15px;
   }

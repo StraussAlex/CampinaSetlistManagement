@@ -27,6 +27,20 @@ pre {
   color-scheme: light;
   --text: #06111b;
   --background: #fafcfe;
+  --primary: #12609c;
+  --primary-darker: #13466d;
+  --primary-lighter: #286b9e;
+  --secondary: #b3c8d8;
+  --secondary-darker: #8fb0ca;
+  --secondary-lighter: #c0d9ec;
+  --accent: #a22c2c;
+  --accent-darker: #912626; 
+  --accent-lighter: #af3333; 
+
+
+    /* 
+  --text: #06111b;
+  --background: #fafcfe;
   --primary: #205b89;
   --primary-darker: #13466d;
   --primary-lighter: #286b9e;
@@ -35,9 +49,12 @@ pre {
   --secondary-lighter: #c0d9ec;
   --accent: #a22c2c;
   --accent-darker: #912626; 
-  --accent-lighter: #af3333;
+  --accent-lighter: #af3333; 
+  */
 
-  --icon-invert: invert(0%);
+
+
+  --icon-invert: invert(0%); 
 }
 :root[data-theme="dark"] {
   color-scheme: dark;

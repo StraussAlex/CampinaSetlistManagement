@@ -47,7 +47,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <header>
+  <header :class="{ 'logged-out-header': !user}">
     <img @click="navigateTo('/events')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
     <nav v-if="displayNav()">
       <span @click="navigateTo('/events')"  :class="{ active: route.name === 'events' }">
@@ -77,6 +77,12 @@ onMounted(async() => {
   img{
     cursor: pointer;
   }
+
+  .logged-out-header {
+    background-color: var(--background);
+    border: none;
+  }
+
   header{
     height: 110px;
     padding: 15px 6vw;
@@ -86,7 +92,7 @@ onMounted(async() => {
     border-bottom: 1px solid var(--primary);
     position: fixed;
     top: 0;
-    background-color: var(--secondary-lighter);
+    background-color: var(--background);
     z-index: 99;
   }
   nav {
@@ -105,7 +111,8 @@ onMounted(async() => {
     color: var(--primary-lighter);
   }
   nav > span.active {
-    color: var(--background);
+    color: var(--primary);
+    text-decoration: underline;
   }
   div {
     display: flex;

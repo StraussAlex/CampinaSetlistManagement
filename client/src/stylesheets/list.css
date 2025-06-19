@@ -47,7 +47,8 @@ div.list{
 }
 
 .list:hover {
-    background-color: var(--secondary-lighter);
+    background-color: color-mix(in srgb, var(--secondary-lighter) 50%, transparent);
+;
 }
 
 /* * Well, I now started to define the listing of the song overview also as a list, so imma put it here yolo :P */
