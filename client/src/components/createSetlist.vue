@@ -141,7 +141,7 @@ async function deleteSetlist(): Promise<void> {
     errors.value.push("Error deleting setlist: " + error);
   }
 }
-function activateOverlay(handler: () => void, text: string){
+function activateOverlay(handler: any, text: string){
   overlayYesHandler.value = handler
   overlayText.value = text
   overlayActive.value = true
@@ -242,12 +242,14 @@ function removeSong(index: number): void {
 
   </div>
   <button @click='activateOverlay(createNewSetlist, "Are you sure you want to save this Setlist?")' class="btn-primary">{{ buttonText }}</button>
-  <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
+  <button @click="
+      activateOverlay(
+        router.back,
+        `Are you sure you want to discard your changes and leave.`
+      )" class="btn-caution">Discard and return</button>
 
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
-  <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <!-- <MobileNavBar></MobileNavBar> -->
   <div v-if="width < 600" class="round-btn" @click="openSheet">
     <div class="horizontal"></div>
     <div class="vertical"></div>

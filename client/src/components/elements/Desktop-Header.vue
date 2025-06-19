@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import {onMounted, onUpdated, ref, watch} from "vue";
+import {computed, onMounted, onUpdated, ref, watch} from "vue";
 import api from "../../services/api.ts";
 const router = useRouter();
 const route = useRoute();
 
 //const DisplayNav = defineModel()
 
-function displayNav():boolean{
+const displayNav = computed(() => {
   switch (route.name) {
     case "login":
-      return false;
     case "landing-page":
-      return false;
     case "not-found-page":
       return false;
+    default:
+      return true;
   }
-  return true;
-}
+});
 function navigateTo(path: string): void {
   router.push(path);
 }
@@ -35,21 +34,21 @@ async function logoutUser()  {
 }
 
 onMounted(async() => {
-
   watch(displayNav, async(newVal, oldVal) => {
-    if (newVal !== oldVal) {
+    if (newVal) {
       user.value = null;
       const response = await api.get('/auth', { withCredentials: true });
       user.value = response.data.user;
+      console.log(user)
     }
-  })
+  }, { immediate: true })
 });
 </script>
 
 <template>
   <header :class="{ 'logged-out-header': !user}">
     <img @click="navigateTo('/events')" src="../../assets/Logo.png" alt="Logo displaying a stylized version of the mos eisley cantina band alien from star wars"/>
-    <nav v-if="displayNav()">
+    <nav v-if="displayNav">
       <span @click="navigateTo('/events')"  :class="{ active: route.name === 'events' }">
         HOME
       </span>

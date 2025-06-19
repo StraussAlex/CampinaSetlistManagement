@@ -138,21 +138,7 @@ async function createEvent(): Promise<void> {
             errors.value.push("Invalid date and time format. Please provide both.");
         }
     }
-    //TODO datum validiern
-    //Warnings machen so wenig sinn wenn man trotzdem speichern kann und weitergeleitet wird - man sieht sie nie?
 
-    // if (eventYear.value < date.getFullYear()){
-    //     warnings.value.push("This event is located in the past.");
-    // }
-    // proper validation
-    /*if (eventYear.value === date.getFullYear && eventMonth.value < date.getMonth()){
-            warnings.value.push("This event is located in the past.");
-    }*/
-    /*if (eventYear.value === date.getFullYear &&
-          eventMonth.value === date.getMonth() &&
-          eventDay.value < date.getDate()){
-            warnings.value.push("This event is located in the past.");
-    }*/
 
     if(errors.value.length > 0) return;
 
@@ -161,7 +147,6 @@ async function createEvent(): Promise<void> {
         setlistIds.push(setlistsInEvent.value[i]._id);
     }
 
-    //! Eigentlich gar nicht nötig, da in der express put route kein set feld fürs creation date existiert. Trotzdem zur sicherheit vorher abfragen?
     const creationDate = isEditingRoute() ? originalCreationDate.value : new Date().toISOString();
     const event = new Event(eventName.value, eventLocation.value, eventDate.value, setlistIds, eventIsPublic.value, creationDate);
 
@@ -179,7 +164,7 @@ async function createEvent(): Promise<void> {
     }
 };
 
-function activateOverlay(handler: () => void, text: string){
+function activateOverlay(handler: any, text: string){
   overlayYesHandler.value = handler
   overlayText.value = text
   overlayActive.value = true
@@ -264,7 +249,11 @@ function toggleSlotOverlay(){
     </div>
 
     <button @click='activateOverlay(createEvent, "Are you sure you want to save this Event?")' class="btn-primary">{{ buttonText }}</button>
-    <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
+    <button @click="
+      activateOverlay(
+        router.back,
+        `Are you sure you want to discard your changes and leave.`
+      )" class="btn-caution">Discard and return</button>
     <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
 
     <SlotOverlay v-model="slotOverlayActive">
@@ -280,8 +269,6 @@ function toggleSlotOverlay(){
         <p v-else>No setlists available</p>
       </div>
     </SlotOverlay>
-
-    <!--<bottom-sheet-overlay ref="sheet"/> -->
 </template>
 
 <style scoped>
