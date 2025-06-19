@@ -8,7 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
 const { MongoClient } = require('mongodb');
-const DB_URI = "mongodb://mongo:27017/";
+const DB_URI = "mongodb://127.0.0.1:27018/";
 const DB_NAME = "campina-band-setlist-management";
 
 const indexRouter = require('./routes/index');
@@ -28,13 +28,13 @@ app.set('view engine', 'hjs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cors({
-	origin: 'http://localhost:5555',  // domains allowed to request from server
+	origin: ['http://localhost:3000', 'https://campinaband.hagenberg.media', 'http://localhost:3333'],  // domains allowed to request from server
 	// TODO: modify origin before moving to production!
 	credentials: true                // allow cookies to be sent
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
 	secret: 'super-secret-key',
@@ -73,6 +73,11 @@ app.use('/users', userRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

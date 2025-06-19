@@ -1,7 +1,9 @@
 import axios from 'redaxios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:3333',
+   // baseURL: 'https://campinaband.hagenberg.media',
+   // baseURL: 'http://localhost:3000',
+    baseURL: '/api',
     withCredentials: true // automatically sends cookies - needed for authentication
 });
 

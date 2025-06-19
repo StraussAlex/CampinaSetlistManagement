@@ -12,17 +12,6 @@ const currentUsername = ref<string>('admin');
 const currentPassword = ref<string>('password123');
 const errorMessage = ref<string>('');
 
-// ! AUTO ADMIN CREATION - DELETE BEFORE PRODUCTION
-onMounted(async () => {
-  try {
-    await api.get('/login/ensure-admin');
-    console.log('Default data check complete');
-  } catch (err) {
-    console.error('Error ensuring default data', err);
-  }
-});
-// ! END OF "TO DELETE"
-
 async function loginUser(): Promise<void> {
   try {
     const response = await api.post(
