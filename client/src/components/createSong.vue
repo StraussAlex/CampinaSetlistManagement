@@ -225,6 +225,25 @@ function getDomainName(url: string): string {
     return url;
   }
 }
+function geniusQuery(){
+  api.get('/api/genius/lyrics', {
+    params: {
+      song: 'Bohemian Rhapsody',
+      artist: 'Queen'
+    }
+  }).then(res => {
+    const link = document.createElement('a');
+    link.href = res.data.url;
+    link.target = '_blank'; // Open in new tab/window
+    link.rel = 'noopener noreferrer'; // Recommended for security
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up
+    console.log(res.data.url); // Genius lyrics page URL
+  }).catch(err => {
+    console.error(err.response?.data || 'Error fetching lyrics');
+  });
+}
 
 </script>
 
@@ -289,6 +308,7 @@ function getDomainName(url: string): string {
           <label for="input-song-lyrics">Lyrics</label>
           <textarea @input="resizeLyrics" ref="lyricsTextarea" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
         </div>
+        <button @click="geniusQuery" class="btn-secondary btn-small">Search Genius Lyrics</button>
       </div>
     </div>
     <span v-if="width > 600" class="vertical-divider"></span>

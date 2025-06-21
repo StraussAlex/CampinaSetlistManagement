@@ -18,6 +18,7 @@ const eventRouter = require('./routes/events');
 const userRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const authRouter = require('./routes/auth');
+const geniusRouter = require('./routes/genius');
 
 const app = express();
 
@@ -72,6 +73,7 @@ app.use('/events', eventRouter);
 app.use('/users', userRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
+app.use('/genius', geniusRouter);
 
 
 // catch 404 and forward to error handler
