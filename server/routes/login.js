@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
+
 
 const ACCOUNT_COLLECTION = 'Users';
 
@@ -21,13 +23,11 @@ router.post('/', async (req, res) => {
   try {
 	console.log("login route hit")
 	console.log('BODY:', req.body)
-	console.log("DB connected?", !req.db);
     const { password, username } = req.body;
-	console.log(username + " " + password)
     const account = await req.db
       .collection(ACCOUNT_COLLECTION)
       .findOne({ userName: username });
-
+	console.log(account)
     if (!account) {
       return res.status(404).send('account not found');
     }
