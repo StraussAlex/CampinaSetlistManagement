@@ -97,7 +97,6 @@ function clearErrors(): void {
 }
 
 async function createNewSong(): Promise<void> {
-  //TODO add validation and save errors to errors
   clearErrors();
   songTitle.value = songTitle.value.trim();
   songArtist.value = songArtist.value.trim();
@@ -124,11 +123,6 @@ async function createNewSong(): Promise<void> {
 
   songLinks.value = songLinks.value.filter((link: string) => link.trim().length > 0);
 
-  //! WICHTIG: Siehe createEvent und createSetlist, sollte es eine editingRoute sein (mithilfe von Funktion abfragen), das alte creationDate laden und
-  //! wie in den anderen beiden create files zwischenspeichern. In der nächsten Zeile basierend auf isEditingRoute entscheiden, ob neues oder bestehendes
-  //! creation Date genommen wird
-
-  //! Eigentlich auch gar nicht nötig, da in der express put route kein set feld fürs creation date existiert. Trotzdem zur sicherheit vorher abfragen?
   const creationDate: string = new Date().toISOString();
   const song = new Song(
     songTitle.value,
@@ -198,11 +192,10 @@ async function deleteInstrument(index: number) {
   await api.delete(`${SONG_API}/file/${filename}`);
   files.value.splice(index, 1);
 }
-function activateOverlay(handler: () => void, text: string) {
+function activateOverlay(handler: any, text: string) {
   overlayYesHandler.value = handler;
   overlayText.value = text;
   overlayActive.value = true;
-  console.log('isActive: ' + overlayActive.value);
 }
 
 const lyricsTextarea = ref<HTMLTextAreaElement | null>(null);
@@ -231,6 +224,25 @@ function getDomainName(url: string): string {
   } catch(error) {
     return url;
   }
+}
+function geniusQuery(){
+  api.get('/api/genius/lyrics', {
+    params: {
+      song: 'Bohemian Rhapsody',
+      artist: 'Queen'
+    }
+  }).then(res => {
+    const link = document.createElement('a');
+    link.href = res.data.url;
+    link.target = '_blank'; // Open in new tab/window
+    link.rel = 'noopener noreferrer'; // Recommended for security
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up
+    console.log(res.data.url); // Genius lyrics page URL
+  }).catch(err => {
+    console.error(err.response?.data || 'Error fetching lyrics');
+  });
 }
 
 </script>
@@ -273,14 +285,6 @@ function getDomainName(url: string): string {
         </div>
         <p v-else>This song has no links yet</p>
         <br>
-        <!-- <ul>
-          <li v-for="(link, index) in songLinks">
-            {{ link }}
-            <button @click="deleteLink(index)" class="btn-caution btn-square">
-              X
-            </button>
-          </li>
-        </ul> -->
 
         <div class="labeled-input">
           <label for="input-song-link">Add link</label>
@@ -304,6 +308,7 @@ function getDomainName(url: string): string {
           <label for="input-song-lyrics">Lyrics</label>
           <textarea @input="resizeLyrics" ref="lyricsTextarea" name="input-song-lyrics" v-model="songLyrics" placeholder="Insert Lyrics or leave empty to automatically fill"></textarea>
         </div>
+        <button @click="geniusQuery" class="btn-secondary btn-small">Search Genius Lyrics</button>
       </div>
     </div>
     <span v-if="width > 600" class="vertical-divider"></span>
@@ -334,22 +339,21 @@ function getDomainName(url: string): string {
       activateOverlay(
         createNewSong,
         `Are you sure you want to ${buttonText.split(' ')[0]} this Song?`
-      )
-    "
+      )"
       class="btn-primary"
   >
     {{ buttonText }}
   </button>
-  <button @click='$router.go(-1)' class="btn-caution">Discard and return</button>
+  <button @click="
+      activateOverlay(
+        router.back,
+        `Are you sure you want to discard your changes and leave.`
+      )" class="btn-caution">Discard and return</button>
   <YesNoOverlay
     v-model="overlayActive"
     :text="overlayText"
     @yes="overlayYesHandler"
   ></YesNoOverlay>
-
-  <!-- <p>TODO: Add the option to add different files and assign them to instruments</p> -->
-  <!-- <NavigationBarBottom></NavigationBarBottom> -->
-  <!-- <MobileNavBar></MobileNavBar> -->
 </template>
 
 <style scoped>

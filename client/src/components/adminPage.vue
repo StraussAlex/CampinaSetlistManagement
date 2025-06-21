@@ -36,7 +36,6 @@ async function loadUsers(): Promise<void> {
   try {
     const response = await api.get(USER_API);
     users.value = response.data;
-    console.log(users.value)
   } catch (error) {
     console.log(error);
   }
@@ -44,7 +43,6 @@ async function loadUsers(): Promise<void> {
 async function getCurrentUserId(): Promise<void> {
   const authresponse = await api.get('/auth', { withCredentials: true });
   currentUserId.value = authresponse.data.user.id;
-  console.log(currentUserId.value)
 }
 
 async function deleteUser(user: User): Promise<void> {
@@ -112,7 +110,6 @@ function activateOverlay(handler: (user: User) => void, text: string, user: User
   overlayYesHandler.value = () => handler(user);
   overlayText.value = text
   overlayActive.value = true
-  console.log("isActive: " + overlayActive.value)
 }
 
 function togglePasswordVisibility(): void {
@@ -192,9 +189,6 @@ function togglePasswordVisibility(): void {
   </div>
 
   <YesNoOverlay v-model="overlayActive" :text="overlayText" @yes="overlayYesHandler"></YesNoOverlay>
-
-  <!-- <NavigationBarBottom></NavigationBarBottom> -->
-
 </template>
 
 <style scoped>
