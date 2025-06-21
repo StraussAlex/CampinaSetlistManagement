@@ -226,20 +226,20 @@ function getDomainName(url: string): string {
   }
 }
 function geniusQuery(){
-  api.get('/api/genius/lyrics', {
+  api.get('/genius', {
     params: {
-      song: 'Bohemian Rhapsody',
-      artist: 'Queen'
+      song: songTitle.value,
+      artist: songArtist.value
     }
   }).then(res => {
     const link = document.createElement('a');
     link.href = res.data.url;
-    link.target = '_blank'; // Open in new tab/window
-    link.rel = 'noopener noreferrer'; // Recommended for security
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link); // Clean up
-    console.log(res.data.url); // Genius lyrics page URL
+    document.body.removeChild(link);
+    console.log(res.data.url);
   }).catch(err => {
     console.error(err.response?.data || 'Error fetching lyrics');
   });
