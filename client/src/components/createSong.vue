@@ -228,8 +228,8 @@ function getDomainName(url: string): string {
 function geniusQuery(){
   api.get('/api/genius/lyrics', {
     params: {
-      song: 'Bohemian Rhapsody',
-      artist: 'Queen'
+      song: songTitle.value,
+      artist: songArtist.value
     }
   }).then(res => {
     const link = document.createElement('a');
