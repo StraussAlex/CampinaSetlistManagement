@@ -18,7 +18,7 @@ const eventRouter = require('./routes/events');
 const userRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const authRouter = require('./routes/auth');
-const geniusRouter = require('./routes/genius');
+//const geniusRouter = require('./routes/genius');
 
 const app = express();
 
@@ -53,6 +53,35 @@ app.use(session({
 	}
   }));
 
+
+
+const client = new MongoClient(DB_URI);
+
+let db;
+
+// Connect to MongoDB once, before mounting routers
+async function connectToDatabase() {
+	try {
+		console.log("trying to connect")
+		await client.connect();
+		db = client.db(DB_NAME);
+		console.log('MongoDB connection established');
+	} catch (error) {
+		console.error('MongoDB connection error:', error);
+		process.exit(1); // exit on DB connection failure
+	}
+}
+
+// Middleware to attach db instance to each request
+app.use((req, res, next) => {
+	if (!db) {
+		return next(createError(500, 'Database not connected'));
+	}
+	req.db = db;
+	next();
+});
+
+/*
 app.use(async(req, res, next) => {
 	try {
 		const client = new MongoClient(DB_URI);
@@ -65,6 +94,7 @@ app.use(async(req, res, next) => {
 		next(createError(500), error);
 	}
 });
+*/
 
 app.use('/', indexRouter);
 app.use('/songs', songRouter);
@@ -73,7 +103,7 @@ app.use('/events', eventRouter);
 app.use('/users', userRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
-app.use('/genius', geniusRouter);
+//app.use('/genius', geniusRouter);
 
 
 // catch 404 and forward to error handler
@@ -92,4 +122,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = { app, connectToDatabase };
